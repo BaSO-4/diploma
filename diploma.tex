@@ -1,14 +1,3 @@
-%*****************************************************************
-%   Vzorec za pisanje diplomskega dela,
-%   ki vsebuje navodila za izdelavo diplomskega dela
-%
-%   UNIVERZA V LJUBLJANI
-%   Fakulteta za računalništvo in informatiko
-%
-%   Pripravila: Peter.Peer@fri.uni-lj.si
-%               Franc.Solina@fri.uni-lj.si
-%*****************************************************************
-
 \documentclass[12pt,a4paper,openany]{book}
 
 %Uporabljeni paketi
@@ -20,9 +9,19 @@
 \usepackage{graphicx,epsfig}
 \usepackage[slovene]{babel}
 \usepackage{cite}
+\usepackage{listings}
+\usepackage{amsmath}
 
 \usepackage[pdftex,colorlinks,citecolor=black,filecolor=black,linkcolor=black,urlcolor=black,pagebackref]{hyperref}
 \usepackage{tikz}
+
+\lstset{
+    literate=%
+        {č}{{\v{c}}}1
+        {š}{{\v{s}}}1
+        {ž}{{\v{z}}}1
+        {λ}{{$\lambda$}}1
+}
 
 %Velikost strani - dvostransko
 \oddsidemargin 1.4cm
@@ -319,272 +318,846 @@ Ključne besede v angleškem jeziku.
 
 %********************************************
 
-\chapter{Splošno o diplomi}
+\chapter{Teorija}
+10 strani
 
-\section{Kaj je diplomski izpit}
-Diplomski izpit je končna oblika ocenjevanja usposobljenosti študenta univerzitetnega študijskega programa in visokošolskega
-strokovnega programa. Sestavljen je iz diplomske naloge in zagovora. Diplomsko delo mora biti vsebinsko zaokroženo samostojno delo, ki naj
-pokaže, da si je študent v času študija pridobil potrebno znanje s področja računalništva in informatike, da zna na metodološko pravilen način
-obravnavati teoretske in eksperimentalne probleme, da obvlada osnovne metode razvojnega in raziskovalnega dela in da lahko pri svojem delu
-samostojno uporablja literaturo. Diplomski izpit lahko opravlja študent, ki je opravil vse izpite in druge s programom univerzitetnega oziroma
-visokošolskega strokovnega študija predpisane obveznosti. 
+todo: 
+- mi notacija, fix operator
+- <> oklepaji
+- prevedi equi in iso recursive
+- prevedi sum types
+- right arrows inside code blocks
+- prevod enumerations in single field variants
+- eval.ml, kaj to dela in ali je sploh uporabno. če je, popravi še število filov, ki sestavljajo Minihaskell
+- bloke kode sem zaključeval z ločili, je to kul?
+- a je treba označt slike, drevesa, formule in to?
+- prevedi interpreter
+- ocaml parser generator
 
-\section{Izstavitev teme} 
-Študent  zaprosi za izstavitev teme diplomske naloge s področja, ki ga sam izbere. Za  izbrano področje si mora poiskati ustreznega
-fakultetnega učitelja, ki je pripravljen prevzeti mentorstvo. Temo za diplomsko nalogo mu izda dekan na predlog mentorja. 
+A hočem tud 'podatkovni tipi'? -> mogoče v uvodu?
 
-\section{Izbira teme}
-Pri izbiri teme diplomskega dela je treba upoštevati aktualnost problema, materialne možnosti in potreben čas za izdelavo dela.
-Zahtevnost dela mora biti odmerjena tako, da ga študent lahko opravi v 10 tednih. Urejeno diplomsko delo izdela in odda študent najkasneje v 3
-mesecih od izstavitve teme. Podro\-bnosti o tem ureja pravilnik o preverjanju in ocenjevanju znanja ter izpitnem redu.
+- RECURSIVE TYPES:  	20 - recursive types: examples, formalities
 
-\section{Rezultati diplome}
-Rezultati diplomskih del so intelektualna lastnina Fakultete za ra\-ču\-nal\-niš\-tvo in informatiko Univerze v Ljubljani. Za
-objavljanje ali izkoriščanje rezultatov diplomskega dela je potrebno pisno soglasje Fakultete za ra\-ču\-nal\-niš\-tvo in informatiko ter
-mentorja.
+                        (processes ?), hungry functions, streams
 
+    	            	21 - induction, finite and infinite
 
+                        equi-recursive and iso-recursive
 
-\chapter{Prijava diplomskega dela}
+- CASE: 
 
-\section{Obrazec za prijavo} 
-Študent, ki je opravil vse izpite in druge, s študijskim programom predpisane obveznosti, se prijavi k diplomskemu delu s posebnim
-obrazcem. 
+        sums, variants -  11.9, 11.10
 
-\section{Kdo izdaja in sprejema obrazce} 
-Obrazce za prijavo diplomskega dela izdajajo in sprejemajo v študentskem referatu. 
-Tam je po potrebi na voljo tudi obrazec za predčasno oddajo diplom\-skega dela.
+        how if is 'compiled' into case
 
-\section{Roki za prijavo in oddajo} 
-Študent mora oddati prijavo diplomskega dela od 1. do 5. v mesecu, rok pa mu začne teči 15. v mesecu, 
-v katerem je oddal prijavo, oz. 5. v mesecu za mesec april.
+\chapter{Implementacija}
+15 strani
 
-\section{Kdaj diplomskih del ni mogoče prijavljati} 
-Diplomskih del ni mogoče prijavljati v maju, juniju, juliju in avgustu.
+vsi fili, kaj kšn file dela, kaj je blo treba spremenit
 
+(kaj bi lahko izbrisal)
 
+- TIPI:
 
-\chapter{Navodila za opravljanje diplomskega dela}
+- CASE:
 
-\section{Viri}
-Za kakovostno diplomsko delo je pomembna uporaba vseh razpoložljivih doma\-čih in tujih strokovnih ter znanstvenih virov.
+\chapter{Uporaba}
+10 strani
 
-\section{Predčasen zagovor diplomskega dela}
-Diplomant, ki je pri diplomskem delu posebno uspešen in ga zaključi pred rokom, lahko s pristankom mentorja zaprosi za 
-predčasen zagovor diplomskega dela. Prošnjo za predčasen zagovor podpišeta na posebnem obrazcu mentor in diplomant. Prošnje sprejema študentski
-referat FRI, predčasen zagovor pa odobri prodekan za pedagoško dejavnost.
+- Menjava vseh tipov z impementiranimi
 
-\section{Nesoglasja med kandidatom in mentorjem}
-Če pride med opravljanjem diplomskega dela do nesoglasja med kandidatom in mentorjem ali somentorjem, 
-kar onemogoči ustvarjalno sodelovanje, ima kandidat na podlagi sklepa Komisije za študijske zadeve pravico do zame\-nja\-ve mentorja ali
-somentorja. Zaradi istih razlogov in po enakem postopku lahko tudi mentor ali somentor odklonita mentorstvo oziroma somentorstvo. V takšnem
-primeru je potrebno z navedbo razlogov pisno zaprositi Komisijo za študijske zadeve, ki na podlagi sklepa odobri zamenjavo in določi novega
-mentorja ali somentorja. Kandidat ima pravico zamenjave mentorja uveljaviti le enkrat.
+lists: 20.1 kar dobro pove kaj vse rabiš za delo s seznami - to lahko pokažem, enako lahko mogoče nardim za drevesa
+
+- rekurzivni tipi: seznami, drevesa, ...
+
+stream:
+
+data Stream = Cons Int Stream
+
+let ones = rec ones : Stream is Cons 1 ones
+
+podobno poiskusi z ostalimi 'hungry' funkcijami
+
+- Zanimivi rekurzivni tipi
+
+- funkcije z uporabo case
 
 
+\newpage
+\chapter{Rekurzivni tipi} %zaenkrat 1 stran plus razlaga primera seznama z drevesom -> cca 1.5 strani 
+V programiranju se vsakodnevno srečujemo z velikim številom konceptov in idej, ki nam na različne načine omogočajo iskati rešitve. Eden najbolj osnovnih in popularnih je tudi rekurzija.
+V osnovi rekurzija predstavlja elegantno preprostost reševanja zapletenih problemov z razčlenitvijo na manjše, bolj obvladljive podprobleme. Ta sposobnost reševanja zapletenih izzivov 
+postopoma, ni le preoblikovala načina, kako se programerji lotevajo kodiranja, temveč je tudi postavila temelje za ustvarjanje razreda podatkovnih struktur, imenovanih rekurzivni tipi.
 
-\chapter{Navodila za pisanje}
+Tako kot rekurzivna funkcija pokliče samo sebe, da reši problem v manjših korakih, rekurzivni tipi opredeljujejo strukture, ki vsebujejo elemente istega tipa in ustvarjajo strukturirane 
+samo-referenčne vzorce. S tem, ko dovoljujejo, da so elementi strukture sestavljeni iz primerkov iste strukture, oponašajo naraven način, kako zaznavamo in opisujemo svet okoli nas. 
+Na primer datotečni sistem, kjer lahko mape vsebujejo podmape, ki pa spet vsebujejo več map in datotek. Podobno v družinskem drevesu: posamezniki imajo otroke, ki sčasoma sami 
+postanejo starši. Rekurzivni tipi omogočajo, da te kompleksne odnose opišemo na preprost in intuitiven način.
 
-\section{Razgledanost}
-Pri pisanju diplomskega dela izkazuje kandidat poleg strokovne uspo\-sob\-lje\-nos\-ti še splošno razgledanost.
+Rekurzivni tip je podatkovni tip, ki se v svoji definiciji sklicuje sam nase. Ločimo ji lahko na induktivne in koinduktivne tipe. Prvi so končni, drugi pa so lahko tudi neskončni. 
+Morda najbolj osnoven primer rekurzivnega tipa, je seznam. Seznam je lahko prazen, ali pa vsebuje urejen par nekega elementa in drugega seznama. Elementu ponavadi rečemo glava, seznamu, 
+ki glavi sledi, pa rep. Tako ima poljubno dolžino, lahko je tudi prazen. Njegovo definicijo zapišemo kot:
+\begin{lstlisting}
+    List = <nil:Unit, cons:{Element, List}>
+\end{lstlisting}
+kjer \emph{nil} prestavlja odsotnost vrednosti, torej prazen seznam. V prikazovanju primerov svoje implementacije bom za prazen seznam uporabljal konstruktor \emph{Empty}, 
+ki ne sprejme nobenega argumenta. \emph{Element} pa predstavlja vrednost, ki je vsebovana v seznamu. Ta je seveda odvisna od tipa seznama. Če bi na primer hoteli seznam celih števil, 
+bi definicija izgledala tako:
+\begin{lstlisting}
+    ListInt = <nil:Unit, cons:{Int, ListInt}>
+\end{lstlisting}
+v moji impementaciji v Minihaskellu pa bi to izlgedalo kot:
+\begin{lstlisting}
+    data ListInt = Empty | Cons Int ListInt
+\end{lstlisting}
+Primer seznama celih števil, ki vsebuje elemente 1, 2 in 3:
+\begin{lstlisting}
+    let oneToThree = Cons 1 (Cons 2 (Cons 3 Empty))
+    > val oneToThree : ListInt
+\end{lstlisting}
 
-\section{Jezik diplomskega dela}
-Diplomsko delo mora biti napisano v slovenskem jeziku in mora biti jezikovno neoporečno. 
-Priporočamo, da pisni izdelek pred oddajo pregleda lektor. Obsega naj najmanj 20 strani strokovnega besedila. Stro\-kov\-no besedilo ni
-li\-te\-rar\-ni tekst in zanj veljajo drugačna pravila. Stro\-kov\-na besedila morajo biti nedvoumna, zato naj bodo stavki kratki, preprosto
-razumljivi in naj vsebujejo čimmanj podredniških zvez. Ena in ista stvar naj bo vedno poimenovana z istim imenom. Samostalniški prilastki so v
-slovenščini na desni strani osebka ali predmeta (SQL query $\rightarrow$ poizvedba SQL, API interface $\rightarrow$ vmesnik API), zato naj
-velja posebna pozornost prevodom iz angleščine. S pisanjem strokovnih besedil se razvija tudi slovenska strokovna terminologija. Vsak avtor
-mora upo\-šte\-va\-ti že uveljavljene slovenske prevode strokovnega izrazja, pri novem stro\-kov\-nem izrazju, ki se pojavlja v tujih jezikih,
-še zlasti v angleščini, pa se mora potruditi za iskanje ustreznih slovenskih prevodov. 
+Ta seznam si lahko predstavljamo tudi kot drevo:
 
-\section{Papir, pisave in vezava}
-Besedilo mora biti napisano na belem papirju formata A4.
-Okvirna postavitev besedila na omenjenem formatu je podana v tabeli \ref{tabela_mere}.
-
-\begin{table}[htb]
 \begin{center}
-\begin{tabular}{|l|l|}\hline
-zgornji rob	 & 20 mm (nad pagino vivo, če je ta uporabljena)\\\hline
-spodnji rob	 & 30 mm\\\hline
-notranji rob & 30 mm\\\hline
-zunanji rob	 & 20 mm\\\hline
-\end{tabular}
+    \begin{tikzpicture}[
+        level 1/.style={sibling distance=40mm},
+        level 2/.style={sibling distance=20mm},
+        node/.style={inner sep=2pt}
+      ]
+      \node[node] {Cons}
+        child {
+          node[node] {1}
+        }
+        child {
+          node[node] {Cons}
+          child {
+            node[node] {2}
+          }
+          child {
+            node[node] {Cons}
+            child {
+              node[node] {3}
+            }
+            child {
+              node[node] {Empty}
+            }
+          }
+        };
+      \end{tikzpicture}
 \end{center}
-\caption[Okvirna postavitev besedila.]{Okvirna postavitev besedila na formatu papirja A4.}
-\label{tabela_mere}
-\end{table}
 
-Priporoča se pisava ``Times New Roman'' ali pisava ``Computer Modern'', obe velikosti 12. 
-Razmak med vrsticami naj bo običajen, tisk pa po možnosti obojestranski.
+Različne vrednosti, ki jih lahko zavzame rekurzivni tip predstavimo s konstruktorji, ki sprejmenjo neko število argumentov, ki so lahko spet kostruktorji. V drevesnem prikazu tega tipa so 
+konstruktorji vozlišča, argumenti pa njihovi otroci. Konstruktorji, ki ne sprejmejo nobenih argumetnov, na primer \emph{Empty}, so listi drevesa. V našem primeru seznama s števili 
+ena do tri, poznamo dva konstruktorja: \emph{Cons} in \emph{Empty}. Drevo ima tudi liste, ki predstavljajo števila. Torej lahko podan primer razčlenimo:
+\begin{enumerate}
+    \item imamo seznam, ki vsebuje število 1 in nek drug seznam ali rep. Konstruktor, ki nam omogoča to strukturo je \emph{Cons}, ki sprejme dva argumenta: število in seznam. To sta 
+    njegova otroka. Vzamemo torej prvi del definicije: \textbf{Cons 1 rep}.
+    \item Seznam, ki je 'rep' seznama s številom 1, je spet seznam, ki vsebuje število 2 in nov seznam. Spet uporabimo konstruktor \emph{Cons} in mu podamo argumenta 2 in nov seznam, se pravi 
+    \textbf{Cons 2 rep}.
+    \item Ostane nam še število 3, ki ga kot argument ponudimo tretjemu \emph{Cons} konstruktorju. Potrebujemo še repni seznam: \textbf{Cons 3 rep}.
+    \item Ker smo na koncu seznama, uporabimo konstruktor \textbf{Empty} in zaključimo strukturo.
+\end{enumerate}
 
-Celoten izdelek naj bo vezan v platno ali drug ustrezen material. 
-Barva tega materiala naj bo črna ali temno modra. 
-Na hrbtu vezanega dela naj bo napisano ime in priimek kandidata in ``Diplomsko delo''.
+Seznamom podoben primer so drevesa. Ta so sestavljena iz vozlišč, vsako je lahko prazno, ali pa vsebuje nek element in svoje otroke. Ti so spet drevesa. V svetu programiranja so seznami in 
+drevesa ključne podatkovne strukture, ki jih uporabljamo na različne načine. Razvijajo se inovativne implementacije in algoritmi za delo z njimi in so nujni za razumevanje programiranja.
+Seveda pa so to hkrati le osnovni primeri rekurzivnih tipov. V nadaljevanju bom predstavil nekaj bolj zanimivih primerov, ki so prav tako zelo uporabni.
 
-\section{Platnica diplomskega dela}
-Na platnici mora biti: 
-\begin{itemize}
-\item	naziv univerze in fakultete z velikimi črkami, oddaljen ca. 30 mm od zgornjega roba; 
-\item	ime in priimek kandidata in pod njim naslov dela;
-\item	oznaka, za katero vrsto diplomskega dela gre (univerzitetno ali visoko\-šol\-sko strokovno), napisana prav tako z velikimi črkami;
-\item	spodaj na sredini ``Ljubljana, letnica'', oddaljena ca. 30 mm od spodnjega roba. 
-\end{itemize}
-Diplomsko delo lahko razdelimo na uvodne liste in glavne liste.
+\section{Koinduktivni podatkovni tipi}
+Seznami in drevesa so končni rekurzivni tipi, kar je lako zelo prikladno, ker lahko hranimo njihovo celo vsebino. Lahko pa se zgodi, da porebujemo podatkovni tip, ki nam omogoča dostop do 
+neomejene količine podatkov. Tu nastopijo koinduktivni tipi. Najbolj so povezani z uporabo v komunikacijah, kjer ni potrebe da se komunikacijaski kanal kdaj zapre, najdemo pa jih lahko v  
+postopkih, ki so lahko neskončni. 
 
-\section{Uvodni listi}
-Uvodni listi si sledijo po naslednjem vrstnem redu: 
-\begin{itemize}
-\item	
-naslovna stran je enaka platnici, le da ima še navedbo mentorja:
-naziv univerze in fakultete, ime in priimek diplomanta, 
-naslov teme diplom\-ske\-ga dela (enak kot v originalu izdane teme), oznaka za katero vrsto diplomskega dela gre, navedba mentorja ter kraj in
-letnica; 
-\item	original izdane teme diplomskega dela, ki ga diplomant dvigne v študent\-skem referatu, preden odda izdelek v vezavo;
-\item izpolnjena izjava o avtorstvu in soglasje, ki omogoča objavo elektronske oblike v zbirki 'Dela FRI'; 
-\item	zahvala, v kateri se diplomant zahvali vsem, ki so kakorkoli pripomogli k uspešni izvedbi diplomskega dela; 
-\item	morebitno posvetilo;
-\item	kazalo, ki obsega oštevilčene naslove poglavij in podpoglavij vključno s številkami strani. 
-Za oštevilčenje poglavij se uporablja večnivojsko desetiško številčenje (kot npr. v tem navodilu);
-\item	seznam uporabljenih kratic in simbolov, ki morajo biti enotni v celotnem delu, ne glede na označevanje v uporabljenih virih. 
-\item uvodne strani nimajo označb strani.
-\end{itemize}
-
-\section{Glavni listi}
-Od tu dalje so strani označene s številkami, ki naj bodo na zunanjem robu strani zgoraj. 
-Delo obsega naslednje dele: povzetek, uvod (1. poglavje), glavni del, ki je smiselno razdeljen na več poglavij (2., 3., \ldots\ poglavje),
-sklepne ugotovitve (zadnje poglavje), morebitne priloge, seznam slik in tabel, seznam uporabljenih virov (literatura). 
-
-\subsection{Povzetek}
-Povzetek naj posreduje bralcu kratko vsebino dela. Zajema naj namen dela, področje, na katerega se delo nanaša,
-uporabljene metode, poglavitne rezultate dela, zaključke in priporočila.  
-Povzetek naj ne obsega več kot eno stran. Napiše se povsem na koncu, ko je že jasna vsebina vseh ostalih poglavij.
-
-\subsection{Uvod}
-Uvod v diplomsko delo ima namen, da uvede bralca v tematiko dip\-lom\-ske\-ga dela. Za izhodišče pri pisanju uvoda služijo zahteve
-in cilji naloge, ki so navedeni v temi diplomske naloge, definirani s strani mentorja. Sledi podrobnejši opis problemskega področja, okolja v
-katerem so problemi pojavljajo, in identifikacija problemov, ki jih je potrebno razrešiti. Marsikateri problem in njegova rešitev je že opisan
-v literaturi, zato je potrebno pregledati vire in oceniti njihovo koristnost pri izdelavi naloge. Če že obstajajo kakšne podobne rešitve, je
-potrebno ugotoviti do kolikšne mere se dajo uporabiti, oziroma kakšne modifikacije bi bile potrebne za njihovo uporabo.
-Na koncu uvoda naj bo podan tudi kratek pregled vsebine posameznih poglavij.
-
-\subsection{Glavni del}
-V glavnem delu diplomskega dela opiše kandidat potek izdelave svojega dela, 
-pri čemer je predhodno seveda dokončal praktični del naloge.  V njem razloži, katere poti je ubral za dosego cilja, in sistematično opiše
-opravljeno delo.
-
-Kandidat oblikovno razdeli gradivo smiselno na poglavja, podpoglavja in morebiti še na razdelke, ki jih oštevilči 
-(na primer 4.6.3.). 
-
-Slik, ki skrajšujejo besedilo, ali pripomorejo k razumljivosti, naj bo čim več. Slike ali fotografije morajo biti
-oštevilčene in citirane v besedilu (npr. slika \ref{slika_seznam}) ter podnaslovljene tako, da je razvidno, kaj predstavljajo. V besedilo so
-vstavljene približno tam, kjer se nanje sklicujemo. Slike naj bodo pregledne in naj prikažejo le najpotrebnejšo informacijo. 
-
-\begin{figure}[htb]
-\centerline{\psfig{figure=image1,width=13cm}}
-\caption[Krožni dvosmerni seznam.]{Krožni dvosmerni seznam za n=15. Kazalec prvi služi kot vstopna to\v cka.}
-\label{slika_seznam}
-\end{figure}
-
-Formule in enačbe se oštevilči z zaporedno številko v oklepaju na desni strani formule, npr. enačba (\ref{enacba_r}), 
-in se tako nanje tudi sklicuje. Kadar za določen strokovni termin ni splošno sprejetega domačega izraza, se navede prvič, ko se slovenski izraz
-pojavi, v oklepaju tudi originalni izraz, povzet iz uporabljene literature.
-
+Osnovni primer koinduktivnih tipov so lačne funkcije. To so funkcije, ki sprejmejo poljubno število argumentov in vrnejo novo funkcijo, ki je lačna novih argumentov:
 \begin{equation}
-r = \pi R_1 (r) \bowtie \pi R_2 (r) \bowtie \cdots \bowtie  \pi R_n  (r)
-\label{enacba_r}
+    \text{Lačna} = \mu X. (\text{Argument} \rightarrow X) \notag
 \end{equation}
+Na primer, lahko imamo funkcijo, ki sprejme število in vrne funkcijo, ki sprejme novo število:
+\begin{lstlisting}
+    f = fix (λf:Int->Lačna. λn:Int. f)
+    > f : Lačna
+\end{lstlisting}
+Ko jo polkičemo, bo vrnila novo funkcijo, ki bo lačna novih argumentov:
+\begin{lstlisting}
+    l_1 = f 1;
+    > l_1 : Lačna
+\end{lstlisting}
+Rezultatu lahko nato podamo nov argument in dobili bomo enak rezultat:
+\begin{lstlisting}
+    l_2 = l_1 2;
+    > l_2 : Lačna  
+\end{lstlisting}
+Tako funkcijo lahko gledamo tudi kot funkcijo, ki sprejme neomejeno količino argumentov in še vedno bo lačna novih:
+\begin{lstlisting}
+    zelo_lačna = f 1 2 3 4 5 6 7 8 9 10;
+    > zelo_lačna : Lačna
+\end{lstlisting}
+V resnici je \emph{zelo\_lačna} sestavljena iz več lačnih funkcij, ki se poračunajo sproti z vsakim argumentom. Lahko bi jo zapisali tudo kot:
+\begin{lstlisting}
+    zelo_lačna = (((((((((f 1) 2) 3) 4) 5) 6) 7) 8) 9) 10
+    > zelo_lačna : Lačna
+\end{lstlisting}
+Tako se 1 uporabi kot argument na funkciji f, 2 na funkciji, ki jo vrne f, ko sprejme 1 in tako naprej.
 
-\subsection{Sklepne ugotovitve}
+Koinduktivni tipi so torej zelo uporabni, ker nam omogočajo delo z neskončnimi podatki. Vendar pa je potrebno biti previden, ker lahko hitro pride do neskončnih zank, ki se nikoli ne izračunajo. 
+Lažje jih je obvladovati v lenih programskih jezikih, ker se njihova vsebina nikoli ne izračuna do konca, vedno samo po potrebi.
 
-Sklepne ugotovitve naj prikažejo oceno o opravljenem delu in povzamejo težave, na katere je naletel kandidat. Kot rezultat dela
-lahko navede ideje, ki so nastale med delom, in bi lahko bile predmet novih raziskav.
+Najbolj znane lačne funkcije so \emph{tokovi}. To so funkcije, ki sprejmejo prazne vrednosti (\emph{Unit}) in vrnejo pare elementov in novih tokov:
+\begin{equation}
+    Tok = \mu X. (Unit \rightarrow {Element, X}) \notag
+\end{equation}
+Lažji način za razumevanje tokov je, da jih gledamo kot neskončne sezname, sestavljene iz parov elementov in novih tokov. Na primer, lahko imamo tok naravnih števil:
+\begin{lstlisting}
+    naravna = fix (λf:Int->Tok. λn:Int. λu:Unit. 
+        {n, f (n+1)}) 0;
+    > naravna : Tok
+\end{lstlisting}
+Za delo s tako funkcijo potrebujemo še nekaj pomožnih funkcij. Najprej funkcijo, ki vrne prvi element, ali glavo toka: (imejmo 1 za indeks prvega elementa in 2 za indeks drugega)
+\begin{lstlisting}
+    glava = λt:Tok. (t Unit).1;
+    > Tok : Tok -> Int
+\end{lstlisting}
+in še funkcijo, ki vrne rep toka:
+\begin{lstlisting}
+    rep = λt:Tok. (t Unit).2;
+    > rep : Tok -> Tok
+\end{lstlisting}
+Tako lahko dostopamo do poljubnega elementa v toku:
+\begin{lstlisting}
+    tri = glava (rep (rep (rep naravna)));
+    > 3 : Int
+\end{lstlisting}
 
-\subsection{Priloge}
-Priloge (slike, diagrami, algoritmi, načrti), 
-če so potrebne, kandidat izdela kot posebna poglavja (dodatki), ki jih zaradi preglednosti ni smiselno vključiti v glavni del naloge. Vsi
-dodatki morajo biti naslovljeni in oštevilčeni, običajno z velikimi tiskanimi črkami. 
-
-Na tem mestu je priporočljivo navesti tudi seznama slik in tabel.
-
-\subsection{Viri}
-Vire navede kandidat po abecednem vrstnem redu priimkov avtorjev. Navajajo naj se le tisti viri, na katere se
-kandidat v besedilu sklicuje! Dolg seznam ni dokaz, da ima kandidat tudi tak pregled čez literaturo. Za navajanje virov naj se uporabi
-slovenska inačica formata IEEE. V tem formatu se viri (članek v zborniku konference,  knjiga, članek v reviji in spletna stran) navedejo  kot
-je to prikazano v poglavju Literatura (stran \pageref{stran_literatura}). Sklicevanje na vir se v besedilu naloge označi z zaporedno številko
-vira v oglatem oklepaju, npr. \cite{peytonjones93} oziroma \cite{trucco98,wadler89,IEEE}, kadar se na istem mestu sklicuje na več
-različnih virov.  Zglede za druge vrste virov je mogoče dobiti v revijah IEEE, ki so na voljo v knjižnici, ali na spletnem naslovu
-\cite{IEEE}.
-
-\subsection{Pisanje v tujem jeziku}
-Kandidatu se dovoli pisanje diplomskega dela v enem izmed svetovnih jezikov (npr. angleščini) na osnovi utemeljene prošnje. Naslovna stran
-(platnica) diplomskega dela je napisana v slovenskem jeziku. V naslednjem zaporedju si sledijo: prva stran diplomskega dela v tujem jeziku,
-prva stran diplomskega dela v slovenskem jeziku in original izdane teme diplomskega dela v tujem jeziku. Povzetek diplomskega dela v slovenskem
-jeziku mora obsegati 3 do 5 strani. 
-
-
-\chapter{Oddaja in zagovor diplomskega dela}
-
-\section{Roki za zagovor}
-Roke za oddajo in pogoje za zagovor diplomskega dela določata ``
-Pravilnik o preverjanju in ocenjevanju znanja ter izpitnem redu FRI''
-in ``Statut univerze''.
-
-\section{Podalj\v sanje roka}
-Ko je kandidatov mentor zadovoljen z dosežki kandidata in ko le-ta do\-kon\-ča diplomsko delo, sledi zagovor. Če ob izteku roka za izdelavo
-diplomskega dela mentor ni zadovoljen s kandidatovimi dosežki, mora kandidat zaprositi za podaljšanje roka oddaje in delo dopolniti glede na
-zahteve mentorja.
-
-V primeru, da kandidat tudi v podaljšanem roku ne odda diplomskega dela, roka ne more več podaljšati in mora zaprositi za izstavitev nove teme.
-
-\section{Kdaj tema zapade}
-Diplomantu, ki ne odda v roku diplomskega dela in ne zaprosi za njegovo podaljšanje, izda fakulteta ugotovitveni sklep, da je tema zapadla. Za
-izstavitev nove teme diplomskega dela mora kandidat s pisno vlogo zaprositi Komisijo za študijske zadeve.
-
-\section{\v Stevilo izvodov}
-Kandidat odda dva oz. tri enake vezane izvode diplomskega dela, enega v študentski referat, drugega mentorju oziroma tretjega somentorju, če je
-bil ta imenovan. Vezan izvod, ki ga študent odda v študentski referat, mora imeti dodan elektronski medij (CD), ki vsebuje:
-\begin{itemize}
-	\item celoten izvod diplomskega dela v elektronski obliki v formatu ....pdf (izvod ne sme biti na noben način zaščiten).
-	\item naslov (slov., angl.), povzetek diplomskega dela (slov., angl.) ter ključne besede (slov., angl.) oblikovane  z ustreznim urejevalnikom besedil in shranjene v formatu .doc ali .rtf. Podatki se uporabijo za vnos v digitalno zbirko ePrints, zato morajo biti napisani z malimi črkami v povezavi s potrebnimi velikimi začetnicami in kraticami, ki so zapisane z velikimi črkami. 
-\end{itemize}
-
-Študent odda v študentski referat tudi podpisan obrazec, ki vključuje izjavo o avtorstvu in soglasje, ki omogoča objavo elektronske oblike v zbirki 'Dela FRI'. Obrazec je na spletni strani FRI: \textit{Izjava o avtorstvu diplomskega dela.doc}. 
+Oglejmo si še nadgradnjo tokov, enostavne procese. To so funkcije, ki sprejmejo nek element in vrnejo par elementa in novega procesa:
+\begin{equation}
+    Proces = \mu X. (Element \rightarrow {Element, X}) \notag
+\end{equation}
+Na primer, lahko imamo proces, ki sproti vrača XOR zadnjih dveh prejetih elementov:
+\begin{lstlisting}
+    xor = fix (λf:Bool->Proces. λb_1:Bool. λb_2:Bool. 
+        let new_b = xor b_1 b_2 in
+        {new_b, f new_b}) true;
+    > xor : Proces
+\end{lstlisting}
+Podobno kot pro tokovih, za delo s procesi potrebujemo pomožne funkcije, kot je na primer funkcija, ki vrne vrnjeno vrednost procesa:
+\begin{lstlisting}
+    vrednost = λp:Proces. (p true).1;
+    > vrednost : Proces -> Bool
+\end{lstlisting}
 
 
-\section{Komisija za zagovor diplomskega dela}
-Kandidat zagovarja svoje delo na diplomskem izpitu pred komisijo, ki jo se\-stav\-lja mentor in vsaj dva učitelja. Zagovor diplomskega dela je
-javen. Zagovor vodi predsednik komisije za oceno in zagovor diplomskega dela. 
+\section{Equi-recursive ali Iso-recursive?}
+Ko implementiramo rekurzivne tipe, se moramo slej ko prej vprašati, kaj je razlika med tipom in čemer dobimo, ko ta tip enkrat 'odvijemo'. Na primer, kaj je razlika med tipom \emph{List}
+in njegovim enkratnim odvojem \emph{<nil:Unit, cons:{Element, List}>}? V literatiri pojavita dva pristopa k temu vprašanju: \emph{equi-recursive} in \emph{iso-recursive}.
+\subsection{Equi-recursive}
+Equi-recursive pristop pravi, da je tip \emph{\(\mu\)X.F(X)} po definiciji enak njegovemu odvoju \emph{F(\(\mu\)X.F(X))}, ker oba predstavljata enaka neskončna drevesa. Ta pristop nato od 
+preverjevalnika tipov zahteva, da poskrbi, da se lahko oba zapisa uporabljata kot argumenta v funkcijah in podobno.
 
-\subsection{Način zagovora}
-Predstavitev diplomskega dela je ustna, kandidat pa ne sme brati vna\-prej pripravljenega besedila. To mu je lahko samo v pomoč. Dovoljeno je
-pre\-brati številčene podatke in citate. Kandidat naj predstavitev diplomskega dela popestri z ilustrativnim prikazom dosežkov. Pri tem sme
-uporabiti vsa primerna sredstva, vključno z multimedijskimi. O obliki predstavitve se dogovori z mentorjem. Za zagotavljanje tehničnih
-pripomočkov se diplomant dogovori z mentorjem ali z referentom v štu\-dent\-skem referatu vsaj en dan pred zagovorom. Kadar ta sredstva niso
-zadostna oziroma primerna, jih diplomant lahko z mentorjevim soglasjem dopolni z laboratorijskimi ali lastnimi. V tem primeru jih mora takoj po
-zagovoru pospraviti, da se v diplomski sobi lahko začne nov zagovor. O času, v katerem je diplomska soba na razpolago diplomantu, se ta
-dogovori v študentskem referatu.
+\subsection{Iso-recursive}
+Iso-recursive način, pa ubere na prvi pogled nekoliko bolj zapleteno pot. Definira dve preslikavi, ki sta med seboj inverzni. Imenujmo ju \emph{fold} in \emph{unfold}. Preslikava 
+\emph{unfold} vzame rekurzivni tip in ga preslika v njegov prvi odvoj, torej vzame tip \(\mu\)X.T in v telesu T zamenja vse pijavitve X z celotnim rekurzivnim tipom. Na primer, v definiciji 
+seznama: 
+\begin{equation}
+    \mu \text{List.}<\text{nil:Unit, cons:}\{\text{Element, List}\}> \notag
+\end{equation}
+preslikamo v
+\begin{equation}
+    <\text{nil:Unit, cons:}\{\text{Element,} \mu \text{List.}<\text{nil:Unit, cons:}\{\text{Element, List}\}>\}>. \notag
+\end{equation}
+  
+\emph{Fold} pa stori ravno obratno, torej rekurzivni tip zavije nazaj. Definiciji teh preslikav lahko tako zapišemo kot:
+\begin{gather}
+    unfold[\mu X.T]: \mu X.T \rightarrow [X \rightarrow \mu X.T] T \notag\\
+    fold[\mu X.T]: [X \rightarrow \mu X.T] T \rightarrow \mu X.T \notag
+\end{gather}
+Ker sta preslikavi inverzni, velja:
 
-\subsection{\v Cas za zagovor}
-Zagovor diplomskega dela začne kandidat s kratko, praviloma 10 minutno predstavitvijo svojega dela. Kandidat mora biti sposoben, da v razmeroma
-kratkem času poda članom komisije in drugim poslušalcem poglavitno vsebino svojega dela. Uvodoma naj razloži, kaj je predmet njegovega dela,
-katerih problemov se je lotil, kakšne so bile zahteve in kakšne vire je imel na voljo za njihovo rešitev. Sledi opis reševanja problemov v
-skladu s podanimi specifikacijami, npr. izdelava programske opreme, izdelava strojne opreme, razvoj algoritmov, metod ali metodologij itd. V
-zaključku kandidat kritično oceni rezultate svojega dela ter poda ideje in smernice za njegovo nadaljevanje.
+\begin{center}
+\includegraphics[width=0.5\textwidth]{fold_unfold.jpg}
+\end{center}
 
-\subsection{Vpra\v sanja}
-Po ustni predstavitvi člani komisije postavijo kandidatu vprašanja. Kandidat odgovori na vprašanja iz celotne tematike diplomskega dela, iz
-usmerjenega znanja dodiplomskega študija, na katerega se opira diplomsko delo, in iz splošnega temeljnega znanja računalništva in informatike.
-Na vprašanja mora kandidat odgovoriti jasno, kratko in suvereno.
+Tako iso-recursive pristop rekurzivni tip in njegove odvoje ne obravnava kot enake, temveč kot izomorfne.
 
-\subsection{Ocena diplomskega dela in ocena zagovora}
-Po končanem zagovoru se komisija za oceno in zagovor diplomskega dela oddalji in oceni diplomsko delo in zagovor. Po vrnitvi v prostor zagovora
-predsednik komisije za oceno in zagovor ustno sporoči oceno diplomskega dela, oceno zagovora diplomskega dela in končno oceno diplomskega
-izpita. 
+Oba pristopa se uporabljata pri konstrukciji programskih jezikov in teoretičnih besedilih. Equi-recursive je bolj intuitiven, vednar zahteva več dela od preverjevalnika tipov in 
+lahko privede do težav pri kombinaciji z drugimi konstrukti, na primer operatorjih na tipih. Medtem iso-recursive pristop zahteva uporabo preslikav \emph{fold} in \emph{unfold}, kjerkoli 
+se uporabijo rekurzivni tipi. V svoji implementaciji sem uporabil equi-recursive pristop, ker je bolj intuitiven in ne zahteva uporabe dodatni preslikav. Ker je Minihaskell len programski 
+jezik, preverjevalnik tipov čaka na potrebo po preverjanju tipov, kar pomeni, da se lahko uporabijo rekurzivni tipi, ne da bi jih bilo treba najprej razviti.
 
-\subsection{Pritožba}
-Če se diplomant ne strinja s katero od ocen (dela ali zagovora), se lahko pisno pritoži dekanu. Pritožbo mora oddati v dekanat fakultete v roku
-24 ur po zagovoru. 
+\chapter{Vsote in variante}
+Programerji se pogosto srečujejo z različnimi strukturami ali spremenljivkami, ki lahko zavzamejo vrednosti iz množice opcij. Na primer, vozlišče v drevesu je lahko prazno, list, ali 
+notranje vozlišče. Element v povezanem seznamu je lahko trivialna vrednost nil, ali pa vozlišče Cons z glavo in repom seznama. Takih primerov je ogromno. Zato poznamo "sum types".
+
+\section{Vsote}
+Vsote so tipi, ki izvirajo iz množice vrednosti, dobljene iz kombinacije natanko dveh tipov. Na primer, če imamo tipa
+\begin{lstlisting}
+    Odrasel = {starost: Int, izobrazba: String}
+    Otrok = {starost: Int, šola: String}
+\end{lstlisting}
+za opis odraslega in otroka in želimo obravnavati oba kot en tip, da bi lahko na primer naredili seznam, ki vključuje oba tipa, lahko definiramo vsoto
+\begin{lstlisting}
+    Oseba = Odrasel + Otrok.
+\end{lstlisting}
+Vsak element s tipom oseba, je tipa Odrasel, ali pa Otrok.
+
+Za ločevanje med elementi vsote, bomo uporabljali označbe \emph{inl} in \emph{inr}. Označbi prideta iz angleških izrazov \textit{inject left} in \textit{inject right}. Lahko ju razumemo kot
+funkciji, v tem primeru:
+\begin{gather}
+    inl: Odrasel \rightarrow Oseba \notag\\
+    inr: Otrok \rightarrow Oseba \notag
+\end{gather}
+vendar ju bomo uporabljali zgolj kot oznaki za ločevanje med elementi vsote. Torej, elementi tipa \emph{Oseba} so bodisi oblike \emph{inl x}, kjer je x tipa \emph{Odrasel}, ali pa \emph{inr y}, kjer je y 
+tipa \emph{Otrok}. Torej, če je \emph{od} tipa \emph{Odrasel}, je \emph{inl od} tipa \emph{Oseba}, če pa je \emph{ot} tipa \emph{Otrok}, je \emph{inr ot} tipa \emph{Oseba}.
+
+Da lahko nato delamo z vsotami, moramo imeti funkcije, ki znajo ločevati med elementi vsote in jih obravnavati posebej. To naredimo z uporabo \emph{case} izraza. Če nas na primer zanimajo 
+informacije o izobrazbi obravnavane osebe, lahko definiramo funkcijo izobrazba:
+\begin{lstlisting}
+    izobrazba: λo:Oseba.
+        case o of
+            inl x -> x.izobrazba
+            inr y -> y.šola;
+\end{lstlisting}
+Ko je argument o tipa Odrasel označen z \emph{inl}, se izvede prva veja in vrne izobrazba odraslega, ko pa je argument o tipa Otrok označen z \emph{inr}, se izvede druga veja in vrne šola
+otroka. Tako je tip celotne funkcije \emph{Oseba $\rightarrow$ String}.
+
+Preverjevalnik tipov tukaj nima težke naloge. Če imamo vsoto tipov \(T_1 + T_2\) in želimo pokazati, da je \emph{inl $t_1$} tipa \emph{$T_1 + T_2$}, moramo le pokazati, da je 
+\emph{$t_1$} tipa \emph{$T_1$}. Podobno velja za \emph{inr $t_2$}. Za \emph{case} moramo preveriti več stvari. Najprej, da je argument tipa \emph{$T_1$ + $T_2$}. Nato preverimo 
+obe veji, kjer predpostavimo da sta arumenta \emph{x} in \emph{y} tipov \emph{$T_1$} in \emph{$T_2$}, v tem vrstnem redu. Preverjamo, da sta tipa \emph{$T_1$} in \emph{$T_2$} 
+vrnjenih vrednosti enaka. Če je to res, označimo tip vrnjene vrednosti kot \emph{T}. Celoten izraz ima nato tip \emph{$T_1 + T_2$ $\rightarrow$ T}.
+
+Ker v \emph{case} izrazu preverjamo tip izraza, ki je podan kot argument na način, da samo preverimo ali ustreza enemu od \emph{\(T_1\) in \(T_2\)} in se ne oziramo na drugi tip v vsoti, 
+se lahko zgodi, da je izrazu možno dodeliti več kot en tip. To se zgodi, če ima več vsot enak seštevanec. Za primer vzemimo vsoti \emph{$\alpha$ + $\beta$} in \emph{$\gamma$ + $\beta$}.
+Obema je skupen seštevanec \emph{$\beta$}, torej lahko nekemu izrazu tipa \emph{$\beta$} dodelimo tip \emph{$\alpha$ + $\beta$} ali pa \emph{$\gamma$ + $\beta$}. To je problem, ki ga
+lahko rešujemo na različne načine. V svoji implementaciji, sem se odločil, da bo prevajalnik tipov izbral prvi tip, ki ga najde, torej tistega, ki je bil nazadnje definiran. To je bila 
+najpreprostejša rešitev, vendar onemogoča, da bi v tem primeru tip \emph{$\beta$} kakorkoli prepoznal kot del vsote \emph{$\alpha$ + $\beta$}.
+
+\section{Variante}
+Binarne vsote lahko razširimo na variante, ki so kot vsote s poljubnim številom seštevancev. Zato označbi \emph{inl} in \emph{inr} ne prideta več v poštev, temveč uporabimo svoje oznake. 
+Tako se malenkost spremeni notacija. Namesto \emph{$T_1 + T_2$} pišemo \emph{<$l_1:T_1, ... , l_n:T_n$>}, kjer \(l_i\) stoji za i-to oznako, ali 'label'. Prav tako namesto \emph{inl t as 
+$T_1 + T_2$}, pišemo \emph{<$l_1$ = t> as <$l_1:T_1, ... , l_n:T_n$>}. Tako naš primer z osebami postane:
+\begin{lstlisting}
+    Oseba = <odrasel:Odrasel, otrok:Otrok>;
+    o = <odrasel=od> as Oseba;
+    > o : Oseba
+
+    izobrazba: λo:Oseba.
+        case o of
+            <odrasel = od> -> od.izobrazba
+          | <otrok = ot> -> ot.šola;
+    > izobrazba : Oseba -> String
+\end{lstlisting}
+
+
+Morda zanimiva skupina variant so tiste, ki lahko vsebujejo tudi trivialne vrednosti \emph{unit}:
+\begin{lstlisting}
+    Optional =  <none:unit, some:Val>;
+\end{lstlisting}
+Ti tipi so izomorfni s tipi, ki spadajo pod oznako \emph{some} in razširjeni z opcijo trivialne vrednosti. To so na primer tipi, ki jih poznamo iz priljubljenih programskih jezikov in dopuščajo 
+vrednosti kot so \emph{null}, \emph{None} ali \emph{nil}.
+
+Še dve posebni vrsti variant sta dovolj zanimivi za posebno obravnavo.
+
+\subsection{Oštevilčenja (enumerations)}
+Oštevilčenja so variante, ki vsebujejo zgolj trivialne vrendosti in so namenjene predstavljanju konstant. Na primer, če želimo predstaviti ocene, ki jih lahko dobi študent, definiramo varianto:
+\begin{lstlisting}
+    Ocena = <pet:Unit, šest:Unit, sedem:Unit, osem:Unit, 
+            devet:Unit, deset:Unit>;
+\end{lstlisting}
+Elementi takega tipa bi nato bili oblike \emph{<deset=unit> as Ocena}. Tako lahko sestavimo tudi funkcije, ki obravnavajo take vrendnosti. Na primer;
+\begin{lstlisting}
+    možno_zviševanje = λ.o:Ocena.
+        case o of 
+              <deset=x> -> false
+            | _         -> true;
+\end{lstlisting}
+je funkcija, ki sprejme eno izmed ocen in vrne odgovor na vprašanje, če jo je možno izboljšati. Tip te funkcije je \emph{Ocena $\rightarrow$ Bool}.
+
+\subsection{Variante enega tipa (Single-field variants)}
+Možno je ustvariti tudi variante s samo eno oznako, torej bodo vsi njeni elementi istega tipa:
+\begin{lstlisting}
+    V = <l:T>;
+\end{lstlisting}
+torej tipa \emph{T}. To je lahko zelo uporabno, ker elementov tipa \emph{V} ni možno zamešati za elemente tipa \emph{T} in posledično na njih ne moremo izvajati operacij, ki jih lahko na tipu 
+\emph{T}. Tako se lahko izognemu nesmiselnim primerom. Recimo, da uporabljamo podatke o valutah. Količino denarja v posamezni valuti lahko predstavimo s tipom \emph{Float}, kot decimalno 
+število. Težava nastane, ko definiramo funkcijo, ki pretvarja med valutami:
+\begin{lstlisting}
+    KuneVEvre = λx:Float. zmnoži x 0.1327;
+    > KuneVEvre : Float -> Float
+\end{lstlisting}
+kjer \emph{zmnoži} predstavlja funkcijo, ki pomnoži dve decimialni števili. Če je \emph{x}, ki ga podamo funkciji \emph{KuneVEvre} količina denarja v evrih, je vse v redu. Vendar pa nam nič ne 
+preprečuje, da bi kot argument v \emph{KuneVEvre} podali katerokoli drugo število, na primer količino denarja v dolarjih, ali še huje, število število komarjev v nekem prostoru. Taka uporaba te 
+funkcije je nesmiselna in se ji v večini primerov želimo izogniti. Tako lahko definiramo variante enega tipa:
+\begin{lstlisting}
+    DenarVKunah = <kune:Float>;
+    DenarVEvrih = <evri:Float>;
+\end{lstlisting}
+in morda še vse ostali, ki jih potrebujemo, ter funkcijo \emph{KuneVEvre} spremenimo tako, da deluje s pravilnimi tipi, torej pretvorbo omogočimo 
+samo iz kun v evre in nič drugega:
+\begin{lstlisting}
+    KuneVEvre = λx:DenarVKunah.
+        case x of 
+            <kune:x> -> <evri = zmnoži x 0.1327> 
+                        as DenarVEvrih;
+    > KuneVEvre : DenarVKunah -> DenarVEvrih.
+\end{lstlisting}
+Tako se zavarujemo pred napakami.
+\newpage
+
+\chapter{Implementacija}
+Predstavljene konstrukte sem tudi sam implementiral. To sem storil v programskem jeziku Minihaskell, ki ga je ustvaril prof. dr. Andrej Bauer in 
+je dostopen na njegovem Github profilu, v repozitoriju \emph{plzoo}. 
+
+Minihaskell je programski jezik, ki je namenjen predstavitvi osnovnih konceptov funkcijskega programiranja. Napisan je v programskem jeziku 
+OCaml in po strukturi in načinu uporabe sledi jeziku Haskell. Omogoča uporabo celih števil (\textit{integers}), booleanov z logičnimi operacijami in primerjavami 
+celih števil ('=', '<'), urejenih parov, seznamov, funkcij in rekurzije. Temu sem dodal možnost definiranja novih tipov, rekurzivnih ali ne, in 
+uporabe \emph{case} izrazov za elo z njimi. Programski jezik sestavljajo leksična analiza, razčlenjevanje, interpreter in preverjevalnik tipov. V nadaljevanju bom predstavil kako 
+delujejo v Minihaskellu, ter kako sem jih dopolnil.
+
+\section{Leksična analiza}
+Prvi korak, ki ga je potrebno narediti, ko dobimo program ali ukaz in ga želimo izvesti, je leksična analiza. To je postopek, kjer vhodni niz znakov očistimo nebistvenih znakov, kot 
+na primer presledki in jih razdelimo na gradnike. To so vse ključne besede, ki jih jezik pozna, števila, znaki, \emph{eof} in podobno. To stori leksični analizator, ali lekser. 
+Lekser je v našem primeru napisan v datoteki \emph{lexer.mll}. Je datoteka, kjer so shranjeni regularni izrazi, ki opisujejo gradnike, ki jih lahko uporabljamo v programskem jeziku. 
+Kot je to storjeno v Haskellu, sem določil, da bom imena spremenljvk dovolil le z majhno začetnico, imena konstruktorjev tipov pa le z veliko. Tako sem si olajšal delo v parserju. 
+Gradnik, ki bo predstavljal imena konstruktorjev in imena tipov sem poimenoval \emph{cname}, kot okrajšavo za \textit{capital name} ali ime z veliko začetnico. Poleg načina poimenovanja 
+konstruktov, je v lekserju definiranih še veliko drugih gradnikov, kot so olkepaji, znaki za operacije, ključne besede, ukaz \emph{:quit} za izhod iz \emph{minihaskell.exe} 
+in podobno. Za definicijo podatkovnih tipov sem dodal ključno besedo \emph{data}, z idejo, da bo imela enako vlogo, kot tista v Haskellu. Tako imamo vse potrebno za 
+definicijo novih podatkovnih tipov, ker smo definirali besedo \emph{data}, imamo \emph{cname} za definicijo konstruktorjev in že od prej možnost definiranja spremenljivk.
+Za delo s podatkovnimi tipi, torej izraz \emph{case}, je bilo potrebno še dodati gradnike za ključne besede \emph{case}, \emph{of} in \emph{end}\footnote{Gradnik \emph{ALTERNATIVE} 
+za znak '|' je že bil definiran, ker je Minihaskell že imel sezname in funkcijo \emph{match} za delo z njimi.}\footnote{Gradnik \emph{TARROW} za znak \emph{->}, ki bo v veji \emph{case} 
+izraza ločil med izrazom, ki ga primerjamo in posledico, ki se sproži v primeru ujemanja, je prav tako že bil definiran.}. V Haskellu sicer gradnika za \emph{end} ne poznamo, vendar ker za 
+razliko od Haskella Minihaskell ni občutljiv na zamik vrstic v kodi, in ker nisem želel z implementacijo še tega zaiti s smeri moje diplomske naloge, sem za lažje delo v parserju 
+dodal tudi ta gradnik. Da bi razumeli zakaj je potreben, si poglejmo naslednji primer: recimo, da imamo \emph{case} izraz, ki v eni od svojih vej vsebuje še en, gnezden \emph{case} 
+izraz:
+\begin{lstlisting}
+    case x of 
+        a -> _
+        b -> case y of
+                c -> _
+                d -> _
+        e -> _
+\end{lstlisting}
+Če bi bil Minihaskell občutljiv na zamik vrstic, bi bil zgornji izraz samoumeven. Ker pa v Minihaskellu v resnici izgleda takole:
+\begin{lstlisting}
+	case x of a -> _ | b -> case y of c -> _ | d -> _ | e -> _,
+\end{lstlisting}
+ga lahko razumemo na dva načina:
+\begin{lstlisting}
+    case x of 
+        a -> _
+        b -> case y of
+                c -> _
+                d -> _
+        e -> _,
+\end{lstlisting}
+ali pa:
+\begin{lstlisting}
+    case x of 
+        a -> _
+        b -> case y of
+                c -> _
+        d -> _
+        e -> _.
+\end{lstlisting}
+Ker imajo različni programerji različna mnenja o tem, kateri od obeh je bolj smiselen in sem se želel izogniti kakeršnikoli dvoumnosti, sem dodal 
+\emph{end} gradnik, ki nam omogoča, da nedvoumno določimo, kdaj se \emph{case} izraz konča:
+\begin{lstlisting}
+    case x of 
+        a -> _
+        b -> case y of
+                c -> _
+                d -> _
+                end
+        e -> _
+    end.
+\end{lstlisting}
+Prav tako imamo v Minihaskellu težavo z vpisovanjem izrazov na zgornji način, saj je prilagojen le vpisovanju ukozov v komandno vsrtico, ki pa 
+sprejema le nize znakov brez znaka za novo vrstico (\emph{newline} ali \emph{\\n}). Tako nastane težava pri iskanju meje med posameznimi vejami
+\emph{case}-a. Haskell za to uporablja le znake za novo vrstico, jaz pa sem dodal obvezno uporabo znaka \emph{|} na začetku vsake veje, ki ni prva.
+Tako bi zgornji primer izgledal takole:
+\begin{lstlisting}
+	case x of 
+		a -> _
+	  | b -> case y of
+				c -> _
+			  | d -> _
+			  end
+	  | e -> _
+	end,
+\end{lstlisting}
+ali kot vnos v komandno vrstico:
+\begin{lstlisting}
+	case x of a -> _ | b -> case y of c -> _ | d -> _ end | e -> _ end.
+\end{lstlisting}
+
+\section{Razčlenjevanje}
+uporabimo parser generator - program, ki sprejme slovnična pravila in iz njih generira razčlenjevalnik (primer takega opisa za aritmetične izraze v OCamlu).
+
+
+Razčlenjevalnik ali parser je naslednji korak v procesu prevajanja progamov. Lekser posreduje tok gradnikov, ki jih je prepoznal, naloga parserja pa je prepoznati slovnično
+pravilne stavke in zgraditi abstraktna sintaktična drevesa. To stori s pomočjo slovničnih pravil, ki povejo, v kakšnem zaporedju pričakujemo 
+gradnike in kje se ti smejo pojaviti. V svoji implementaciji sem dodal dve gramatični pravili: eno za definicijo novih tipov in eno za \emph{case}
+izraz. Pravilo za definicijo novih tipov je sledeče:
+\begin{lstlisting}
+  datadef:
+  | DATA CNAME EQUAL data_variants,
+
+  data_variants:
+  | data_variant
+  | data_variant ALTERNATIVE data_variants
+
+  data_variant:
+  | CNAME list(ty)
+\end{lstlisting}
+ki omogoča definicijo tipov na način:
+\begin{lstlisting}
+    data Type = Constr_1 args_1 | Constr_2 args_2 | ... | Constr_n args_n.
+\end{lstlisting}
+Seveda morajo biti TYPE in CONSTR imena z veliko začetnico. Slovnična pravila lahko zapišemo tudi z abstraktnimi sintaktičnimi drevesi. Na primer, 
+definicijo tipa:
+\begin{lstlisting}
+	data Type = Constr_1 args_1 | Constr_2 args_2 | Constr_3 args_3,
+\end{lstlisting}
+lahko predstavimo z drevesom:
+\begin{center}
+    \begin{tikzpicture}[
+        level 1/.style={sibling distance=60mm},
+        level 2/.style={sibling distance=70mm},
+        level 3/.style={sibling distance=50mm},
+        level 4/.style={sibling distance=30mm},
+        level 5/.style={sibling distance=10mm},
+        node/.style={inner sep=2pt}
+      ]
+      \node[node] {EQUAL}
+        child {
+          node[node] {DATA}
+			child {	
+				node[node] {CNAME}
+			}
+        }
+        child {
+          node[node] {ALTERNATIVE}
+          	child {
+            	node[node] {CNAME}
+					child {
+			  			node[node] {list(ty)}
+					}
+          	}
+          	child {
+            	node[node] {ALTERNATIVE}
+            		child {
+              			node[node] {CNAME}
+			  				child {
+								node[node] {list(ty)}
+							}
+					}
+            		child {
+              			node[node] {CNAME}
+			  				child {
+								node[node] {list(ty)}
+							}
+            		}
+          	}
+		};
+      \end{tikzpicture}
+\end{center}
+
+Definicijo tipov sem kot \emph{datadeftop} definiral kot enega izmed štirih osnovnih ukazov. Pred njim so bili že definirani \emph{lettop}, ki omogoča definicijo 
+spremenljivk, \emph{exprtop}, ki omogoča definicijo izrazov in \emph{cmdtop}, ki vsebuje posebne ukaze, kot so na primer \emph{quit}.
+
+Slovnično pravilo za \emph{case} izraz pa sem dodal samo pod pravilo za \emph{expr} ali izraze, ker se \emph{case} ne uporabljav v definicijo spremenljivk ali
+definiciji tipov, niti to ni poseben ukaz. Pravilo je: 
+\begin{lstlisting}
+    expr:
+    ...
+    | CASE expr OF cases END
+
+	case_variants:
+	| case_variant
+	| case_variant ALTERNATIVE case_variants
+  
+    case_variant:
+	| pattern TARROW expr
+  
+    pattern:
+	| CNAME list(VAR)
+\end{lstlisting}
+in omogoča uporabo \emph{case} izrazov, kot so:
+\begin{lstlisting}
+    case x of 
+        Constr 1 -> _
+        Constr 2 -> _
+        ...
+        Constr n -> _
+    end,
+\end{lstlisting}
+ki jih seveda lahko prav tako zapišemo kot abstraktno sintaktično drevo:
+\begin{center}
+    \begin{tikzpicture}[
+        level 1/.style={sibling distance=60mm},
+        level 2/.style={sibling distance=70mm},
+        level 3/.style={sibling distance=50mm},
+        level 4/.style={sibling distance=30mm},
+        level 5/.style={sibling distance=10mm},
+        node/.style={inner sep=2pt}
+      ]
+      \node[node] {of}
+        child {
+          node[node] {CASE}
+			child {	
+				node[node] {expr}
+			}
+        }
+        child {
+          node[node] {ALTERNATIVE}
+          	child {
+            	node[node] {TARROW}
+					child {
+			  			node[node] {CNAME}
+							child {
+								node[node] {list(VAR)}
+							}
+					}
+					child {
+						node[node] {expr}
+					}
+          	}
+			child {
+				node[node] {ALTERNATIVE}
+					child{
+						node[node] {...}
+					}
+					child{
+						node[node] {...}
+					}
+			}
+		};
+      \end{tikzpicture}
+\end{center}
+
+\section{Definicija in manipulacija abstraktne sintakse}
+Ko imamo zgrajena drevesa iz gradnikov, je potrebno ugotoviti, kaj pomenijo in čemu so namenjeni, preden lahko program začnemo izvajati. Tu pride na vrsto abstraktna sintaksa. 
+V datoteki \emph{syntax.ml} so najprej definirani podatkovni tipi, ki jih parser pripiše drevesom in njihovim vozliščem, ko prepozna slovnična pravila. Eden izmed njih je na primer 
+\emph{htype}, krajše za haskell type, ki hrani vrednosti tipov, ki jih Minihaskell pozna na začetku, torej \emph{TInt}, \emph{TBool}, \emph{TTimes}, \emph{Tarrow}, \emph{TList} in 
+\emph{TData}. Črke \emph{T} na začetku poimenovanj služijo kot oznaka, da gre za tip. Morda ne samoumeven tip je \emph{TArrow}, ki predstavlja funkcije. Hrani dva tipa, tip argumenta
+in tip vrnjene vrednosti. Spomnimo se, da v Haskellu ne obstajajo funkcije večih argumentov, temveč funkcije lahko vrnejo tudi nove funkcijem ki sprejmejo nove argumente in tako 
+simulirajo sprejem večih argumetnov. Na primer: funkcija, ki sešteje dve naravni števili, tipa \emph{Int -> Int -> Int}, je v resnici funkcija, ki sprejme prvi argument tipa \emph{Int}
+in vrne novo funkcijo, ki sprejme drugi argument in vrne rezultat:
+\begin{lstlisting}
+	seštej :: Int -> Int -> Int
+	seštej x y = x + y
+\end{lstlisting}
+v resnici izgleda kot:
+\begin{lstlisting}
+	seštej :: Int -> (Int -> Int)
+	seštej x = (\y -> x + y).
+\end{lstlisting}
+Med tipe, ki jih pozna Minihaskell sem moral dodati tip \emph{TData}, ki je namenjen shranjevanju imen konstruktorjev in imen tipov. Sam ima tip \emph{string}, ampak kot omenjeno, 
+se vanj shranjejo le besede z veliko začetnico. 
+
+Morda bolj zanimiv, je tip \emph{toplevel_cmd}, ali \textit{toplevel command}, ki kot omenjeno zgoraj, lahko zavzame eno izmed štirih vrendnosti: \emph{Expr}, mki shranjuje izraze, 
+\emph{Def}, ki shrnajuje definicije spremenljivk, \emph{DataDef}, ki shranjuje definicije novih tipov in \emph{Quit}, ki označuje ukaz za izhod iz \emph{toplevel}, torej 
+\emph{minihaskell.exe}. Odločil sem se, da bo \emph{DataDef} shranjeval definicije novih tipov, kot urejen par imena tipa in seznama konstruktorjev in njihovih argumentov:
+\begin{lstlisting}
+	(** Toplevel commands *)
+	type toplevel_cmd =
+	| Expr of expr              (** an expression to be evaluated *)
+	| Def of name * expr        (** toplevel definition [let x = e] *)
+	| DataDef of cname * datadef (** type definition *)
+	| Quit                      (** exit toplevel [$quit] *)
+	
+	(** MiniHaskell data definitions *)
+	type datadef = (cname * htype list) list
+\end{lstlisting}
+Kot vidimo, so argumenti konstruktorjev tipa \emph{htype}. To pomeni, da lahko konstruktorjem podamo tudi argumente, ki so novih tipov. To nam omogoča definicijo rekurzivnih tipov:
+\begin{lstlisting}
+	data Seznam = Empty | Cons Int Seznam.
+\end{lstlisting}
+
+Za uporabnika je uporabno videti, da in kaj mu je uspelo, ko požene ukaz. Zato sem definiral tudi funkcije, ki definicije tipov pripravijo za izpis na zaslon, da lahko uporabniku 
+potrdimo, da je definicija uspela in ni prišlo do napake:
+\begin{lstlisting}
+	let string_of_constructor (constr, args) =
+		let args_str = String.concat " " (List.map string_of_type args) in 
+		constr ^ " " ^ args_str
+
+	let string_of_datadef (cname, constructors) =
+		let constructors_str = String.concat " | " (List.map string_of_constructor constructors) in
+		"data" ^ cname ^ " = " ^ constructors_str
+\end{lstlisting}
+Ok, tole je treba še popravt v minihaskell.ml, da bo sploh v uporabi. Dodaj primer za seznam.
+
+\emph{Case} izraz ima bolj zapleteno strukturo. Odločil sem se, da ga bom najprej razbil na dva dela: vhodni izraz in seznam vej. V abstraktnem sintaktičnem drevesu, prikazanem zgoraj, 
+sta ta dva dela prva potomca korenskega vozlišča. Vsako vejo v seznamu sem nato razbil še naprej, na vzorec, ki ga primerjamo z vhodnim izrazom in posledico, ki se sproži v primeru ujemanja. 
+Vzorec pa je sestavljen iz imena kontruktorja in seznamom spremenljivk, ki predstavljajo njegove morebitne argumente. V kodi ta definicija igleda takole:
+\begin{lstlisting}
+	type expr =
+  		...
+  		| Case of expr * (pattern * expr) list
+
+	and pattern = cname * name list
+\end{lstlisting}
+kjer \emph{expr} predstavlja izraz, \emph{pattern} vzorec v veji, \emph{cname} ime konstruktorja z veliko začetnico in \emph{name} ime spremenljivke z malo začetnico, ki predstavlja morebitni 
+argument konstruktorja. 
+
+Zdaj imamo že dovolj konstrukcij, da lahko definiramo svoj tip in funkcijo s \emph{case} izrazom: 
+\begin{lstlisting}
+	data Oseba = Odrasel Int | Otrok Int Int
+
+	let starost = fun o : Oseba => 
+	case o of 
+	    Odrasel x -> x 
+	  | Otrok x y -> y
+	end
+\end{lstlisting}
+
+Definiral sem tudi funkcijo za izpis \emph{case} izraza, vendar je zaradi njene preprostosti ne bom ipostavljal. Na voljo je v repozitoriju.
+
+\section{Pravilnost tipov}
+ Da se program lahko izvede, se morajo vsi tipi spremenljivk, funkcij in izrazov ujemati. Preveriti, da je temu tako, je naloga preverjevalnika tipov. V Minihaskellu je zapisan v datoteki 
+ \emph{type\_check.ml}. Peverjevalnik tipov programskega jezika MiniHaskell je zelo preprost. Poleg pomožnih funkcij vsebuje kontekst, kjer hrani tipe spremenljivk, funkcijo \emph{check}, 
+ ki preveri, če je tip danega izraza pravilen in funkcijo \emph{type\_of}, ki kakšnega tipa je dani izraz.
+ 
+ Da lahko preverjevalnik tipov deluje, mora poznati tipe obstoječih spremenljivk. To hrani kot seznam urejenih parov imen spremenljivk in njihovih tipov. Da pa lahko poznamo tipe spremenljivk, 
+ ki so rezultat novih konstruktorjev, moramo poznati tudi njihove tipe.
+ \begin{lstlisting}
+ 	data Oseba = Odrasel Int | Otrok Int Int
+
+	let študent = Odrasel 20
+\end{lstlisting}
+Da lahko razberemo tip spremenljivke \emph{študent}, moramo vedeti, da je tip, ki ga prinese koonstruktor \emph{Odrasel} \emph{Oseba}. Te informacije shranimo kot seznam urejenih parov imen 
+tipov in njihovih konstruktorjev. Tako dobimo kontekst:
+\begin{lstlisting}
+	type context = {vars: (string * Syntax.htype) list; datadefs: (Syntax.cname * Syntax.datadef) list}
+\end{lstlisting}
+definiramo tudi začeten, prazen kontekst, ki ga potrebujemo na začetku izvajanja, ko še ne poznamo nobenih spremenljivk in pomožni funkciji za dodajanje novih spremenljivk in tipov:
+\begin{lstlisting}
+	let empty_ctx = {vars = []; datadefs = []}
+
+	let extend_var x ty ctx = {ctx with vars = (x, ty)::ctx.vars}
+
+	let extend_datadef x constrs ctx = {ctx with datadefs = (x, constrs)::ctx.datadefs}.
+\end{lstlisting}
+
+Funkcija \emph{check} deluje zelo preprosto, primerja izračunan tip danega izraza s tistim, ki ga pričakuje in sproži napako, če se ne ujemata. Funkcija \emph{type\_of} pa s pomočjo informacij 
+v kontekstu preoblikuje podan izraz v izrazno drevo in rekurzivno izračuna tipe podizrazov. Hkrati preverja pravilnost tipov s pomočjo funkcije \emph{check}. Na primer, v operaciji seštevanja 
+dovolimo le dve celi števili, torej izračunamo tipa obeh podizrazov in če nista celi števili, sprožimo napako.
+
+Poglejmo, kako sem dopolnil \emph{type\_of}, da pravilno preverja tipe novih konstruktorjev in \emph{case} izrazov:
+\begin{lstlisting}
+	and type_of (ctx:context) = function
+		...
+		| Syntax.Constr c -> type_of_constr c ctx.datadefs
+		| Syntax.Case (e, cases) -> 
+		   let t = type_of ctx e in
+		   (match t with
+		   | Syntax.TData u -> 
+			  let u_def = find_u u ctx.datadefs in
+			  let ret_type = cases_type u_def cases ctx in
+			  ret_type
+		   | _ -> type_error "%s cannot occur in a case expression" (Syntax.string_of_type t))
+\end{lstlisting}
+Osredotočimo se najprej na definicije novih tipov, torej \emph{Syntax.Constr} vejo. Tu enostavno kličemo funkcijo \emph{type\_of\_constr}, s konstruktorjem, katerega tip nas zanima in delom 
+konteksta, kjer je ta shranjen. Funkcija \emph{type\_of\_constr} izgleda takole:
+\begin{lstlisting}
+	let rec type_of_constr c = function
+   | [] -> type_error "unknown constructor %s" c
+   | (type_name, constrs)::datadefs -> 
+      begin
+         match List.assoc_opt c constrs with
+            | None -> type_of_constr c datadefs
+            | Some arg_types -> List.fold_right (fun arg_type t -> Syntax.TArrow (arg_type, t)) arg_types (Syntax.TData type_name) 
+      end
+\end{lstlisting}
+Funkcija se rekurzivno sprehodi skozi del konteksta, kjer so shranjeni novi tipi in njihovi konstruktorji. Za vsak tip preveri, če se med njegovimi konstruktorji nahaja želeni in če se, izračuna 
+njegov tip. 
+
+Malo več dela je bilo s preverjanjem tipa v \emph{case} izrazu. Najprej izračunamo tip izraza, ki ga primerjamo z vejami. Ker je \emph{case} smiselen le za novo definirane tipe, ker ne bi ničesar 
+pridobili, če bi vstavili na primer celo število, v nasprotnem primeru sprožimo napako. Sedaj poznamo vhodni tip. Nato poiščemo konstruktorje tega tipa, da jih bomo lahko primerjali z vzorci v vejah.
+To storimo rekurzivno, na zelo podoben način, kot smo to storili v funkciji \emph{type\_of\_constr}. Preostane nam le še izračunati tip, ki ga bomo vrnili. Pri tem nam pomaga pomožna funkcija 
+\emph{cases\_type}:
+\begin{lstlisting}
+	and cases_type u_def cases ctx =
+	match cases with
+	   | [] -> type_error "empty case expression"
+	   | ((cname, xs), action)::cases' ->
+		  let xs_types = find_u cname u_def in
+		  let ctx = extend_ctx xs xs_types ctx in
+		  let t1 = type_of ctx action in
+		  let rec rest_of_cases cases =
+			 match cases with
+			 | [] -> t1
+			 | ((cname, xs), action)::cases' ->
+				let xs_types = find_u cname u_def in
+				let ctx' = extend_ctx xs xs_types ctx in
+				let t2 = type_of ctx' action in
+				if t1 <> t2 then
+				   type_error "case expressions have different types"
+				else
+				   rest_of_cases cases'
+		  in rest_of_cases cases'
+\end{lstlisting}
+Seveda ne želimo praznega \emph{case} izraza, zato v takem primeru sprožimo napako. Nato izračunamo tipe spremenljivk, ki predstavljajo argumente za konstruktor v dani veji. To storimo z uporabo
+funkcije \emph{find\_u}, ki poišče konstruktor v seznamu konstruktorjev in vrne tipe njegovih argumentov. Nato to dodamo v kontekst, da jih lahko uporabimo pri izračunu tipa posledice. Opazimo, 
+da, ko dodajamo spremenljivke in njihove tipe v kontekst, posredno preverimo, da je število spremenljivk enako številu potrebnih argumentov, torej pravilno. Ko tega izračunamo in ga 
+poimenujemo \emph{t1}, se lotimo preostalih vej. Te pregledamo rekurzivno, z enakim postopkom kot pri prvi veji, vendar zdaj namesto da shranimo tip posledice, ga primerjamo z \emph{t1} in če 
+se ne ujemata, sprožimo napako. To storimo, ker želimo, da \emph{case} izraz vrne rezultat enakega tipa, neodvisno od izbrane veje.
+
+\section{interpreter}
+Čas je za izračunanje vrednosti izrazov v programu. Tega se lahko brez težav lotimo, ker nam preverjevalnik tipov zagotavlja, da so ti pravilni. V Minihaskellu izraze računamo znotraj datoteke 
+\emph{interpret.ml}. Ta deluje precej preprosto, ker smo vso pripravo naredili že prej. Najprej definira okolje za spremenljivke, nato kako shranjujemo izračunane vrednosti, funkcijo 
+\emph{interp}, ki računa vrednosti izrazov, in izpiše rezultat. 
+
+Okolje ali \emph{environment} je seznam urejenih parov imen spremenljivk in njihovih vrednosti. Uporabljala ga funkcija \emph{interp}, ki vrednosti spremenljivk uporablja za izračun 
+vrednosti izrazov. Izračune vrednosti hranimo v enem izmed konstruktov tipa \emph{value}: 
+\begin{lstlisting}
+	and value =
+	| VInt of int
+	| VBool of bool
+	| VNil of Syntax.htype
+	| VClosure of environment * Syntax.expr
+	| VConstr of Syntax.cname * (environment * Syntax.expr) list
+\end{lstlisting}
+Potrebujemo način za shranjevanje osnovnih tipov Minihaskella, torej \emph{Int} in \emph{Bool}, prazen seznam \emph{Nil} in funkcije. Za hranjenje vrednosti novih tipov sem dodal še 
+\emph{VConstr}, ki vsebuje ime konstruktorja in seznam urejenih parov okolja in izraza, ki predstavlja njegove argumente. 
+
+Za \emph{case} je bilo potrebno dopolniti funkcijo \emph{interp}, da zna poiskati pravo vejo in vrniti njeno posledico. Ker vemo, da preverjevalnik tipov zagotavlja pravilno število 
+spremenljivk za konstruktorji v vejah, lahko le enostavno primerjamo ime podanega konstruktorja z vsemi v \emph{case} izrazu. Če najdemo pravega, dodamo njegove argumente v okolje in 
+izračunamo posledico. V nasprotnem primeru sprožimo napako. 
+\begin{lstlisting}
+	let rec extend_env env xs vs =
+  		match xs, vs with
+		...
+		| Syntax.Case (e, cases) ->
+			(match interp env e with
+			| VConstr (c, args) ->
+				let rec find_case = function
+				| [] -> runtime_error ("Unmatched constructor " ^ c)
+				| ((c', xs), action) :: l ->
+					if c = c' then
+					let env' = extend_env env xs args in
+					interp env' action
+					else find_case l
+				in find_case cases
+			| _ -> runtime_error "Constructor expected in case"
+			)
+\end{lstlisting}
+
+\section{minihaskell.ml}
+Preostane le še glavna datoteka, ki poganja programe s uporabo vseh zgoraj opisanih datotek. Definira lekser in parser, okolje in funkcijo \emph{exec}, ki izvaja ukaze. Okolje je sestavljeno 
+iz konteksta preverjevalnika tipov in okolja intepretatorja. Tako pozna vrednosti in tipe vseh spremenljivk. Moral sem le dodati, kaj se zgodi, ko uporabnik definira nov tip:
+\begin{lstlisting}
+	let exec (ctx, env) = function
+		...
+		| Syntax.DataDef (name, constructors) ->
+        (* Zoo.print_info "type %s is defined@." name ; *)
+        Zoo.print_info (Syntax.string_of_datadef name constructors);
+        (Type_check.extend_datadef name constructors ctx, env)
+		...
+\end{lstlisting}
+\textbf{to še ne dela, najprej popravi kodo!!! ne vem zakaj koda ne dela btw}
+
+Imamo programski jezik z delujočimi funkcionalnostmi definiranja novih tipov in delanja z njimi. Poglejmo si še nekaj primerov uporabe.
+
+\chapter{Uporaba}
+
 
 \newpage
 
