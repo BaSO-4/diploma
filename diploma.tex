@@ -325,49 +325,13 @@ todo:
 - a je treba označt slike, drevesa, formule in to?
 - prevedi interpreter
 - ocaml parser generator
-- sintaksa
+- sintaksa jezika, kako se definirajo funkcije in to
 - case: veja ima lahko tudi _ (najprej dokaži) - parser? al type_checker?
 - popravi interpreter description, i added the printing of contructors
-- find za sezname? neki ne dela (sekction primeri)
 - ali delam tudi negativna števila?
 - koliko sta dolga uvod, zaključek in abstract in ključne besede? 10\%
-- naslov
+- naslov diplome, kaj točno je
 
-A hočem tud 'podatkovni tipi'? -> mogoče v uvodu?
-
-- RECURSIVE TYPES:  	20 - recursive types: examples, formalities
-
-                        (processes ?), hungry functions, streams
-
-    	            	21 - induction, finite and infinite
-
-                        equi-recursive and iso-recursive
-
-- CASE: 
-
-        sums, variants -  11.9, 11.10
-
-        how if is 'compiled' into case
-
-\chapter{Implementacija}
-15 strani
-
-vsi fili, kaj kšn file dela, kaj je blo treba spremenit
-
-(kaj bi lahko izbrisal)
-
-- TIPI:
-
-- CASE:
-
-\chapter{Uporaba}
-10 strani
-
-- Menjava vseh tipov z impementiranimi
-
-lists: 20.1 kar dobro pove kaj vse rabiš za delo s seznami - to lahko pokažem, enako lahko mogoče nardim za drevesa
-
-- rekurzivni tipi: seznami, drevesa, ...
 
 stream:
 
@@ -379,7 +343,6 @@ podobno poiskusi z ostalimi 'hungry' funkcijami
 
 - Zanimivi rekurzivni tipi
 
-- funkcije z uporabo case
 
 
 \newpage
@@ -790,10 +753,12 @@ ali kot vnos v komandno vrstico:
 uporabimo parser generator - program, ki sprejme slovnična pravila in iz njih generira razčlenjevalnik (primer takega opisa za aritmetične izraze v OCamlu).
 
 
-Razčlenjevalnik ali parser je naslednji korak v procesu prevajanja progamov. Lekser posreduje tok gradnikov, ki jih je prepoznal, naloga parserja pa je prepoznati slovnično
-pravilne stavke in zgraditi abstraktna sintaktična drevesa. To stori s pomočjo slovničnih pravil, ki povejo, v kakšnem zaporedju pričakujemo 
-gradnike in kje se ti smejo pojaviti. V svoji implementaciji sem dodal dve gramatični pravili: eno za definicijo novih tipov in eno za \emph{case}
-izraz. Pravilo za definicijo novih tipov je sledeče:
+Razčlenjevalnik ali parser je naslednji korak v procesu prevajanja progamov. Kot je to delano v praksi, tudi v Minihaskellu ni parser napisan na roke, temveč 
+je uporabljen program parser generator, kateremu moramo podati le slovnična pravila. Ker se tukaj uporabi Menhirjev OCaml parser generator, končnica 
+datoteke ni .ml, ampak .mly. Lekser posreduje tok gradnikov, ki jih je prepoznal, naloga parserja pa je prepoznati slovnično pravilne stavke in zgraditi 
+abstraktna sintaktična drevesa. To stori s pomočjo slovničnih pravil, ki povejo, v kakšnem zaporedju pričakujemo gradnike in kje se ti smejo pojaviti. 
+V svoji implementaciji sem dodal dve gramatični pravili: eno za definicijo novih tipov in eno za \emph{case} izraz. Pravilo za definicijo novih tipov je 
+sledeče:
 \begin{lstlisting}
   datadef:
   | DATA CNAME EQUAL data_variants,
@@ -951,7 +916,7 @@ v resnici izgleda kot:
 Med tipe, ki jih pozna Minihaskell sem moral dodati tip \emph{TData}, ki je namenjen shranjevanju imen konstruktorjev in imen tipov. Sam ima tip \emph{string}, ampak kot omenjeno, 
 se vanj shranjejo le besede z veliko začetnico. 
 
-Morda bolj zanimiv, je tip \emph{toplevel_cmd}, ali \textit{toplevel command}, ki kot omenjeno zgoraj, lahko zavzame eno izmed štirih vrendnosti: \emph{Expr}, mki shranjuje izraze, 
+Morda bolj zanimiv je tip \emph{toplevel_cmd} ali \textit{toplevel command}, ki kot omenjeno zgoraj, lahko zavzame eno izmed štirih vrendnosti: \emph{Expr}, mki shranjuje izraze, 
 \emph{Def}, ki shrnajuje definicije spremenljivk, \emph{DataDef}, ki shranjuje definicije novih tipov in \emph{Quit}, ki označuje ukaz za izhod iz \emph{toplevel}, torej 
 \emph{minihaskell.exe}. Odločil sem se, da bo \emph{DataDef} shranjeval definicije novih tipov, kot urejen par imena tipa in seznama konstruktorjev in njihovih argumentov:
 \begin{lstlisting}
@@ -1162,8 +1127,8 @@ Da lahko jezik uporabljamo, moramo vedeti, kako napisati posamezne ukaze.
 Vsak programski jezik je razvit z namenom, da v njem programiramo. Poglejmo si, kako to izgleda v Minihaskellu. Z implementacijo definicije novih podatkovnih tipov MiniHaskell programerju 
 ponuja veliko več možnosti načina pristopa k problemu. Vendar najprej poglejmo, če lahko programski jezik nekoliko poenostavimo, brez da izgubimo funkcionalnost. 
 
-Spomnimo se, da ima jezik od prej že osnovne tipe celih števil, booleanov, urejeni parov, seznamov in funkcij. Najbolj očitno je, da lahko z definiranjem nekega novega tipa nadomestimo posebej 
-deiniran tip seznama:
+Spomnimo se, da ima jezik od prej že osnovne tipe celih števil, booleanov, urejenih parov, seznamov in funkcij. Najbolj očitno je, da lahko z definiranjem nekega novega tipa nadomestimo posebej 
+definiran tip seznama:
 \begin{lstlisting}
 data Element = Nil | Num Int | Boolean Bool | Pair A B
 data Seznam = Empty | Cons Element Seznam
@@ -1320,6 +1285,25 @@ MiniHaskell> drugi par
 - : Element = S (Naslednik (Nic))
 \end{lstlisting}
 Tako lahko nadomestimo tudi urejene pare. Funkcij pa ne moremo, ker jih potrebujemo za delo s tipi. Vanje vstavljamo \emph{case} izraze. 
+
+Zelo pogosto upoabljen primer rekurzivnih tipov so drevesa. Definirajmo tip \emph{Drevo}, ki bo predstavljalo binarno drevo in funkcijo, ki bo preštela število elementov v drevesu:
+\begin{lstlisting}	
+data Drevo = Empty | List Stevilo | Vozlisce Stevilo Drevo Drevo
+
+let st_vozlisc = rec st_vozlisc : Drevo -> Stevilo is
+  fun d : Drevo =>
+    case d of
+      Empty -> Nic
+      | List s -> Naslednik Nic
+      | Vozlisce s l r -> plus (Naslednik Nic) (plus (st_vozlisc l) (st_vozlisc r))
+    end
+
+let lipa = Vozlisce Nic (List (Naslednik Nic)) (List (Naslednik (Naslednik Nic)))
+
+MiniHaskell> st_vozlisc lipa
+- : Stevilo = Naslednik (Naslednik (Naslednik (Nic)))
+\end{lstlisting}
+Definirali smo drevo \emph{lipa}, ki ima korensko vozlišče in dva lista. Funkcija \emph{st\_vozlisc} vrne število tri.
 
 \newpage
 
