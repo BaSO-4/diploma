@@ -333,6 +333,12 @@ todo:
 - a je treba označt slike, drevesa, formule in to?
 - prevedi interpreter
 - ocaml parser generator
+- sintaksa
+- case: veja ima lahko tudi _ (najprej dokaži) - parser? al type_checker?
+- popravi interpreter description, i added the printing of contructors
+- find za sezname? neki ne dela (sekction primeri)
+- ali delam tudi negativna števila?
+- koliko sta dolga uvod, zaključek in abstract in ključne besede? 10\%
 
 A hočem tud 'podatkovni tipi'? -> mogoče v uvodu?
 
@@ -938,7 +944,7 @@ V datoteki \emph{syntax.ml} so najprej definirani podatkovni tipi, ki jih parser
 \emph{htype}, krajše za haskell type, ki hrani vrednosti tipov, ki jih Minihaskell pozna na začetku, torej \emph{TInt}, \emph{TBool}, \emph{TTimes}, \emph{Tarrow}, \emph{TList} in 
 \emph{TData}. Črke \emph{T} na začetku poimenovanj služijo kot oznaka, da gre za tip. Morda ne samoumeven tip je \emph{TArrow}, ki predstavlja funkcije. Hrani dva tipa, tip argumenta
 in tip vrnjene vrednosti. Spomnimo se, da v Haskellu ne obstajajo funkcije večih argumentov, temveč funkcije lahko vrnejo tudi nove funkcijem ki sprejmejo nove argumente in tako 
-simulirajo sprejem večih argumetnov. Na primer: funkcija, ki sešteje dve naravni števili, tipa \emph{Int -> Int -> Int}, je v resnici funkcija, ki sprejme prvi argument tipa \emph{Int}
+simulirajo sprejem večih argumetnov. Na primer: funkcija, ki sešteje dve celi števili, tipa \emph{Int -> Int -> Int}, je v resnici funkcija, ki sprejme prvi argument tipa \emph{Int}
 in vrne novo funkcijo, ki sprejme drugi argument in vrne rezultat:
 \begin{lstlisting}
 	seštej :: Int -> Int -> Int
@@ -1154,10 +1160,173 @@ iz konteksta preverjevalnika tipov in okolja intepretatorja. Tako pozna vrednost
 \end{lstlisting}
 \textbf{to še ne dela, najprej popravi kodo!!! ne vem zakaj koda ne dela btw}
 
-Imamo programski jezik z delujočimi funkcionalnostmi definiranja novih tipov in delanja z njimi. Poglejmo si še nekaj primerov uporabe.
+Imamo programski jezik z delujočimi funkcionalnostmi definiranja novih tipov in delanja z njimi. Poglejmo si še kako ga uporabljamo.
+
+\section{Sintaksa programskega jezika Minihaskell}
+Da lahko jezik uporabljamo, moramo vedeti, kako napisati posamezne ukaze. 
 
 \chapter{Uporaba}
+Vsak programski jezik je razvit z namenom, da v njem programiramo. Poglejmo si, kako to izgleda v Minihaskellu. Z implementacijo definicije novih podatkovnih tipov MiniHaskell programerju 
+ponuja veliko več možnosti načina pristopa k problemu. Vendar najprej poglejmo, če lahko programski jezik nekoliko poenostavimo, brez da izgubimo funkcionalnost. 
 
+Spomnimo se, da ima jezik od prej že osnovne tipe celih števil, booleanov, urejeni parov, seznamov in funkcij. Najbolj očitno je, da lahko z definiranjem nekega novega tipa nadomestimo posebej 
+deiniran tip seznama:
+\begin{lstlisting}
+data Element = Nil | Num Int | Boolean Bool | Pair A B
+data Seznam = Empty | Cons Element Seznam
+\end{lstlisting}
+Definirali smo seznam kot nov podatkovni tip, ki lahko vsebuje elemente tipa \emph{Int}, \emph{Bool} ali \emph{Pair}\footnote{\emph{Pair} ni zares notacija, ki se uporablja v Minihaskellu, 
+temveč sem jo poenostavil za uporabo v tem primeru.}. Konstruktorja Num in Boolean uporabimo, ker sta besedi \emph{Int} in \emph{Bool} že rezervirani in ju ne moremo ponovno uporabiti. Dodajmo 
+še nekaj funkcij za uporabo novih seznamov. Najbolj uporabne funkcije so \emph{head}, ki vrne prvi element seznama, \emph{tail},ki vrne vse elemente razen prvega, \emph{length} za računanje 
+dolžine seznama, \emph{append}, ki doda element na konec seznama in \emph{map}, ki uporabi funkcijo na vsakem elementu seznama. 
+\begin{lstlisting}
+let head = fun s : Seznam => 
+    case s of
+     Empty -> Nil
+    | Cons x xs -> x
+    end
+
+let tail = fun s : Seznam =>
+	case s of
+	  Empty -> Empty
+	  | Cons x xs -> xs
+	end
+
+let length = rec length : Seznam -> Int is
+	fun s : Seznam =>
+	  case s of
+		Empty -> 0
+		| Cons x xs -> 1 + length xs
+	  end
+
+let append = rec append : Seznam -> Seznam -> Seznam is
+	fun s1 : Seznam => fun s2 : Seznam => 
+	case s1 of
+		Empty -> s2
+		| Cons x xs -> Cons x (append xs s2)
+	end
+
+let map = rec map : (Element -> Element) -> Seznam -> Seznam is
+	fun f : (Element -> Element) => fun s : Seznam =>
+	 case s of
+	   Empty -> Empty
+	   | Cons x xs -> Cons (f x) (map f xs)
+	 end
+\end{lstlisting}
+Imamo funkcije za delo s seznami. Potrebujemo še seznam, na katerem jih bomo uporabili
+\begin{lstlisting}
+let enke = Cons (Num 1) (Cons (Num 1) (Cons (Num 1) Empty))
+\end{lstlisting}
+\emph{Enke} so torej seznam sestavljen iz treh enic. Dodajmo še funkcijo, ki jo bomo kot argument podali funkciji \emph{map}:
+\begin{lstlisting}
+let plus_ena = fun x : Element => case x of Num n -> Num (n + 1) | _ -> x end
+\end{lstlisting}
+Sedaj imamo vse potrebno. Poglejmo, kako deluje naš primer.
+\begin{lstlisting}
+MiniHaskell> head enke
+- : Element = Num (1)
+
+MiniHaskell> tail enke
+- : Seznam = Cons (Num (1) (Cons (Num (1) (Empty))))
+
+MiniHaskell> length enke
+- : int = 3
+
+MiniHaskell> append (Cons (Num 2) Empty) enke
+- : Seznam = Cons (Num (2) (Cons (Num (1) (Cons (Num (1) (Cons (Num (1) (Empty))))))))
+
+MiniHaskell> map plus_ena enke
+- : Seznam = Cons (Num (2) (Cons (Num (2) (Cons (Num (2) (Empty))))))
+\end{lstlisting}
+Torej, z implementacijo novih tipov smodobili tudi možnost delanja s seznami. Torej seznamov, kot so bili definirani v Minihaskellu, ne potrebujemo več. Vprašanje je, kaj še vse lahko nadomestimo.
+Poskusimo še ustvariti nov tip \emph{Boolean}, ki bo zamenjal osnovni tip \emph{Bool} in nekaj pripadajočih funkcij:
+\begin{lstlisting}
+data Boolean = True | False
+	
+let not = fun b : Boolean => 
+  case b of 
+     True -> False 
+    | False -> True 
+  end
+
+let xor = fun b1 : Boolean => fun2 b2 : Boolean =>
+case of b1 of
+True -> case b2 of
+			True -> False
+			| False -> True
+		end
+| False -> case b2 of
+			True -> True
+			| False -> False
+			end
+end
+\end{lstlisting}
+Podobno bi lahko definirali tudi funkciji \emph{and} in \emph{or}, vendar tu nista ključnega pomena. Oglejmo si rezultate:
+\begin{lstlisting}
+MiniHaskell> let a = True
+val a : Boolean
+
+MiniHaskell> let b = False
+val b : Boolean
+
+MiniHaskell> not a
+- : Boolean = False
+
+MiniHaskell> not b
+- : Boolean = True
+
+MiniHaskell> xor a b
+- : Boolean = True
+
+MiniHaskell> xor a a
+- : Boolean = False
+\end{lstlisting}
+Preostanejo nam še cela števila ali \emph{Int}, urejeni pari in funkcije. Slednje se samo s tipi ne dajo reproducirati, lahko pa se lotimo števil. Najbolj enostaven primer in tak, ki se izogne pisanju neštetega števila 
+konstruktorjev, so Churchova števila. Delujejo tako, da definirajo število nič in naslednika števila. Tako lahko zapišemo vsa naravna števila, kot bi to naredili v eniškem sistemu. Z negativnimi števili je več težav, 
+zato se jim ne bomo posebej posvečali. Definiramo tudi funkcijo \emph{plus}, ki sešteje dve Churchevi števili na način, da vemo, da je vsota nič in nekemu številu to drugo število in to uporabimo tako, da rekurzivno 
+zmanjšujemo prvi seštevanec do nič in sproti povečujemo vsoto. Na koncu samo prištejemo drugi seštevanec.
+\begin{lstlisting}
+data Stevilo = Nic | Naslednik Stevilo
+
+let plus = rec plus : Stevilo -> Stevilo -> Stevilo is
+fun x : Stevilo => fun y : Stevilo =>
+case x of
+Nic -> y
+| Naslednik a -> Naslednik (plus a y)
+end
+
+let ena = Naslednik Nic
+
+let dva = Naslednik (Naslednik Nic)
+
+MiniHaskell> plus ena dva
+- : Stevilo = Naslednik (Naslednik (Naslednik (Nic)))
+\end{lstlisting}
+Opazimo, da seštevanje deluje pravilno. 
+
+Urejeni pari so tudi dokaj preprosta struktura. Potrebujemo tip in funkciji za pridobivanje prvega in drugega elementa.
+\begin{lstlisting}
+data Element = Nil | S Stevilo | B Boolean | S Seznam
+data Par = Par Element Element
+
+let prvi = fun p : Par =>
+  case p of 
+    Par x y -> x
+  end
+
+let drugi = fun p : Par =>
+  case p of 
+    Par x y -> y
+  end
+
+let par = Par (S (Naslednik (Naslednik Nic))) (S (Naslednik Nic))
+
+MiniHaskell> prvi par
+- : Element = S (Naslednik (Naslednik (Nic)))
+MiniHaskell> drugi par
+- : Element = S (Naslednik (Nic))
+\end{lstlisting}
+Tako lahko nadomestimo tudi urejene pare. Funkcij pa ne moremo, ker jih potrebujemo za delo s tipi. Vanje vstavljamo \emph{case} izraze. 
 
 \newpage
 
