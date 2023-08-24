@@ -21,6 +21,9 @@
         {š}{{\v{s}}}1
         {ž}{{\v{z}}}1
         {λ}{{$\lambda$}}1
+        {->}{{$\rightarrow$}}1
+        {<}{{$\langle$}}1
+        {>}{{$\rangle$}}1
 }
 
 %Velikost strani - dvostransko
@@ -173,7 +176,7 @@ z vpisno številko \hspace{0.5cm} 63200031,
 sem avtor/-ica diplomskega dela z naslovom:
    
 \vspace{0.5cm}
-Implementacija rekurzivnih podatkovnih tipov v programskem jeziku Minihaskell
+Implementacija rekurzivnih podatkovnih tipov v programskem jeziku MiniHaskell
 
 \vspace{1.5cm}
 S svojim podpisom zagotavljam, da:
@@ -309,44 +312,41 @@ Ključne besede v angleškem jeziku.
 
 
 %********************************************
-
-\chapter{Teorija}
 10 strani
 
 todo: 
-- mi notacija, fix operator
-- <> oklepaji
-- prevedi equi in iso recursive
-- prevedi sum types
-- right arrows inside code blocks
-- prevod enumerations in single field variants
-- eval.ml, kaj to dela in ali je sploh uporabno. če je, popravi še število filov, ki sestavljajo Minihaskell
-- bloke kode sem zaključeval z ločili, je to kul?
-- a je treba označt slike, drevesa, formule in to?
-- prevedi interpreter
-- ocaml parser generator
+- popravi širino kodnih blokov 
 - sintaksa jezika, kako se definirajo funkcije in to
 - case: veja ima lahko tudi _ (najprej dokaži) - parser? al type_checker?
 - popravi interpreter description, i added the printing of contructors
-- ali delam tudi negativna števila?
+- dodaj primere!
+
+- prevedi equi in iso recursive
+
+- prevedi sum types
+
+- prevod enumerations in single field variants
+
+- eval.ml, kaj to dela in ali je sploh uporabno. če je, popravi še število filov, ki sestavljajo MiniHaskell
+
+- bloke kode sem zaključeval z ločili, je to kul?
+
+- a je treba označt slike, drevesa, formule in to?
+
+- prevedi interpreter
+
 - koliko sta dolga uvod, zaključek in abstract in ključne besede? 10\%
+
 - naslov diplome, kaj točno je
 
-
-stream:
-
-data Stream = Cons Int Stream
-
-let ones = rec ones : Stream is Cons 1 ones
-
-podobno poiskusi z ostalimi 'hungry' funkcijami
-
-- Zanimivi rekurzivni tipi
+- ali to pomeni da imamo isorecursive tipe: Type error: A has type B $\rightarrow$ A but is used as if it has type A
+MiniHaskell> A      
+- : B $\rightarrow$ A = A
 
 
 
 \newpage
-\chapter{Rekurzivni tipi} %zaenkrat 1 stran plus razlaga primera seznama z drevesom -> cca 1.5 strani 
+\chapter{Rekurzivni tipi} %zaenkrat 1 stran plus razlaga primera seznama z drevesom $\rightarrow$ cca 1.5 strani 
 V programiranju se vsakodnevno srečujemo z velikim številom konceptov in idej, ki nam na različne načine omogočajo iskati rešitve. Eden najbolj osnovnih in popularnih je tudi rekurzija.
 V osnovi rekurzija predstavlja elegantno preprostost reševanja zapletenih problemov z razčlenitvijo na manjše, bolj obvladljive podprobleme. Ta sposobnost reševanja zapletenih izzivov 
 postopoma, ni le preoblikovala načina, kako se programerji lotevajo kodiranja, temveč je tudi postavila temelje za ustvarjanje razreda podatkovnih struktur, imenovanih rekurzivni tipi.
@@ -360,22 +360,22 @@ Rekurzivni tip je podatkovni tip, ki se v svoji definiciji sklicuje sam nase. Lo
 Morda najbolj osnoven primer rekurzivnega tipa, je seznam. Seznam je lahko prazen, ali pa vsebuje urejen par nekega elementa in drugega seznama. Elementu ponavadi rečemo glava, seznamu, 
 ki glavi sledi, pa rep. Tako ima poljubno dolžino, lahko je tudi prazen. Njegovo definicijo zapišemo kot:
 \begin{lstlisting}
-    List = <nil:Unit, cons:{Element, List}>
+List = <nil:Unit, cons:{Element, List}>
 \end{lstlisting}
 kjer \emph{nil} prestavlja odsotnost vrednosti, torej prazen seznam. V prikazovanju primerov svoje implementacije bom za prazen seznam uporabljal konstruktor \emph{Empty}, 
 ki ne sprejme nobenega argumenta. \emph{Element} pa predstavlja vrednost, ki je vsebovana v seznamu. Ta je seveda odvisna od tipa seznama. Če bi na primer hoteli seznam celih števil, 
 bi definicija izgledala tako:
 \begin{lstlisting}
-    ListInt = <nil:Unit, cons:{Int, ListInt}>
+ListInt = <nil:Unit, cons:{Int, ListInt}>
 \end{lstlisting}
-v moji impementaciji v Minihaskellu pa bi to izlgedalo kot:
+v moji impementaciji v MiniHaskellu pa bi to izlgedalo kot:
 \begin{lstlisting}
-    data ListInt = Empty | Cons Int ListInt
+data ListInt = Empty | Cons Int ListInt
 \end{lstlisting}
 Primer seznama celih števil, ki vsebuje elemente 1, 2 in 3:
 \begin{lstlisting}
-    let oneToThree = Cons 1 (Cons 2 (Cons 3 Empty))
-    > val oneToThree : ListInt
+let oneToThree = Cons 1 (Cons 2 (Cons 3 Empty))
+- : val oneToThree : ListInt
 \end{lstlisting}
 
 Ta seznam si lahko predstavljamo tudi kot drevo:
@@ -429,34 +429,37 @@ Seznami in drevesa so končni rekurzivni tipi, kar je lako zelo prikladno, ker l
 neomejene količine podatkov. Tu nastopijo koinduktivni tipi. Najbolj so povezani z uporabo v komunikacijah, kjer ni potrebe da se komunikacijaski kanal kdaj zapre, najdemo pa jih lahko v  
 postopkih, ki so lahko neskončni. 
 
-Osnovni primer koinduktivnih tipov so lačne funkcije. To so funkcije, ki sprejmejo poljubno število argumentov in vrnejo novo funkcijo, ki je lačna novih argumentov:
+Osnovni primer koinduktivnih tipov so lačne funkcije. To so funkcije, ki sprejmejo poljubno število argumentov in vrnejo novo funkcijo, ki je lačna novih argumentov. Za njihovo definicjo 
+si pomagajmo z \(\mu\)\footnote{Intuitivno si pomen operatorja \(\mu\) lahko razlagamo, kot da \(\mu x.y\) pomeni "tisti x, za katerega velja x = y".} in \emph{fix}\footnote{Intuitivna 
+interpretacija izraza \emph{fix f} je "tak x, za katerega velja x = f(x)".} operatorjema:
 \begin{equation}
     \text{Lačna} = \mu X. (\text{Argument} \rightarrow X) \notag
 \end{equation}
 Na primer, lahko imamo funkcijo, ki sprejme število in vrne funkcijo, ki sprejme novo število:
 \begin{lstlisting}
-    f = fix (λf:Int->Lačna. λn:Int. f)
-    > f : Lačna
+f = fix (λf:Int -> Lačna. λn:Int. f)
+- : f : Lačna
 \end{lstlisting}
-Ko jo polkičemo, bo vrnila novo funkcijo, ki bo lačna novih argumentov:
+Opazimo, da za vsak x:Int velja x = f(x).
+Ko polkičemo f, bo taS vrnila novo funkcijo, ki bo lačna novih argumentov:
 \begin{lstlisting}
-    l_1 = f 1;
-    > l_1 : Lačna
+l_1 = f 1;
+> l_1 : Lačna
 \end{lstlisting}
 Rezultatu lahko nato podamo nov argument in dobili bomo enak rezultat:
 \begin{lstlisting}
-    l_2 = l_1 2;
-    > l_2 : Lačna  
+l_2 = l_1 2;
+- : l_2 : Lačna  
 \end{lstlisting}
 Tako funkcijo lahko gledamo tudi kot funkcijo, ki sprejme neomejeno količino argumentov in še vedno bo lačna novih:
 \begin{lstlisting}
-    zelo_lačna = f 1 2 3 4 5 6 7 8 9 10;
-    > zelo_lačna : Lačna
+zelo_lačna = f 1 2 3 4 5 6 7 8 9 10;
+- : zelo_lačna : Lačna
 \end{lstlisting}
 V resnici je \emph{zelo\_lačna} sestavljena iz več lačnih funkcij, ki se poračunajo sproti z vsakim argumentom. Lahko bi jo zapisali tudo kot:
 \begin{lstlisting}
-    zelo_lačna = (((((((((f 1) 2) 3) 4) 5) 6) 7) 8) 9) 10
-    > zelo_lačna : Lačna
+zelo_lačna = (((((((((f 1) 2) 3) 4) 5) 6) 7) 8) 9) 10
+- : zelo_lačna : Lačna
 \end{lstlisting}
 Tako se 1 uporabi kot argument na funkciji f, 2 na funkciji, ki jo vrne f, ko sprejme 1 in tako naprej.
 
@@ -469,24 +472,24 @@ Najbolj znane lačne funkcije so \emph{tokovi}. To so funkcije, ki sprejmejo pra
 \end{equation}
 Lažji način za razumevanje tokov je, da jih gledamo kot neskončne sezname, sestavljene iz parov elementov in novih tokov. Na primer, lahko imamo tok naravnih števil:
 \begin{lstlisting}
-    naravna = fix (λf:Int->Tok. λn:Int. λu:Unit. 
-        {n, f (n+1)}) 0;
-    > naravna : Tok
+naravna = fix (λf:Int -> Tok. λn:Int. λu:Unit. 
+  {n, f (n+1)}) 0;
+- : naravna : Tok
 \end{lstlisting}
 Za delo s tako funkcijo potrebujemo še nekaj pomožnih funkcij. Najprej funkcijo, ki vrne prvi element, ali glavo toka: (imejmo 1 za indeks prvega elementa in 2 za indeks drugega)
 \begin{lstlisting}
-    glava = λt:Tok. (t Unit).1;
-    > Tok : Tok -> Int
+glava = λt:Tok. (t Unit).1;
+- : Tok : Tok -> Int
 \end{lstlisting}
 in še funkcijo, ki vrne rep toka:
 \begin{lstlisting}
-    rep = λt:Tok. (t Unit).2;
-    > rep : Tok -> Tok
+rep = λt:Tok. (t Unit).2;
+- : rep : Tok -> Tok
 \end{lstlisting}
 Tako lahko dostopamo do poljubnega elementa v toku:
 \begin{lstlisting}
-    tri = glava (rep (rep (rep naravna)));
-    > 3 : Int
+tri = glava (rep (rep (rep naravna)));
+- : 3 : Int
 \end{lstlisting}
 
 Oglejmo si še nadgradnjo tokov, enostavne procese. To so funkcije, ki sprejmejo nek element in vrnejo par elementa in novega procesa:
@@ -495,21 +498,21 @@ Oglejmo si še nadgradnjo tokov, enostavne procese. To so funkcije, ki sprejmejo
 \end{equation}
 Na primer, lahko imamo proces, ki sproti vrača XOR zadnjih dveh prejetih elementov:
 \begin{lstlisting}
-    xor = fix (λf:Bool->Proces. λb_1:Bool. λb_2:Bool. 
-        let new_b = xor b_1 b_2 in
-        {new_b, f new_b}) true;
-    > xor : Proces
+xor = fix (λf:Bool->Proces. λb_1:Bool. λb_2:Bool. 
+    let new_b = xor b_1 b_2 in
+    {new_b, f new_b}) true;
+- : xor : Proces
 \end{lstlisting}
 Podobno kot pro tokovih, za delo s procesi potrebujemo pomožne funkcije, kot je na primer funkcija, ki vrne vrnjeno vrednost procesa:
 \begin{lstlisting}
-    vrednost = λp:Proces. (p true).1;
-    > vrednost : Proces -> Bool
+vrednost = λp:Proces. (p true).1;
+- : vrednost : Proces -> Bool
 \end{lstlisting}
 
 
 \section{Equi-recursive ali Iso-recursive?}
 Ko implementiramo rekurzivne tipe, se moramo slej ko prej vprašati, kaj je razlika med tipom in čemer dobimo, ko ta tip enkrat 'odvijemo'. Na primer, kaj je razlika med tipom \emph{List}
-in njegovim enkratnim odvojem \emph{<nil:Unit, cons:{Element, List}>}? V literatiri pojavita dva pristopa k temu vprašanju: \emph{equi-recursive} in \emph{iso-recursive}.
+in njegovim enkratnim odvojem \emph{$\langle$nil:Unit, cons:{Element, List}$\rangle$}? V literatiri pojavita dva pristopa k temu vprašanju: \emph{equi-recursive} in \emph{iso-recursive}.
 \subsection{Equi-recursive}
 Equi-recursive pristop pravi, da je tip \emph{\(\mu\)X.F(X)} po definiciji enak njegovemu odvoju \emph{F(\(\mu\)X.F(X))}, ker oba predstavljata enaka neskončna drevesa. Ta pristop nato od 
 preverjevalnika tipov zahteva, da poskrbi, da se lahko oba zapisa uporabljata kot argumenta v funkcijah in podobno.
@@ -519,11 +522,11 @@ Iso-recursive način, pa ubere na prvi pogled nekoliko bolj zapleteno pot. Defin
 \emph{unfold} vzame rekurzivni tip in ga preslika v njegov prvi odvoj, torej vzame tip \(\mu\)X.T in v telesu T zamenja vse pijavitve X z celotnim rekurzivnim tipom. Na primer, v definiciji 
 seznama: 
 \begin{equation}
-    \mu \text{List.}<\text{nil:Unit, cons:}\{\text{Element, List}\}> \notag
+    \mu \text{List.}\langle\text{nil:Unit, cons:}\{\text{Element, List}\}\rangle \notag
 \end{equation}
 preslikamo v
 \begin{equation}
-    <\text{nil:Unit, cons:}\{\text{Element,} \mu \text{List.}<\text{nil:Unit, cons:}\{\text{Element, List}\}>\}>. \notag
+    \langle\text{nil:Unit, cons:}\{\text{Element,} \mu \text{List.}\langle\text{nil:Unit, cons:}\{\text{Element, List}\}\rangle\}\rangle. \notag
 \end{equation}
   
 \emph{Fold} pa stori ravno obratno, torej rekurzivni tip zavije nazaj. Definiciji teh preslikav lahko tako zapišemo kot:
@@ -541,7 +544,7 @@ Tako iso-recursive pristop rekurzivni tip in njegove odvoje ne obravnava kot ena
 
 Oba pristopa se uporabljata pri konstrukciji programskih jezikov in teoretičnih besedilih. Equi-recursive je bolj intuitiven, vednar zahteva več dela od preverjevalnika tipov in 
 lahko privede do težav pri kombinaciji z drugimi konstrukti, na primer operatorjih na tipih. Medtem iso-recursive pristop zahteva uporabo preslikav \emph{fold} in \emph{unfold}, kjerkoli 
-se uporabijo rekurzivni tipi. V svoji implementaciji sem uporabil equi-recursive pristop, ker je bolj intuitiven in ne zahteva uporabe dodatni preslikav. Ker je Minihaskell len programski 
+se uporabijo rekurzivni tipi. V svoji implementaciji sem uporabil equi-recursive pristop, ker je bolj intuitiven in ne zahteva uporabe dodatni preslikav. Ker je MiniHaskell len programski 
 jezik, preverjevalnik tipov čaka na potrebo po preverjanju tipov, kar pomeni, da se lahko uporabijo rekurzivni tipi, ne da bi jih bilo treba najprej razviti.
 
 \chapter{Vsote in variante}
@@ -551,12 +554,12 @@ notranje vozlišče. Element v povezanem seznamu je lahko trivialna vrednost nil
 \section{Vsote}
 Vsote so tipi, ki izvirajo iz množice vrednosti, dobljene iz kombinacije natanko dveh tipov. Na primer, če imamo tipa
 \begin{lstlisting}
-    Odrasel = {starost: Int, izobrazba: String}
-    Otrok = {starost: Int, šola: String}
+Odrasel = {starost: Int, izobrazba: String}
+Otrok = {starost: Int, šola: String}
 \end{lstlisting}
 za opis odraslega in otroka in želimo obravnavati oba kot en tip, da bi lahko na primer naredili seznam, ki vključuje oba tipa, lahko definiramo vsoto
 \begin{lstlisting}
-    Oseba = Odrasel + Otrok.
+Oseba = Odrasel + Otrok.
 \end{lstlisting}
 Vsak element s tipom oseba, je tipa Odrasel, ali pa Otrok.
 
@@ -572,10 +575,10 @@ tipa \emph{Otrok}. Torej, če je \emph{od} tipa \emph{Odrasel}, je \emph{inl od}
 Da lahko nato delamo z vsotami, moramo imeti funkcije, ki znajo ločevati med elementi vsote in jih obravnavati posebej. To naredimo z uporabo \emph{case} izraza. Če nas na primer zanimajo 
 informacije o izobrazbi obravnavane osebe, lahko definiramo funkcijo izobrazba:
 \begin{lstlisting}
-    izobrazba: λo:Oseba.
-        case o of
-            inl x -> x.izobrazba
-            inr y -> y.šola;
+izobrazba: λo:Oseba.
+    case o of
+        inl x -> x.izobrazba
+        inr y -> y.šola;
 \end{lstlisting}
 Ko je argument o tipa Odrasel označen z \emph{inl}, se izvede prva veja in vrne izobrazba odraslega, ko pa je argument o tipa Otrok označen z \emph{inr}, se izvede druga veja in vrne šola
 otroka. Tako je tip celotne funkcije \emph{Oseba $\rightarrow$ String}.
@@ -594,23 +597,23 @@ najpreprostejša rešitev, vendar onemogoča, da bi v tem primeru tip \emph{$\be
 \section{Variante}
 Binarne vsote lahko razširimo na variante, ki so kot vsote s poljubnim številom seštevancev. Zato označbi \emph{inl} in \emph{inr} ne prideta več v poštev, temveč uporabimo svoje oznake. 
 Tako se malenkost spremeni notacija. Namesto \emph{$T_1 + T_2$} pišemo \emph{<$l_1:T_1, ... , l_n:T_n$>}, kjer \(l_i\) stoji za i-to oznako, ali 'label'. Prav tako namesto \emph{inl t as 
-$T_1 + T_2$}, pišemo \emph{<$l_1$ = t> as <$l_1:T_1, ... , l_n:T_n$>}. Tako naš primer z osebami postane:
+$T_1 + T_2$}, pišemo \emph{$\langle l_1$ = t$\rangle$ as $\langle l_1:T_1, ... , l_n:T_n\rangle$}. Tako naš primer z osebami postane:
 \begin{lstlisting}
-    Oseba = <odrasel:Odrasel, otrok:Otrok>;
-    o = <odrasel=od> as Oseba;
-    > o : Oseba
+Oseba = <odrasel:Odrasel, otrok:Otrok>;
+o = <odrasel=od> as Oseba;
+- : o : Oseba
 
-    izobrazba: λo:Oseba.
-        case o of
-            <odrasel = od> -> od.izobrazba
-          | <otrok = ot> -> ot.šola;
-    > izobrazba : Oseba -> String
+izobrazba: λo:Oseba.
+    case o of
+    <odrasel = od> -> od.izobrazba
+      | <otrok = ot> -> ot.šola;
+- : izobrazba : Oseba -> String
 \end{lstlisting}
 
 
 Morda zanimiva skupina variant so tiste, ki lahko vsebujejo tudi trivialne vrednosti \emph{unit}:
 \begin{lstlisting}
-    Optional =  <none:unit, some:Val>;
+Optional =  <none:unit, some:Value>;
 \end{lstlisting}
 Ti tipi so izomorfni s tipi, ki spadajo pod oznako \emph{some} in razširjeni z opcijo trivialne vrednosti. To so na primer tipi, ki jih poznamo iz priljubljenih programskih jezikov in dopuščajo 
 vrednosti kot so \emph{null}, \emph{None} ali \emph{nil}.
@@ -620,58 +623,58 @@ vrednosti kot so \emph{null}, \emph{None} ali \emph{nil}.
 \subsection{Oštevilčenja (enumerations)}
 Oštevilčenja so variante, ki vsebujejo zgolj trivialne vrendosti in so namenjene predstavljanju konstant. Na primer, če želimo predstaviti ocene, ki jih lahko dobi študent, definiramo varianto:
 \begin{lstlisting}
-    Ocena = <pet:Unit, šest:Unit, sedem:Unit, osem:Unit, 
-            devet:Unit, deset:Unit>;
+Ocena = <pet:Unit, šest:Unit, sedem:Unit, osem:Unit, 
+        devet:Unit, deset:Unit>;
 \end{lstlisting}
-Elementi takega tipa bi nato bili oblike \emph{<deset=unit> as Ocena}. Tako lahko sestavimo tudi funkcije, ki obravnavajo take vrendnosti. Na primer;
+Elementi takega tipa bi nato bili oblike \emph{$\langle$deset=unit$\rangle$ as Ocena}. Tako lahko sestavimo tudi funkcije, ki obravnavajo take vrendnosti. Na primer;
 \begin{lstlisting}
-    možno_zviševanje = λ.o:Ocena.
-        case o of 
-              <deset=x> -> false
-            | _         -> true;
+možno_zviševanje = λ.o:Ocena.
+    case o of 
+    <deset=x> -> false
+        | _         -> true;
 \end{lstlisting}
 je funkcija, ki sprejme eno izmed ocen in vrne odgovor na vprašanje, če jo je možno izboljšati. Tip te funkcije je \emph{Ocena $\rightarrow$ Bool}.
 
 \subsection{Variante enega tipa (Single-field variants)}
 Možno je ustvariti tudi variante s samo eno oznako, torej bodo vsi njeni elementi istega tipa:
 \begin{lstlisting}
-    V = <l:T>;
+V = <l:T>;
 \end{lstlisting}
 torej tipa \emph{T}. To je lahko zelo uporabno, ker elementov tipa \emph{V} ni možno zamešati za elemente tipa \emph{T} in posledično na njih ne moremo izvajati operacij, ki jih lahko na tipu 
 \emph{T}. Tako se lahko izognemu nesmiselnim primerom. Recimo, da uporabljamo podatke o valutah. Količino denarja v posamezni valuti lahko predstavimo s tipom \emph{Float}, kot decimalno 
 število. Težava nastane, ko definiramo funkcijo, ki pretvarja med valutami:
 \begin{lstlisting}
-    KuneVEvre = λx:Float. zmnoži x 0.1327;
-    > KuneVEvre : Float -> Float
+KuneVEvre = λx:Float. zmnoži x 0.1327;
+- : KuneVEvre : Float -> Float
 \end{lstlisting}
 kjer \emph{zmnoži} predstavlja funkcijo, ki pomnoži dve decimialni števili. Če je \emph{x}, ki ga podamo funkciji \emph{KuneVEvre} količina denarja v evrih, je vse v redu. Vendar pa nam nič ne 
 preprečuje, da bi kot argument v \emph{KuneVEvre} podali katerokoli drugo število, na primer količino denarja v dolarjih, ali še huje, število število komarjev v nekem prostoru. Taka uporaba te 
 funkcije je nesmiselna in se ji v večini primerov želimo izogniti. Tako lahko definiramo variante enega tipa:
 \begin{lstlisting}
-    DenarVKunah = <kune:Float>;
-    DenarVEvrih = <evri:Float>;
+DenarVKunah = <kune:Float>;
+DenarVEvrih = <evri:Float>;
 \end{lstlisting}
 in morda še vse ostali, ki jih potrebujemo, ter funkcijo \emph{KuneVEvre} spremenimo tako, da deluje s pravilnimi tipi, torej pretvorbo omogočimo 
 samo iz kun v evre in nič drugega:
 \begin{lstlisting}
-    KuneVEvre = λx:DenarVKunah.
-        case x of 
-            <kune:x> -> <evri = zmnoži x 0.1327> 
-                        as DenarVEvrih;
-    > KuneVEvre : DenarVKunah -> DenarVEvrih.
+KuneVEvre = λx:DenarVKunah.
+    case x of 
+    <kune:x> -> <evri = zmnoži x 0.1327> 
+                    as DenarVEvrih;
+- : KuneVEvre : DenarVKunah -> DenarVEvrih.
 \end{lstlisting}
 Tako se zavarujemo pred napakami.
 \newpage
 
 \chapter{Implementacija}
-Predstavljene konstrukte sem tudi sam implementiral. To sem storil v programskem jeziku Minihaskell, ki ga je ustvaril prof. dr. Andrej Bauer in 
+Predstavljene konstrukte sem tudi sam implementiral. To sem storil v programskem jeziku MiniHaskell, ki ga je ustvaril prof. dr. Andrej Bauer in 
 je dostopen na njegovem Github profilu, v repozitoriju \emph{plzoo}. 
 
-Minihaskell je programski jezik, ki je namenjen predstavitvi osnovnih konceptov funkcijskega programiranja. Napisan je v programskem jeziku 
+MiniHaskell je programski jezik, ki je namenjen predstavitvi osnovnih konceptov funkcijskega programiranja. Napisan je v programskem jeziku 
 OCaml in po strukturi in načinu uporabe sledi jeziku Haskell. Omogoča uporabo celih števil (\textit{integers}), booleanov z logičnimi operacijami in primerjavami 
 celih števil ('=', '<'), urejenih parov, seznamov, funkcij in rekurzije. Temu sem dodal možnost definiranja novih tipov, rekurzivnih ali ne, in 
 uporabe \emph{case} izrazov za elo z njimi. Programski jezik sestavljajo leksična analiza, razčlenjevanje, interpreter in preverjevalnik tipov. V nadaljevanju bom predstavil kako 
-delujejo v Minihaskellu, ter kako sem jih dopolnil.
+delujejo v MiniHaskellu, ter kako sem jih dopolnil.
 
 \section{Leksična analiza}
 Prvi korak, ki ga je potrebno narediti, ko dobimo program ali ukaz in ga želimo izvesti, je leksična analiza. To je postopek, kjer vhodni niz znakov očistimo nebistvenih znakov, kot 
@@ -683,101 +686,98 @@ konstruktov, je v lekserju definiranih še veliko drugih gradnikov, kot so olkep
 in podobno. Za definicijo podatkovnih tipov sem dodal ključno besedo \emph{data}, z idejo, da bo imela enako vlogo, kot tista v Haskellu. Tako imamo vse potrebno za 
 definicijo novih podatkovnih tipov, ker smo definirali besedo \emph{data}, imamo \emph{cname} za definicijo konstruktorjev in že od prej možnost definiranja spremenljivk.
 Za delo s podatkovnimi tipi, torej izraz \emph{case}, je bilo potrebno še dodati gradnike za ključne besede \emph{case}, \emph{of} in \emph{end}\footnote{Gradnik \emph{ALTERNATIVE} 
-za znak '|' je že bil definiran, ker je Minihaskell že imel sezname in funkcijo \emph{match} za delo z njimi.}\footnote{Gradnik \emph{TARROW} za znak \emph{->}, ki bo v veji \emph{case} 
+za znak '|' je že bil definiran, ker je MiniHaskell že imel sezname in funkcijo \emph{match} za delo z njimi.}\footnote{Gradnik \emph{TARROW} za znak \emph{$\rightarrow$}, ki bo v veji \emph{case} 
 izraza ločil med izrazom, ki ga primerjamo in posledico, ki se sproži v primeru ujemanja, je prav tako že bil definiran.}. V Haskellu sicer gradnika za \emph{end} ne poznamo, vendar ker za 
-razliko od Haskella Minihaskell ni občutljiv na zamik vrstic v kodi, in ker nisem želel z implementacijo še tega zaiti s smeri moje diplomske naloge, sem za lažje delo v parserju 
+razliko od Haskella MiniHaskell ni občutljiv na zamik vrstic v kodi, in ker nisem želel z implementacijo še tega zaiti s smeri moje diplomske naloge, sem za lažje delo v parserju 
 dodal tudi ta gradnik. Da bi razumeli zakaj je potreben, si poglejmo naslednji primer: recimo, da imamo \emph{case} izraz, ki v eni od svojih vej vsebuje še en, gnezden \emph{case} 
 izraz:
 \begin{lstlisting}
-    case x of 
-        a -> _
-        b -> case y of
-                c -> _
-                d -> _
-        e -> _
+case x of 
+    a -> _
+    b -> case y of
+            c -> _
+            d -> _
+    e -> _
 \end{lstlisting}
-Če bi bil Minihaskell občutljiv na zamik vrstic, bi bil zgornji izraz samoumeven. Ker pa v Minihaskellu v resnici izgleda takole:
+Če bi bil MiniHaskell občutljiv na zamik vrstic, bi bil zgornji izraz samoumeven. Ker pa v MiniHaskellu v resnici izgleda takole:
 \begin{lstlisting}
-	case x of a -> _ | b -> case y of c -> _ | d -> _ | e -> _,
+case x of a -> _ | b -> case y of c -> _ | d -> _ | e -> _,
 \end{lstlisting}
 ga lahko razumemo na dva načina:
 \begin{lstlisting}
-    case x of 
-        a -> _
-        b -> case y of
-                c -> _
-                d -> _
-        e -> _,
+case x of 
+    a -> _
+    b -> case y of
+            c -> _
+            d -> _
+    e -> _,
 \end{lstlisting}
 ali pa:
 \begin{lstlisting}
-    case x of 
-        a -> _
-        b -> case y of
-                c -> _
-        d -> _
-        e -> _.
+case x of 
+    a -> _
+    b -> case y of
+            c -> _
+    d -> _
+    e -> _.
 \end{lstlisting}
 Ker imajo različni programerji različna mnenja o tem, kateri od obeh je bolj smiselen in sem se želel izogniti kakeršnikoli dvoumnosti, sem dodal 
 \emph{end} gradnik, ki nam omogoča, da nedvoumno določimo, kdaj se \emph{case} izraz konča:
 \begin{lstlisting}
-    case x of 
-        a -> _
-        b -> case y of
-                c -> _
-                d -> _
-                end
-        e -> _
-    end.
+case x of 
+    a -> _
+    b -> case y of
+            c -> _
+            d -> _
+            end
+    e -> _
+end.
 \end{lstlisting}
-Prav tako imamo v Minihaskellu težavo z vpisovanjem izrazov na zgornji način, saj je prilagojen le vpisovanju ukozov v komandno vsrtico, ki pa 
+Prav tako imamo v MiniHaskellu težavo z vpisovanjem izrazov na zgornji način, saj je prilagojen le vpisovanju ukozov v komandno vsrtico, ki pa 
 sprejema le nize znakov brez znaka za novo vrstico (\emph{newline} ali \emph{\\n}). Tako nastane težava pri iskanju meje med posameznimi vejami
 \emph{case}-a. Haskell za to uporablja le znake za novo vrstico, jaz pa sem dodal obvezno uporabo znaka \emph{|} na začetku vsake veje, ki ni prva.
 Tako bi zgornji primer izgledal takole:
 \begin{lstlisting}
-	case x of 
-		a -> _
-	  | b -> case y of
-				c -> _
-			  | d -> _
-			  end
-	  | e -> _
-	end,
+case x of 
+  a -> _
+  | b -> case y of
+      c -> _
+      | d -> _
+      end
+  | e -> _
+end,
 \end{lstlisting}
 ali kot vnos v komandno vrstico:
 \begin{lstlisting}
-	case x of a -> _ | b -> case y of c -> _ | d -> _ end | e -> _ end.
+case x of a -> _ | b -> case y of c -> _ | d -> _ end | e -> _ end.
 \end{lstlisting}
 
 \section{Razčlenjevanje}
-uporabimo parser generator - program, ki sprejme slovnična pravila in iz njih generira razčlenjevalnik (primer takega opisa za aritmetične izraze v OCamlu).
-
-
-Razčlenjevalnik ali parser je naslednji korak v procesu prevajanja progamov. Kot je to delano v praksi, tudi v Minihaskellu ni parser napisan na roke, temveč 
+Razčlenjevalnik ali parser je naslednji korak v procesu prevajanja progamov. Kot je to delano v praksi, tudi v MiniHaskellu ni parser napisan na roke, temveč 
 je uporabljen program parser generator, kateremu moramo podati le slovnična pravila. Ker se tukaj uporabi Menhirjev OCaml parser generator, končnica 
 datoteke ni .ml, ampak .mly. Lekser posreduje tok gradnikov, ki jih je prepoznal, naloga parserja pa je prepoznati slovnično pravilne stavke in zgraditi 
 abstraktna sintaktična drevesa. To stori s pomočjo slovničnih pravil, ki povejo, v kakšnem zaporedju pričakujemo gradnike in kje se ti smejo pojaviti. 
 V svoji implementaciji sem dodal dve gramatični pravili: eno za definicijo novih tipov in eno za \emph{case} izraz. Pravilo za definicijo novih tipov je 
 sledeče:
 \begin{lstlisting}
-  datadef:
-  | DATA CNAME EQUAL data_variants,
+datadef:
+| DATA CNAME EQUAL data_variants,
 
-  data_variants:
-  | data_variant
-  | data_variant ALTERNATIVE data_variants
+data_variants:
+| data_variant
+| data_variant ALTERNATIVE data_variants
 
-  data_variant:
-  | CNAME list(ty)
+data_variant:
+| CNAME list(ty)
 \end{lstlisting}
 ki omogoča definicijo tipov na način:
 \begin{lstlisting}
-    data Type = Constr_1 args_1 | Constr_2 args_2 | ... | Constr_n args_n.
+data Type = Constr_1 args_1 | Constr_2 args_2 | ... | Constr_n args_n.
 \end{lstlisting}
 Seveda morajo biti TYPE in CONSTR imena z veliko začetnico. Slovnična pravila lahko zapišemo tudi z abstraktnimi sintaktičnimi drevesi. Na primer, 
 definicijo tipa:
 \begin{lstlisting}
-	data Type = Constr_1 args_1 | Constr_2 args_2 | Constr_3 args_3,
+data Type = Constr_1 args_1 | Constr_2 args_2 | Constr_3 args_3,
 \end{lstlisting}
 lahko predstavimo z drevesom:
 \begin{center}
@@ -829,28 +829,28 @@ spremenljivk, \emph{exprtop}, ki omogoča definicijo izrazov in \emph{cmdtop}, k
 Slovnično pravilo za \emph{case} izraz pa sem dodal samo pod pravilo za \emph{expr} ali izraze, ker se \emph{case} ne uporabljav v definicijo spremenljivk ali
 definiciji tipov, niti to ni poseben ukaz. Pravilo je: 
 \begin{lstlisting}
-    expr:
-    ...
-    | CASE expr OF cases END
+expr:
+...
+| CASE expr OF cases END
 
-	case_variants:
-	| case_variant
-	| case_variant ALTERNATIVE case_variants
-  
-    case_variant:
-	| pattern TARROW expr
-  
-    pattern:
-	| CNAME list(VAR)
+case_variants:
+| case_variant
+| case_variant ALTERNATIVE case_variants
+
+  case_variant:
+| pattern TARROW expr
+
+  pattern:
+| CNAME list(VAR)
 \end{lstlisting}
 in omogoča uporabo \emph{case} izrazov, kot so:
 \begin{lstlisting}
-    case x of 
-        Constr 1 -> _
-        Constr 2 -> _
-        ...
-        Constr n -> _
-    end,
+case x of 
+    Constr 1 -> _
+    Constr 2 -> _
+    ...
+    Constr n -> _
+end,
 \end{lstlisting}
 ki jih seveda lahko prav tako zapišemo kot abstraktno sintaktično drevo:
 \begin{center}
@@ -899,52 +899,52 @@ ki jih seveda lahko prav tako zapišemo kot abstraktno sintaktično drevo:
 \section{Definicija in manipulacija abstraktne sintakse}
 Ko imamo zgrajena drevesa iz gradnikov, je potrebno ugotoviti, kaj pomenijo in čemu so namenjeni, preden lahko program začnemo izvajati. Tu pride na vrsto abstraktna sintaksa. 
 V datoteki \emph{syntax.ml} so najprej definirani podatkovni tipi, ki jih parser pripiše drevesom in njihovim vozliščem, ko prepozna slovnična pravila. Eden izmed njih je na primer 
-\emph{htype}, krajše za haskell type, ki hrani vrednosti tipov, ki jih Minihaskell pozna na začetku, torej \emph{TInt}, \emph{TBool}, \emph{TTimes}, \emph{Tarrow}, \emph{TList} in 
+\emph{htype}, krajše za haskell type, ki hrani vrednosti tipov, ki jih MiniHaskell pozna na začetku, torej \emph{TInt}, \emph{TBool}, \emph{TTimes}, \emph{Tarrow}, \emph{TList} in 
 \emph{TData}. Črke \emph{T} na začetku poimenovanj služijo kot oznaka, da gre za tip. Morda ne samoumeven tip je \emph{TArrow}, ki predstavlja funkcije. Hrani dva tipa, tip argumenta
 in tip vrnjene vrednosti. Spomnimo se, da v Haskellu ne obstajajo funkcije večih argumentov, temveč funkcije lahko vrnejo tudi nove funkcijem ki sprejmejo nove argumente in tako 
-simulirajo sprejem večih argumetnov. Na primer: funkcija, ki sešteje dve celi števili, tipa \emph{Int -> Int -> Int}, je v resnici funkcija, ki sprejme prvi argument tipa \emph{Int}
+simulirajo sprejem večih argumetnov. Na primer: funkcija, ki sešteje dve celi števili, tipa \emph{Int $\rightarrow$ Int $\rightarrow$ Int}, je v resnici funkcija, ki sprejme prvi argument tipa \emph{Int}
 in vrne novo funkcijo, ki sprejme drugi argument in vrne rezultat:
 \begin{lstlisting}
-	seštej :: Int -> Int -> Int
-	seštej x y = x + y
+seštej :: Int -> Int -> Int
+seštej x y = x + y
 \end{lstlisting}
 v resnici izgleda kot:
 \begin{lstlisting}
-	seštej :: Int -> (Int -> Int)
-	seštej x = (\y -> x + y).
+seštej :: Int -> (Int -> Int)
+seštej x = (\y -> x + y).
 \end{lstlisting}
-Med tipe, ki jih pozna Minihaskell sem moral dodati tip \emph{TData}, ki je namenjen shranjevanju imen konstruktorjev in imen tipov. Sam ima tip \emph{string}, ampak kot omenjeno, 
+Med tipe, ki jih pozna MiniHaskell sem moral dodati tip \emph{TData}, ki je namenjen shranjevanju imen konstruktorjev in imen tipov. Sam ima tip \emph{string}, ampak kot omenjeno, 
 se vanj shranjejo le besede z veliko začetnico. 
 
 Morda bolj zanimiv je tip \emph{toplevel_cmd} ali \textit{toplevel command}, ki kot omenjeno zgoraj, lahko zavzame eno izmed štirih vrendnosti: \emph{Expr}, mki shranjuje izraze, 
 \emph{Def}, ki shrnajuje definicije spremenljivk, \emph{DataDef}, ki shranjuje definicije novih tipov in \emph{Quit}, ki označuje ukaz za izhod iz \emph{toplevel}, torej 
 \emph{minihaskell.exe}. Odločil sem se, da bo \emph{DataDef} shranjeval definicije novih tipov, kot urejen par imena tipa in seznama konstruktorjev in njihovih argumentov:
 \begin{lstlisting}
-	(** Toplevel commands *)
-	type toplevel_cmd =
-	| Expr of expr              (** an expression to be evaluated *)
-	| Def of name * expr        (** toplevel definition [let x = e] *)
-	| DataDef of cname * datadef (** type definition *)
-	| Quit                      (** exit toplevel [$quit] *)
-	
-	(** MiniHaskell data definitions *)
-	type datadef = (cname * htype list) list
+(** Toplevel commands *)
+type toplevel_cmd =
+| Expr of expr              (** an expression to be evaluated *)
+| Def of name * expr        (** toplevel definition [let x = e] *)
+| DataDef of cname * datadef (** type definition *)
+| Quit                      (** exit toplevel [$quit] *)
+
+(** MiniHaskell data definitions *)
+type datadef = (cname * htype list) list
 \end{lstlisting}
 Kot vidimo, so argumenti konstruktorjev tipa \emph{htype}. To pomeni, da lahko konstruktorjem podamo tudi argumente, ki so novih tipov. To nam omogoča definicijo rekurzivnih tipov:
 \begin{lstlisting}
-	data Seznam = Empty | Cons Int Seznam.
+data Seznam = Empty | Cons Int Seznam.
 \end{lstlisting}
 
 Za uporabnika je uporabno videti, da in kaj mu je uspelo, ko požene ukaz. Zato sem definiral tudi funkcije, ki definicije tipov pripravijo za izpis na zaslon, da lahko uporabniku 
 potrdimo, da je definicija uspela in ni prišlo do napake:
 \begin{lstlisting}
-	let string_of_constructor (constr, args) =
-		let args_str = String.concat " " (List.map string_of_type args) in 
-		constr ^ " " ^ args_str
+let string_of_constructor (constr, args) =
+  let args_str = String.concat " " (List.map string_of_type args) in 
+  constr ^ " " ^ args_str
 
-	let string_of_datadef (cname, constructors) =
-		let constructors_str = String.concat " | " (List.map string_of_constructor constructors) in
-		"data" ^ cname ^ " = " ^ constructors_str
+let string_of_datadef (cname, constructors) =
+  let constructors_str = String.concat " | " (List.map string_of_constructor constructors) in
+  "data" ^ cname ^ " = " ^ constructors_str
 \end{lstlisting}
 Ok, tole je treba še popravt v minihaskell.ml, da bo sploh v uporabi. Dodaj primer za seznam.
 
@@ -952,52 +952,52 @@ Ok, tole je treba še popravt v minihaskell.ml, da bo sploh v uporabi. Dodaj pri
 sta ta dva dela prva potomca korenskega vozlišča. Vsako vejo v seznamu sem nato razbil še naprej, na vzorec, ki ga primerjamo z vhodnim izrazom in posledico, ki se sproži v primeru ujemanja. 
 Vzorec pa je sestavljen iz imena kontruktorja in seznamom spremenljivk, ki predstavljajo njegove morebitne argumente. V kodi ta definicija igleda takole:
 \begin{lstlisting}
-	type expr =
-  		...
-  		| Case of expr * (pattern * expr) list
+type expr =
+    ...
+    | Case of expr * (pattern * expr) list
 
-	and pattern = cname * name list
+and pattern = cname * name list
 \end{lstlisting}
 kjer \emph{expr} predstavlja izraz, \emph{pattern} vzorec v veji, \emph{cname} ime konstruktorja z veliko začetnico in \emph{name} ime spremenljivke z malo začetnico, ki predstavlja morebitni 
 argument konstruktorja. 
 
 Zdaj imamo že dovolj konstrukcij, da lahko definiramo svoj tip in funkcijo s \emph{case} izrazom: 
 \begin{lstlisting}
-	data Oseba = Odrasel Int | Otrok Int Int
+data Oseba = Odrasel Int | Otrok Int Int
 
-	let starost = fun o : Oseba => 
-	case o of 
-	    Odrasel x -> x 
-	  | Otrok x y -> y
-	end
+let starost = fun o : Oseba => 
+case o of 
+    Odrasel x -> x 
+  | Otrok x y -> y
+end
 \end{lstlisting}
 
 Definiral sem tudi funkcijo za izpis \emph{case} izraza, vendar je zaradi njene preprostosti ne bom ipostavljal. Na voljo je v repozitoriju.
 
 \section{Pravilnost tipov}
- Da se program lahko izvede, se morajo vsi tipi spremenljivk, funkcij in izrazov ujemati. Preveriti, da je temu tako, je naloga preverjevalnika tipov. V Minihaskellu je zapisan v datoteki 
+ Da se program lahko izvede, se morajo vsi tipi spremenljivk, funkcij in izrazov ujemati. Preveriti, da je temu tako, je naloga preverjevalnika tipov. V MiniHaskellu je zapisan v datoteki 
  \emph{type\_check.ml}. Peverjevalnik tipov programskega jezika MiniHaskell je zelo preprost. Poleg pomožnih funkcij vsebuje kontekst, kjer hrani tipe spremenljivk, funkcijo \emph{check}, 
  ki preveri, če je tip danega izraza pravilen in funkcijo \emph{type\_of}, ki kakšnega tipa je dani izraz.
  
  Da lahko preverjevalnik tipov deluje, mora poznati tipe obstoječih spremenljivk. To hrani kot seznam urejenih parov imen spremenljivk in njihovih tipov. Da pa lahko poznamo tipe spremenljivk, 
  ki so rezultat novih konstruktorjev, moramo poznati tudi njihove tipe.
  \begin{lstlisting}
- 	data Oseba = Odrasel Int | Otrok Int Int
+data Oseba = Odrasel Int | Otrok Int Int
 
-	let študent = Odrasel 20
+let študent = Odrasel 20
 \end{lstlisting}
 Da lahko razberemo tip spremenljivke \emph{študent}, moramo vedeti, da je tip, ki ga prinese koonstruktor \emph{Odrasel} \emph{Oseba}. Te informacije shranimo kot seznam urejenih parov imen 
 tipov in njihovih konstruktorjev. Tako dobimo kontekst:
 \begin{lstlisting}
-	type context = {vars: (string * Syntax.htype) list; datadefs: (Syntax.cname * Syntax.datadef) list}
+type context = {vars: (string * Syntax.htype) list; datadefs: (Syntax.cname * Syntax.datadef) list}
 \end{lstlisting}
 definiramo tudi začeten, prazen kontekst, ki ga potrebujemo na začetku izvajanja, ko še ne poznamo nobenih spremenljivk in pomožni funkciji za dodajanje novih spremenljivk in tipov:
 \begin{lstlisting}
-	let empty_ctx = {vars = []; datadefs = []}
+let empty_ctx = {vars = []; datadefs = []}
 
-	let extend_var x ty ctx = {ctx with vars = (x, ty)::ctx.vars}
+let extend_var x ty ctx = {ctx with vars = (x, ty)::ctx.vars}
 
-	let extend_datadef x constrs ctx = {ctx with datadefs = (x, constrs)::ctx.datadefs}.
+let extend_datadef x constrs ctx = {ctx with datadefs = (x, constrs)::ctx.datadefs}.
 \end{lstlisting}
 
 Funkcija \emph{check} deluje zelo preprosto, primerja izračunan tip danega izraza s tistim, ki ga pričakuje in sproži napako, če se ne ujemata. Funkcija \emph{type\_of} pa s pomočjo informacij 
@@ -1006,29 +1006,29 @@ dovolimo le dve celi števili, torej izračunamo tipa obeh podizrazov in če nis
 
 Poglejmo, kako sem dopolnil \emph{type\_of}, da pravilno preverja tipe novih konstruktorjev in \emph{case} izrazov:
 \begin{lstlisting}
-	and type_of (ctx:context) = function
-		...
-		| Syntax.Constr c -> type_of_constr c ctx.datadefs
-		| Syntax.Case (e, cases) -> 
-		   let t = type_of ctx e in
-		   (match t with
-		   | Syntax.TData u -> 
-			  let u_def = find_u u ctx.datadefs in
-			  let ret_type = cases_type u_def cases ctx in
-			  ret_type
-		   | _ -> type_error "%s cannot occur in a case expression" (Syntax.string_of_type t))
+and type_of (ctx:context) = function
+  ...
+  | Syntax.Constr c -> type_of_constr c ctx.datadefs
+  | Syntax.Case (e, cases) -> 
+    let t = type_of ctx e in
+    (match t with
+      | Syntax.TData u -> 
+      let u_def = find_u u ctx.datadefs in
+      let ret_type = cases_type u_def cases ctx in
+      ret_type
+      | _ -> type_error "%s cannot occur in a case expression" (Syntax.string_of_type t))
 \end{lstlisting}
 Osredotočimo se najprej na definicije novih tipov, torej \emph{Syntax.Constr} vejo. Tu enostavno kličemo funkcijo \emph{type\_of\_constr}, s konstruktorjem, katerega tip nas zanima in delom 
 konteksta, kjer je ta shranjen. Funkcija \emph{type\_of\_constr} izgleda takole:
 \begin{lstlisting}
-	let rec type_of_constr c = function
-   | [] -> type_error "unknown constructor %s" c
-   | (type_name, constrs)::datadefs -> 
-      begin
-         match List.assoc_opt c constrs with
-            | None -> type_of_constr c datadefs
-            | Some arg_types -> List.fold_right (fun arg_type t -> Syntax.TArrow (arg_type, t)) arg_types (Syntax.TData type_name) 
-      end
+let rec type_of_constr c = function
+  | [] -> type_error "unknown constructor %s" c
+  | (type_name, constrs)::datadefs -> 
+    begin
+        match List.assoc_opt c constrs with
+          | None -> type_of_constr c datadefs
+          | Some arg_types -> List.fold_right (fun arg_type t -> Syntax.TArrow (arg_type, t)) arg_types (Syntax.TData type_name) 
+    end
 \end{lstlisting}
 Funkcija se rekurzivno sprehodi skozi del konteksta, kjer so shranjeni novi tipi in njihovi konstruktorji. Za vsak tip preveri, če se med njegovimi konstruktorji nahaja želeni in če se, izračuna 
 njegov tip. 
@@ -1038,25 +1038,25 @@ pridobili, če bi vstavili na primer celo število, v nasprotnem primeru sproži
 To storimo rekurzivno, na zelo podoben način, kot smo to storili v funkciji \emph{type\_of\_constr}. Preostane nam le še izračunati tip, ki ga bomo vrnili. Pri tem nam pomaga pomožna funkcija 
 \emph{cases\_type}:
 \begin{lstlisting}
-	and cases_type u_def cases ctx =
-	match cases with
-	   | [] -> type_error "empty case expression"
-	   | ((cname, xs), action)::cases' ->
-		  let xs_types = find_u cname u_def in
-		  let ctx = extend_ctx xs xs_types ctx in
-		  let t1 = type_of ctx action in
-		  let rec rest_of_cases cases =
-			 match cases with
-			 | [] -> t1
-			 | ((cname, xs), action)::cases' ->
-				let xs_types = find_u cname u_def in
-				let ctx' = extend_ctx xs xs_types ctx in
-				let t2 = type_of ctx' action in
-				if t1 <> t2 then
-				   type_error "case expressions have different types"
-				else
-				   rest_of_cases cases'
-		  in rest_of_cases cases'
+and cases_type u_def cases ctx =
+match cases with
+    | [] -> type_error "empty case expression"
+    | ((cname, xs), action)::cases' ->
+    let xs_types = find_u cname u_def in
+    let ctx = extend_ctx xs xs_types ctx in
+    let t1 = type_of ctx action in
+    let rec rest_of_cases cases =
+      match cases with
+      | [] -> t1
+      | ((cname, xs), action)::cases' ->
+      let xs_types = find_u cname u_def in
+      let ctx' = extend_ctx xs xs_types ctx in
+      let t2 = type_of ctx' action in
+      if t1 <> t2 then
+          type_error "case expressions have different types"
+      else
+          rest_of_cases cases'
+    in rest_of_cases cases'
 \end{lstlisting}
 Seveda ne želimo praznega \emph{case} izraza, zato v takem primeru sprožimo napako. Nato izračunamo tipe spremenljivk, ki predstavljajo argumente za konstruktor v dani veji. To storimo z uporabo
 funkcije \emph{find\_u}, ki poišče konstruktor v seznamu konstruktorjev in vrne tipe njegovih argumentov. Nato to dodamo v kontekst, da jih lahko uporabimo pri izračunu tipa posledice. Opazimo, 
@@ -1065,66 +1065,66 @@ poimenujemo \emph{t1}, se lotimo preostalih vej. Te pregledamo rekurzivno, z ena
 se ne ujemata, sprožimo napako. To storimo, ker želimo, da \emph{case} izraz vrne rezultat enakega tipa, neodvisno od izbrane veje.
 
 \section{interpreter}
-Čas je za izračunanje vrednosti izrazov v programu. Tega se lahko brez težav lotimo, ker nam preverjevalnik tipov zagotavlja, da so ti pravilni. V Minihaskellu izraze računamo znotraj datoteke 
+Čas je za izračunanje vrednosti izrazov v programu. Tega se lahko brez težav lotimo, ker nam preverjevalnik tipov zagotavlja, da so ti pravilni. V MiniHaskellu izraze računamo znotraj datoteke 
 \emph{interpret.ml}. Ta deluje precej preprosto, ker smo vso pripravo naredili že prej. Najprej definira okolje za spremenljivke, nato kako shranjujemo izračunane vrednosti, funkcijo 
 \emph{interp}, ki računa vrednosti izrazov, in izpiše rezultat. 
 
 Okolje ali \emph{environment} je seznam urejenih parov imen spremenljivk in njihovih vrednosti. Uporabljala ga funkcija \emph{interp}, ki vrednosti spremenljivk uporablja za izračun 
 vrednosti izrazov. Izračune vrednosti hranimo v enem izmed konstruktov tipa \emph{value}: 
 \begin{lstlisting}
-	and value =
-	| VInt of int
-	| VBool of bool
-	| VNil of Syntax.htype
-	| VClosure of environment * Syntax.expr
-	| VConstr of Syntax.cname * (environment * Syntax.expr) list
+and value =
+| VInt of int
+| VBool of bool
+| VNil of Syntax.htype
+| VClosure of environment * Syntax.expr
+| VConstr of Syntax.cname * (environment * Syntax.expr) list
 \end{lstlisting}
-Potrebujemo način za shranjevanje osnovnih tipov Minihaskella, torej \emph{Int} in \emph{Bool}, prazen seznam \emph{Nil} in funkcije. Za hranjenje vrednosti novih tipov sem dodal še 
+Potrebujemo način za shranjevanje osnovnih tipov MiniHaskella, torej \emph{Int} in \emph{Bool}, prazen seznam \emph{Nil} in funkcije. Za hranjenje vrednosti novih tipov sem dodal še 
 \emph{VConstr}, ki vsebuje ime konstruktorja in seznam urejenih parov okolja in izraza, ki predstavlja njegove argumente. 
 
 Za \emph{case} je bilo potrebno dopolniti funkcijo \emph{interp}, da zna poiskati pravo vejo in vrniti njeno posledico. Ker vemo, da preverjevalnik tipov zagotavlja pravilno število 
 spremenljivk za konstruktorji v vejah, lahko le enostavno primerjamo ime podanega konstruktorja z vsemi v \emph{case} izrazu. Če najdemo pravega, dodamo njegove argumente v okolje in 
 izračunamo posledico. V nasprotnem primeru sprožimo napako. 
 \begin{lstlisting}
-	let rec extend_env env xs vs =
-  		match xs, vs with
-		...
-		| Syntax.Case (e, cases) ->
-			(match interp env e with
-			| VConstr (c, args) ->
-				let rec find_case = function
-				| [] -> runtime_error ("Unmatched constructor " ^ c)
-				| ((c', xs), action) :: l ->
-					if c = c' then
-					let env' = extend_env env xs args in
-					interp env' action
-					else find_case l
-				in find_case cases
-			| _ -> runtime_error "Constructor expected in case"
-			)
+let rec extend_env env xs vs =
+    match xs, vs with
+  ...
+  | Syntax.Case (e, cases) ->
+    (match interp env e with
+    | VConstr (c, args) ->
+      let rec find_case = function
+      | [] -> runtime_error ("Unmatched constructor " ^ c)
+      | ((c', xs), action) :: l ->
+        if c = c' then
+        let env' = extend_env env xs args in
+        interp env' action
+        else find_case l
+      in find_case cases
+    | _ -> runtime_error "Constructor expected in case"
+    )
 \end{lstlisting}
 
 \section{minihaskell.ml}
 Preostane le še glavna datoteka, ki poganja programe s uporabo vseh zgoraj opisanih datotek. Definira lekser in parser, okolje in funkcijo \emph{exec}, ki izvaja ukaze. Okolje je sestavljeno 
 iz konteksta preverjevalnika tipov in okolja intepretatorja. Tako pozna vrednosti in tipe vseh spremenljivk. Moral sem le dodati, kaj se zgodi, ko uporabnik definira nov tip:
 \begin{lstlisting}
-	let exec (ctx, env) = function
-		...
-		| Syntax.DataDef (name, constructors) ->
-        (* Zoo.print_info "type %s is defined@." name ; *)
-        Zoo.print_info (Syntax.string_of_datadef name constructors);
-        (Type_check.extend_datadef name constructors ctx, env)
-		...
+let exec (ctx, env) = function
+  ...
+  | Syntax.DataDef (name, constructors) ->
+      (* Zoo.print_info "type %s is defined@." name ; *)
+      Zoo.print_info (Syntax.string_of_datadef name constructors);
+      (Type_check.extend_datadef name constructors ctx, env)
+  ...
 \end{lstlisting}
 \textbf{to še ne dela, najprej popravi kodo!!! ne vem zakaj koda ne dela btw}
 
 Imamo programski jezik z delujočimi funkcionalnostmi definiranja novih tipov in delanja z njimi. Poglejmo si še kako ga uporabljamo.
 
-\section{Sintaksa programskega jezika Minihaskell}
+\section{Sintaksa programskega jezika MiniHaskell}
 Da lahko jezik uporabljamo, moramo vedeti, kako napisati posamezne ukaze. 
 
 \chapter{Uporaba}
-Vsak programski jezik je razvit z namenom, da v njem programiramo. Poglejmo si, kako to izgleda v Minihaskellu. Z implementacijo definicije novih podatkovnih tipov MiniHaskell programerju 
+Vsak programski jezik je razvit z namenom, da v njem programiramo. Poglejmo si, kako to izgleda v MiniHaskellu. Z implementacijo definicije novih podatkovnih tipov MiniHaskell programerju 
 ponuja veliko več možnosti načina pristopa k problemu. Vendar najprej poglejmo, če lahko programski jezik nekoliko poenostavimo, brez da izgubimo funkcionalnost. 
 
 Spomnimo se, da ima jezik od prej že osnovne tipe celih števil, booleanov, urejenih parov, seznamov in funkcij. Najbolj očitno je, da lahko z definiranjem nekega novega tipa nadomestimo posebej 
@@ -1133,7 +1133,7 @@ definiran tip seznama:
 data Element = Nil | Num Int | Boolean Bool | Pair A B
 data Seznam = Empty | Cons Element Seznam
 \end{lstlisting}
-Definirali smo seznam kot nov podatkovni tip, ki lahko vsebuje elemente tipa \emph{Int}, \emph{Bool} ali \emph{Pair}\footnote{\emph{Pair} ni zares notacija, ki se uporablja v Minihaskellu, 
+Definirali smo seznam kot nov podatkovni tip, ki lahko vsebuje elemente tipa \emph{Int}, \emph{Bool} ali \emph{Pair}\footnote{\emph{Pair} ni zares notacija, ki se uporablja v MiniHaskellu, 
 temveč sem jo poenostavil za uporabo v tem primeru.}. Konstruktorja Num in Boolean uporabimo, ker sta besedi \emph{Int} in \emph{Bool} že rezervirani in ju ne moremo ponovno uporabiti. Dodajmo 
 še nekaj funkcij za uporabo novih seznamov. Najbolj uporabne funkcije so \emph{head}, ki vrne prvi element seznama, \emph{tail},ki vrne vse elemente razen prvega, \emph{length} za računanje 
 dolžine seznama, \emph{append}, ki doda element na konec seznama in \emph{map}, ki uporabi funkcijo na vsakem elementu seznama. 
@@ -1196,7 +1196,7 @@ MiniHaskell> append (Cons (Num 2) Empty) enke
 MiniHaskell> map plus_ena enke
 - : Seznam = Cons (Num (2) (Cons (Num (2) (Cons (Num (2) (Empty))))))
 \end{lstlisting}
-Torej, z implementacijo novih tipov smodobili tudi možnost delanja s seznami. Torej seznamov, kot so bili definirani v Minihaskellu, ne potrebujemo več. Vprašanje je, kaj še vse lahko nadomestimo.
+Torej, z implementacijo novih tipov smodobili tudi možnost delanja s seznami. Torej seznamov, kot so bili definirani v MiniHaskellu, ne potrebujemo več. Vprašanje je, kaj še vse lahko nadomestimo.
 Poskusimo še ustvariti nov tip \emph{Boolean}, ki bo zamenjal osnovni tip \emph{Bool} in nekaj pripadajočih funkcij:
 \begin{lstlisting}
 data Boolean = True | False
@@ -1207,7 +1207,7 @@ let not = fun b : Boolean =>
     | False -> True 
   end
 
-let xor = fun b1 : Boolean => fun2 b2 : Boolean =>
+let xor = fun b1 : Boolean => fun b2 : Boolean =>
 case of b1 of
 True -> case b2 of
 			True -> False
@@ -1304,6 +1304,40 @@ MiniHaskell> st_vozlisc lipa
 - : Stevilo = Naslednik (Naslednik (Naslednik (Nic)))
 \end{lstlisting}
 Definirali smo drevo \emph{lipa}, ki ima korensko vozlišče in dva lista. Funkcija \emph{st\_vozlisc} vrne število tri.
+
+
+primer lačne funkcije tu ne dela, type\_checker ne pusti, ker se tipi ne ujemajo (logično):
+
+
+Tokovi:
+\begin{lstlisting}
+data Stream = Cons Int Stream
+  
+let ones = rec ones : Stream is Cons 1 ones
+
+MiniHaskell> ones
+- : Stream = Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
+(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
+(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
+(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
+(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
+(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
+(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
+(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
+(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
+(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
+(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
+(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
+(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
+(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
+(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
+(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
+(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 Cons(......)))
+)))))))))))))))))))))))))))))))))))))))))))))))))))))
+)))))))))))))))))))))))))))))))))))))))))))))))))))))
+)))))))))))))))))))))))))))))))))))))))))))))))))))))
+))))))))))))))))))))))))))))))))))))))
+\end{lstlisting}
 
 \newpage
 
