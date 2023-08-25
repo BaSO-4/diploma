@@ -312,13 +312,12 @@ Ključne besede v angleškem jeziku.
 
 
 %********************************************
-10 strani
 
 todo: 
 - popravi širino kodnih blokov 
-- sintaksa jezika, kako se definirajo funkcije in to
-- case: veja ima lahko tudi _ (najprej dokaži) - parser? al type_checker?
-- popravi interpreter description, i added the printing of contructors
+
+- sintaksa jezika, kako se definirajo funkcije in to? 
+
 - dodaj primere!
 
 - prevedi equi in iso recursive
@@ -326,8 +325,6 @@ todo:
 - prevedi sum types
 
 - prevod enumerations in single field variants
-
-- eval.ml, kaj to dela in ali je sploh uporabno. če je, popravi še število filov, ki sestavljajo MiniHaskell
 
 - bloke kode sem zaključeval z ločili, je to kul?
 
@@ -339,14 +336,11 @@ todo:
 
 - naslov diplome, kaj točno je
 
-- ali to pomeni da imamo isorecursive tipe: Type error: A has type B $\rightarrow$ A but is used as if it has type A
-MiniHaskell> A      
-- : B $\rightarrow$ A = A
 
 
 
 \newpage
-\chapter{Rekurzivni tipi} %zaenkrat 1 stran plus razlaga primera seznama z drevesom $\rightarrow$ cca 1.5 strani 
+\chapter{Rekurzivni tipi}
 V programiranju se vsakodnevno srečujemo z velikim številom konceptov in idej, ki nam na različne načine omogočajo iskati rešitve. Eden najbolj osnovnih in popularnih je tudi rekurzija.
 V osnovi rekurzija predstavlja elegantno preprostost reševanja zapletenih problemov z razčlenitvijo na manjše, bolj obvladljive podprobleme. Ta sposobnost reševanja zapletenih izzivov 
 postopoma, ni le preoblikovala načina, kako se programerji lotevajo kodiranja, temveč je tudi postavila temelje za ustvarjanje razreda podatkovnih struktur, imenovanih rekurzivni tipi.
@@ -1080,11 +1074,29 @@ and value =
 | VConstr of Syntax.cname * (environment * Syntax.expr) list
 \end{lstlisting}
 Potrebujemo način za shranjevanje osnovnih tipov MiniHaskella, torej \emph{Int} in \emph{Bool}, prazen seznam \emph{Nil} in funkcije. Za hranjenje vrednosti novih tipov sem dodal še 
-\emph{VConstr}, ki vsebuje ime konstruktorja in seznam urejenih parov okolja in izraza, ki predstavlja njegove argumente. 
+\emph{VConstr}, ki vsebuje ime konstruktorja in seznam urejenih parov okolja in izraza, ki predstavlja njegove argumente. To nam med drugim tudi omogoča izpisovanje tipov in njihovih 
+konstruktorjev:
+\begin{lstlisting}
+let rec print_result n v =
+  (if n = 0 then
+     print_string "..."
+   else
+     match v with
+     ...
+     | VConstr (c, args) ->
+      print_string c;
+      if args <> [] then begin
+        print_string " (";
+        print_args n args;
+        print_string ")"
+      end
+      ...
+) ;
+\end{lstlisting}
 
-Za \emph{case} je bilo potrebno dopolniti funkcijo \emph{interp}, da zna poiskati pravo vejo in vrniti njeno posledico. Ker vemo, da preverjevalnik tipov zagotavlja pravilno število 
-spremenljivk za konstruktorji v vejah, lahko le enostavno primerjamo ime podanega konstruktorja z vsemi v \emph{case} izrazu. Če najdemo pravega, dodamo njegove argumente v okolje in 
-izračunamo posledico. V nasprotnem primeru sprožimo napako. 
+Za \emph{case} je bilo potrebno dopolniti funkcijo \emph{interp}, da zna poiskati pravo vejo in vrniti njeno posledico. Kot je tuudi navada v splošnem, omogočam vzorec oblike '_', ki 
+pomeni "vsi preostali primeri". Ker vemo, da preverjevalnik tipov zagotavlja pravilno število spremenljivk za konstruktorji v vejah, lahko le enostavno primerjamo ime podanega 
+konstruktorja z vsemi v \emph{case} izrazu. Če najdemo pravega, dodamo njegove argumente v okolje in izračunamo posledico. V nasprotnem primeru sprožimo napako. 
 \begin{lstlisting}
 let rec extend_env env xs vs =
     match xs, vs with
@@ -1092,14 +1104,17 @@ let rec extend_env env xs vs =
   | Syntax.Case (e, cases) ->
     (match interp env e with
     | VConstr (c, args) ->
-      let rec find_case = function
-      | [] -> runtime_error ("Unmatched constructor " ^ c)
-      | ((c', xs), action) :: l ->
-        if c = c' then
-        let env' = extend_env env xs args in
-        interp env' action
-        else find_case l
-      in find_case cases
+        let rec find_case = function
+        | [] -> runtime_error ("Unmatched constructor " ^ c)
+        | ((c', xs), action) :: l ->
+          if c = c' then
+            let env' = extend_env env xs args in
+            interp env' action
+          else if "_" = c' then
+            let env' = extend_env env xs args in
+            interp env' action
+          else find_case l
+        in find_case cases
     | _ -> runtime_error "Constructor expected in case"
     )
 \end{lstlisting}
