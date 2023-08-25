@@ -316,7 +316,7 @@ Ključne besede v angleškem jeziku.
 todo: 
 - popravi širino kodnih blokov 
 
-- sintaksa jezika, kako se definirajo funkcije in to? 
+- ali naj dodam poglavje sintaksa jezika, kako se definirajo funkcije in to? 
 
 - dodaj primere!
 
@@ -335,6 +335,8 @@ todo:
 - koliko sta dolga uvod, zaključek in abstract in ključne besede? 10\%
 
 - naslov diplome, kaj točno je
+
+- kje se dejansko pojavita fold in unfold?
 
 
 
@@ -538,8 +540,7 @@ Tako iso-recursive pristop rekurzivni tip in njegove odvoje ne obravnava kot ena
 
 Oba pristopa se uporabljata pri konstrukciji programskih jezikov in teoretičnih besedilih. Equi-recursive je bolj intuitiven, vednar zahteva več dela od preverjevalnika tipov in 
 lahko privede do težav pri kombinaciji z drugimi konstrukti, na primer operatorjih na tipih. Medtem iso-recursive pristop zahteva uporabo preslikav \emph{fold} in \emph{unfold}, kjerkoli 
-se uporabijo rekurzivni tipi. V svoji implementaciji sem uporabil equi-recursive pristop, ker je bolj intuitiven in ne zahteva uporabe dodatni preslikav. Ker je MiniHaskell len programski 
-jezik, preverjevalnik tipov čaka na potrebo po preverjanju tipov, kar pomeni, da se lahko uporabijo rekurzivni tipi, ne da bi jih bilo treba najprej razviti.
+se uporabijo rekurzivni tipi. V svoji implementaciji sem uporabil iso-recursive pristop, saj je tako lažje obvladovati neskončne vzorce.
 
 \chapter{Vsote in variante}
 Programerji se pogosto srečujejo z različnimi strukturami ali spremenljivkami, ki lahko zavzamejo vrednosti iz množice opcij. Na primer, vozlišče v drevesu je lahko prazno, list, ali 
