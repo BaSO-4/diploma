@@ -330,8 +330,6 @@ todo:
 
 - prevedi interpreter
 
-- koliko sta dolga uvod, zaključek in abstract in ključne besede? 10\% 
-
 - naslov diplome, kaj točno je
 
 
@@ -495,7 +493,7 @@ xor = fix (λf:Bool->Proces. λb_1:Bool. λb_2:Bool.
     {new_b, f new_b}) true;
 - : xor : Proces
 \end{lstlisting}
-Podobno kot pro tokovih, za delo s procesi potrebujemo pomožne funkcije, kot je na primer funkcija, ki vrne vrnjeno vrednost procesa:
+Podobno kot pri tokovih, za delo s procesi potrebujemo pomožne funkcije, kot je na primer funkcija, ki vrne vrnjeno vrednost procesa:
 \begin{lstlisting}
 vrednost = λp:Proces. (p true).1;
 - : vrednost : Proces -> Bool
@@ -1201,14 +1199,14 @@ let not = fun b : Boolean =>
 
 let xor = fun b1 : Boolean => fun b2 : Boolean =>
 case of b1 of
-True -> case b2 of
-			True -> False
-			| False -> True
-		end
-| False -> case b2 of
-			True -> True
-			| False -> False
-			end
+  True -> case b2 of
+	  True -> False
+	  | False -> True
+	end
+  | False -> case b2 of
+		True -> True
+	  | False -> False
+	end
 end
 \end{lstlisting}
 Podobno bi lahko definirali tudi funkciji \emph{and} in \emph{or}, vendar tu nista ključnega pomena. Oglejmo si rezultate:
@@ -1332,19 +1330,21 @@ MiniHaskell> fold (fold (fold (fold ((fold (lacna e)) e) e) e) e)
 - : Element -> Lacna = <fun>
 \end{lstlisting}
 
-Poglejmo še kako bi naredili procese, ki poleg lačne funkcije vrnejo še funkcijo vhoda. Ker vračamo par elementa in funkcije, bomo potrebovali še 
-en dodaten tip \emph{Par} in funkciji, ki vračata prvi in drugi element para \emph{drugi}, ter tudi funkcijo, ki jo bomo uporabili na vhodu. 
+Še malo bolj zapletene lačne funkcije so tokovi, ki za vsak prejeto \emph{unit} vrednost, vrnejo naslednji element toka. Ker vračajo urejeni 
+par elementa in toka, potrebujemo še dodatni funkciji, ki vračata posamezne elemente para.
 \begin{lstlisting}
-data Par = Out Element Proces
+data Unit = Nil
 
-data Proces = Fun (Element -> Par)
+data Par = Out Int Tok
+
+data Tok = Fun (Unit -> Par)
 
 let fold = fun t : Tok =>
   case t of
     Fun f -> f
   end
 
-let prvi = fun p : Pair =>
+let prvi = fun p : Par =>
   case p of
     Out e l -> e
   end
@@ -1353,89 +1353,65 @@ let drugi = fun p : Par =>
   case p of
     Out e l -> l
   end
-
-let funkcija = fun e : Element =>
-  e
-
-let proces = rec proces : Element -> Par is
-  fun e : Element =>
-    Out (funkcija e) (Fun proces)
 \end{lstlisting}
-Podobno kot prej, bomo morali tudi tukaj še malo predelati izhod, da ga bomo lahko uporabili naprej.
+Ker v toku ne želimo le enoličnih elementov, mu podamo še funkcijo ki tega spreminja in začetni element. Poglejmo 
+primer toka naravnih števil:
 \begin{lstlisting}
-MiniHaskell> proces e
-- : Pair = Out (Nil (Fun (<fun>)))
+let funkcija = fun n : Int => n + 1
 
-MiniHaskell> prvi (proces e)
-- : Element = Nil
+let tok = rec tok : (Int -> Int) -> Int -> Unit -> Par is
+  fun f : (Int -> Int) =>
+    fun n : Int => fun u : Unit =>
+      Out n (Fun (tok f (f n)))
 
-MiniHaskell> fold (drugi (proces e))
-- : Element -> Par = <fun>
+let u = Nil
 
-MiniHaskell> fold (drugi ((fold (drugi ((fold (drugi (proces e))) e))) e))
-- : Element -> Par = <fun>
+MiniHaskell> prvi ((fold (drugi ((fold (drugi ((tok funkcija 0) u))) u))) u)
+- : int = 2
 \end{lstlisting}
-Na mesto da na elementu uporabimo funkcijo, lahko tudi samo vrnemo nek element, neodvisen od vhoda. 
-Tako dobimo tok:
-\begin{lstlisting}
-data Par = Out Element Tok
 
-data Tok = Fun (Element -> Par)
-
-let fold = fun t : Tok =>
-  case t of
-    Fun f -> f
-  end
-
-let drugi = fun p : Par =>
-  case p of
-    Out e t -> t
-  end
-
-let tok = rec tok : Element -> Par is
-  fun e : Element =>
-    Out 1 (Fun tok)
-\end{lstlisting}
-Tako dobimo neskončen tok enic:
-\begin{lstlisting}
-MiniHaskell> tok e
-- : Par = Out (1 (Fun (<fun>)))
-MiniHaskell> fold (drugi (tok e))
-- : Element -> Par = <fun>
-\end{lstlisting}
-Ker lahko na tokove gledamo tudi kot na neskončne sezname, jih lahko tudi definiramo podobno kot smo zgoraj sezname:
+Ker lahko na tokove gledamo tudi kot na neskončne sezname, jih lahko tudi definiramo podobno kot smo zgoraj sezname. Seveda tudi tukaj 
+potrebujemo funkcijo na začetnem elementu.
 \begin{lstlisting}
 data Tok = Cons Int Tok
-  
-let enice = rec enice : Tok is Cons 1 enice
 
-MiniHaskell> enice
-- : Tok = Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
-(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
-(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
-(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
-(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
-(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
-(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
-(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
-(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
-(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
-(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
-(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
-(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
-(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
-(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
-(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 (Cons 
-(1 (Cons (1 (Cons (1 (Cons (1 (Cons (1 Cons(......)))
-)))))))))))))))))))))))))))))))))))))))))))))))))))))
-)))))))))))))))))))))))))))))))))))))))))))))))))))))
-)))))))))))))))))))))))))))))))))))))))))))))))))))))
-))))))))))))))))))))))))))))))))))))))
+let funkcija = rec funkcija : Tok -> Tok is
+  fun t : Tok =>
+    case t of
+      Cons e tok -> Cons (e+1) (funkcija tok)
+    end
+
+MiniHaskell> let naravna = rec naravna : Tok is Cons 0 (funkcija naravna)
+val naravna : Tok
+
+MiniHaskell> naravna
+- : Tok = Cons (0 (Cons (1 (Cons (2 (Cons (3 (Cons (4 
+(Cons (5 (Cons (6 (Cons (7 (Cons (8 (Cons (9 (Cons (10 
+(Cons (11 (Cons (12 (Cons (13 (Cons (14 (Cons (15 (Cons 
+(16 (Cons (17 (Cons (18 (Cons (19 (Cons (20 (Cons (21 
+(Cons (22 (Cons (23 (Cons (24 (Cons (25 (Cons (26 (Cons 
+(27 (Cons (28 (Cons (29 (Cons (30 (Cons (31 (Cons (32 
+(Cons (33 (Cons (34 (Cons (35 (Cons (36 (Cons (37 (Cons 
+(38 (Cons (39 (Cons (40 (Cons (41 (Cons (42 (Cons (43 
+(Cons (44 (Cons (45 (Cons (46 (Cons (47 (Cons (48 (Cons 
+(49 (Cons (50 (Cons (51 (Cons (52 (Cons (53 (Cons (54 
+(Cons (55 (Cons (56 (Cons (57 (Cons (58 (Cons (59 (Cons 
+(60 (Cons (61 (Cons (62 (Cons (63 (Cons (64 (Cons (65 
+(Cons (66 (Cons (67 (Cons (68 (Cons (69 (Cons (70 (Cons 
+(71 (Cons (72 (Cons (73 (Cons (74 (Cons (75 (Cons (76 
+(Cons (77 (Cons (78 (Cons (79 (Cons (80 (Cons (81 (Cons 
+(82 (Cons (83 (Cons (84 (Cons (85 (Cons (86 (Cons (87 
+(Cons (88 (Cons (89 (Cons (90 (Cons (91 (Cons (92 (Cons 
+(93 (Cons (94 (Cons (95 (Cons (96 (Cons (97 (Cons (98 
+(Cons (... (...))))))))))))))))))))))))))))))))))))))))
+)))))))))))))))))))))))))))))))))))))))))))))))))))))))
+)))))))))))))))))))))))))))))))))))))))))))))))))))))))
+))))))))))))))))))))))))))))))))))))))))))))))))))
 \end{lstlisting}
-Dobimo neskončen seznam enic. Program seveda ne izpiše vseh, da lahko nadaljujemo z vpisovanjem ukazev. Ta definicija 
-nam poda le neskončen seznam, medtem ko definicija z uporabo lačne funkcije vsakič vrne le en par in nas tako ne zasuje 
-z neskončno vrednostmi. Seveda lahko tudi iz neskončnega seznama izluščimo končno mnogo elementov, če definiramo 
-funkciji \emph{glava}, ki vrne prvi element seznama in \emph{rep}, ki vrne vse neprve elemente. 
+Dobimo neskončen seznam naravnih števil. Program seveda ne izpiše vseh, da lahko nadaljujemo z vpisovanjem ukazev. 
+Taka definicija nam poda le neskončen seznam, medtem ko definicija z uporabo lačne funkcije vsakič vrne le en par 
+in nas tako ne zasuje z neskončno vrednostmi. Seveda lahko tudi iz neskončnega seznama izluščimo končno mnogo 
+elementov, če definiramo funkciji \emph{glava}, ki vrne prvi element seznama in \emph{rep}, ki vrne vse neprve elemente. 
 \begin{lstlisting}
 let glava = fun t : Tok =>
   case t of 
@@ -1448,7 +1424,33 @@ let rep = fun t : Tok =>
   end
 \end{lstlisting}
 
+Če definicijo tokov malenkost spremenimo, lahko definiramo tudi procese. Ti namesto \emph{unit} vrednosti sprejemejo poljubne elemente, ki 
+vplivajo na izhos funkcije. Ohranimo lahko funkciji \emph{prvi} in \emph{drugi} iz definicije tokov. Poglejmo si primer, ki vrne vsoto 
+vseh dosedanjih vhodov:
+\begin{lstlisting}
+data Par = Out Int Proces
 
+data Proces = Fun (Int -> Par)
+
+let fold = fun t : Proces =>
+  case t of
+    Fun f -> f
+  end
+
+let funkcija = fun e : Int =>
+  fun n : Int =>
+    e + n
+
+let proces = rec proces : (Int -> Int -> Int) -> Int -> Int -> Par is
+  fun f : (Int -> Int -> Int) =>
+    fun n : Int =>
+      fun e : Int =>
+        Out (f e n) (Fun (proces f (f e n)))
+  
+MiniHaskell> prvi ((fold (drugi (proces funkcija 1 2))) 3)
+- : int = 6
+\end{lstlisting}
+Dobili smo šest, kar je vsota enke, dvojice in trojke.
 
 \newpage
 
