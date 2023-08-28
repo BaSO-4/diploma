@@ -16,6 +16,9 @@
 \usepackage{tikz}
 
 \lstset{
+    xleftmargin=2em,
+    basicstyle= \small,
+    stringstyle=\ttfamily,
     literate=%
         {č}{{\v{c}}}1
         {š}{{\v{s}}}1
@@ -24,7 +27,7 @@
         {->}{{$\rightarrow$}}1
         {=>}{{$\Rightarrow$}}1
         {<}{{$\langle$}}1
-        {>}{{$\rangle$}}1
+        {>}{{$\rangle$}}1   
 }
 
 %Velikost strani - dvostransko
@@ -70,10 +73,10 @@ FAKULTETA ZA RAČUNALNIŠTVO IN INFORMATIKO\\
 \vspace{3cm}
 {\LARGE Luka Sabotič}\\
 
+% todo: linebreaks
 \vspace{2cm}
 \textsc{\textbf{\LARGE 
-Navodila za izdelavo in vzorec za\\ 
-pisanje diplomskega dela\\ 
+Implementacija rekurzivnih\\ podatkovnih tipov v programski\\ jezik MiniHaskell
 }}
 
 \vspace{2cm}
@@ -176,7 +179,7 @@ z vpisno številko \hspace{0.5cm} 63200031,
 sem avtor/-ica diplomskega dela z naslovom:
    
 \vspace{0.5cm}
-Implementacija rekurzivnih podatkovnih tipov v programskem jeziku MiniHaskell
+Implementacija rekurzivnih podatkovnih tipov v programski jezik MiniHaskell
 
 \vspace{1.5cm}
 S svojim podpisom zagotavljam, da:
@@ -352,8 +355,8 @@ ki glavi sledi, pa rep. Tako ima poljubno dolžino, lahko je tudi prazen. Njegov
 \begin{lstlisting}
 List = <nil:Unit, cons:{Element, List}>
 \end{lstlisting}
-kjer \emph{nil} prestavlja odsotnost vrednosti, torej prazen seznam. V prikazovanju primerov svoje implementacije bom za prazen seznam uporabljal konstruktor \emph{Empty}, 
-ki ne sprejme nobenega argumenta. \emph{Element} pa predstavlja vrednost, ki je vsebovana v seznamu. Ta je seveda odvisna od tipa seznama. Če bi na primer hoteli seznam celih števil, 
+kjer \lstinline{nil} prestavlja odsotnost vrednosti, torej prazen seznam. V prikazovanju primerov svoje implementacije bom za prazen seznam uporabljal konstruktor \lstinline{Empty}, 
+ki ne sprejme nobenega argumenta. \lstinline{Element} pa predstavlja vrednost, ki je vsebovana v seznamu. Ta je seveda odvisna od tipa seznama. Če bi na primer hoteli seznam celih števil, 
 bi definicija izgledala tako:
 \begin{lstlisting}
 ListInt = <nil:Unit, cons:{Int, ListInt}>
@@ -376,22 +379,22 @@ Ta seznam si lahko predstavljamo tudi kot drevo:
         level 2/.style={sibling distance=20mm},
         node/.style={inner sep=2pt}
       ]
-      \node[node] {Cons}
+      \node[node] {\lstinline{Cons}}
         child {
           node[node] {1}
         }
         child {
-          node[node] {Cons}
+          node[node] {\lstinline{Cons}}
           child {
             node[node] {2}
           }
           child {
-            node[node] {Cons}
+            node[node] {\lstinline{Cons}}
             child {
               node[node] {3}
             }
             child {
-              node[node] {Empty}
+              node[node] {\lstinline{Empty}}
             }
           }
         };
@@ -399,15 +402,15 @@ Ta seznam si lahko predstavljamo tudi kot drevo:
 \end{center}
 
 Različne vrednosti, ki jih lahko zavzame rekurzivni tip predstavimo s konstruktorji, ki sprejmejo neko število argumentov, ki so lahko spet konstruktorji. V drevesnem prikazu tega tipa so 
-konstruktorji vozlišča, argumenti pa njihovi otroci. Konstruktorji, ki ne sprejmejo nobenih argumetnov, na primer \emph{Empty}, so listi drevesa. V našem primeru seznama s števili 
-ena do tri, poznamo dva konstruktorja: \emph{Cons} in \emph{Empty}. Drevo ima tudi liste, ki predstavljajo števila. Torej lahko podan primer razčlenimo:
+konstruktorji vozlišča, argumenti pa njihovi otroci. Konstruktorji, ki ne sprejmejo nobenih argumetnov, na primer \lstinline{Empty}, so listi drevesa. V našem primeru seznama s števili 
+ena do tri, poznamo dva konstruktorja: \lstinline{Cons} in \lstinline{Empty}. Drevo ima tudi liste, ki predstavljajo števila. Torej lahko podan primer razčlenimo:
 \begin{enumerate}
-    \item imamo seznam, ki vsebuje število 1 in nek drug seznam ali rep. Konstruktor, ki nam omogoča to strukturo je \emph{Cons}, ki sprejme dva argumenta: število in seznam. To sta 
-    njegova otroka. Vzamemo torej prvi del definicije: \textbf{Cons 1 rep}.
-    \item Seznam, ki je 'rep' seznama s številom 1, je spet seznam, ki vsebuje število 2 in nov seznam. Spet uporabimo konstruktor \emph{Cons} in mu podamo argumenta 2 in nov seznam, se pravi 
-    \textbf{Cons 2 rep}.
-    \item Ostane nam še število 3, ki ga kot argument ponudimo tretjemu \emph{Cons} konstruktorju. Potrebujemo še repni seznam: \textbf{Cons 3 rep}.
-    \item Ker smo na koncu seznama, uporabimo konstruktor \textbf{Empty} in zaključimo strukturo.
+    \item imamo seznam, ki vsebuje število 1 in nek drug seznam ali rep. Konstruktor, ki nam omogoča to strukturo je \lstinline{Cons}, ki sprejme dva argumenta: število in seznam. To sta 
+    njegova otroka. Vzamemo torej prvi del definicije: \lstinline{Cons 1 rep}.
+    \item Seznam, ki je `rep' seznama s številom 1, je spet seznam, ki vsebuje število 2 in nov seznam. Spet uporabimo konstruktor \lstinline{Cons} in mu podamo argumenta 2 in nov seznam, se pravi 
+    \lstinline{Cons 2 rep}.
+    \item Ostane nam še število 3, ki ga kot argument ponudimo tretjemu \lstinline{Cons} konstruktorju. Potrebujemo še repni seznam: \lstinline{Cons 3 rep}.
+    \item Ker smo na koncu seznama, uporabimo konstruktor \lstinline{Empty} in zaključimo strukturo.
 \end{enumerate}
 
 Seznamom podoben primer so drevesa. Ta so sestavljena iz vozlišč, vsako je lahko končno, ali pa ima potomce. Ti so spet drevesa. V svetu programiranja so seznami in 
@@ -423,42 +426,42 @@ Primer koinduktivnih tipov so lačne funkcije. To so funkcije, ki sprejmejo polj
 si pomagajmo z \(\mu\)\footnote{Intuitivno si pomen operatorja \(\mu\) lahko razlagamo, kot da \(\mu x.y\) pomeni "tisti x, za katerega velja x = y".} in \emph{fix}\footnote{Intuitivna 
 interpretacija izraza \emph{fix f} je "tak x, za katerega velja x = f(x)".} operatorjema:
 \begin{equation}
-    \text{Lačna} = \mu X. (\text{Argument} \rightarrow X) \notag
+    \mathtt{Lacna} = \mu X. (\mathtt{Argument} \rightarrow X) \notag
 \end{equation}
 Na primer, lahko imamo funkcijo, ki sprejme število in vrne funkcijo, ki sprejme novo število:
 \begin{lstlisting}
-f = fix (λf:Int -> Lačna. λn:Int. f)
-- : f : Lačna
+f = fix (λf:Int -> Lacna. λn:Int. f)
+- : f : Lacna
 \end{lstlisting}
 Opazimo, da za vsak x:Int velja x = f(x).
 Ko polkičemo f, bo ta vrnila novo funkcijo, ki bo lačna novih argumentov:
 \begin{lstlisting}
 l_1 = f 1;
-- : l_1 : Lačna
+- : l_1 : Lacna
 \end{lstlisting}
 Rezultatu lahko nato podamo nov argument in dobili bomo enak rezultat:
 \begin{lstlisting}
 l_2 = l_1 2;
-- : l_2 : Lačna  
+- : l_2 : Lacna  
 \end{lstlisting}
 Tako funkcijo lahko gledamo tudi kot funkcijo, ki sprejme neomejeno količino argumentov in še vedno bo lačna novih:
 \begin{lstlisting}
-zelo_lačna = f 1 2 3 4 5 6 7 8 9 10;
-- : zelo_lačna : Lačna
+zelo_lacna = f 1 2 3 4 5 6 7 8 9 10;
+- : zelo_lacna : Lacna
 \end{lstlisting}
-V resnici je \emph{zelo\_lačna} sestavljena iz več lačnih funkcij, ki se poračunajo sproti z vsakim argumentom. Lahko bi jo zapisali tudo kot:
+V resnici je \lstinline{zelo\_lacna} sestavljena iz več lačnih funkcij, ki se poračunajo sproti z vsakim argumentom. Lahko bi jo zapisali tudo kot:
 \begin{lstlisting}
-zelo_lačna = (((((((((f 1) 2) 3) 4) 5) 6) 7) 8) 9) 10
-- : zelo_lačna : Lačna
+zelo_lacna = (((((((((f 1) 2) 3) 4) 5) 6) 7) 8) 9) 10
+- : zelo_lacna : Lacna
 \end{lstlisting}
 Tako se 1 uporabi kot argument na funkciji f, 2 na funkciji, ki jo vrne f, ko sprejme 1 in tako naprej.
 
 Koinduktivni tipi so torej zelo uporabni, ker nam omogočajo delo z neskončnimi podatki. Vendar pa je potrebno biti previden, ker lahko hitro pride do neskončnih zank. 
 Lažje jih je obvladovati v lenih programskih jezikih, ker se njihova vsebina nikoli ne izračuna do konca, vedno samo po potrebi.
 
-Najbolj znane lačne funkcije so \emph{tokovi}. To so funkcije, ki sprejmejo prazne vrednosti (\emph{Unit}) in vrnejo pare elementov in novih tokov:
+Najbolj znane lačne funkcije so tokovi. To so funkcije, ki sprejmejo prazne vrednosti (\lstinline{Unit}) in vrnejo pare elementov in novih tokov:
 \begin{equation}
-    Tok = \mu X. (Unit \rightarrow {Element, X}) \notag
+    \mathtt{Tok} = \mu X. (\mathtt{Unit} \rightarrow {\mathtt{Element}, X}) \notag
 \end{equation}
 Lažji način za razumevanje tokov je, da jih gledamo kot neskončne sezname, sestavljene iz parov elementov in novih tokov. Na primer, lahko imamo tok naravnih števil:
 \begin{lstlisting}
@@ -484,7 +487,7 @@ tri = glava (rep (rep (rep naravna)));
 
 Oglejmo si še nadgradnjo tokov, enostavne procese. To so funkcije, ki sprejmejo nek element in vrnejo par elementa in novega procesa:
 \begin{equation}
-    Proces = \mu X. (Element \rightarrow {Element, X}) \notag
+    \mathtt{Proces} = \mu X. (\mathtt{Element} \rightarrow {\mathtt{Element}, X}) \notag
 \end{equation}
 Na primer, lahko imamo proces, ki sproti vrača XOR zadnjih dveh prejetih elementov:
 \begin{lstlisting}
@@ -501,28 +504,28 @@ vrednost = λp:Proces. (p true).1;
 
 
 \section{Equi-recursive ali Iso-recursive?}
-Ko implementiramo rekurzivne tipe, se moramo slej ko prej vprašati, kaj je razlika med tipom in čemer dobimo, ko ta tip enkrat 'odvijemo'. Na primer, kaj je razlika med tipom \emph{List}
+Ko implementiramo rekurzivne tipe, se moramo slej ko prej vprašati, kaj je razlika med tipom in čemer dobimo, ko ta tip enkrat 'odvijemo'. Na primer, kaj je razlika med tipom \lstinline{List}
 in njegovim enkratnim odvojem \emph{$\langle$nil:Unit, cons:{Element, List}$\rangle$}? V literatiri pojavita dva pristopa k temu vprašanju: \emph{equi-recursive} in \emph{iso-recursive}.
 \subsection{Equi-recursive}
 Equi-recursive pristop pravi, da je tip \emph{\(\mu\)X.F(X)} po definiciji enak njegovemu odvoju \emph{F(\(\mu\)X.F(X))}, ker oba predstavljata enaka neskončna drevesa. Ta pristop nato od 
 preverjevalnika tipov zahteva, da poskrbi, da se lahko oba zapisa uporabljata kot argumenta v funkcijah in podobno.
 
 \subsection{Iso-recursive}
-Iso-recursive način, pa ubere na prvi pogled nekoliko bolj zapleteno pot. Definira dve preslikavi, ki sta med seboj inverzni. Imenujmo ju \emph{fold} in \emph{unfold}. Preslikava 
-\emph{unfold} vzame rekurzivni tip in ga preslika v njegov prvi odvoj, torej vzame tip \(\mu\)X.T in v telesu T zamenja vse pijavitve X z celotnim rekurzivnim tipom. Na primer, v definiciji 
+Iso-recursive način, pa ubere na prvi pogled nekoliko bolj zapleteno pot. Definira dve preslikavi, ki sta med seboj inverzni. Imenujmo ju \lstinline{fold} in \lstinline{unfold}. Preslikava 
+\lstinline{unfold} vzame rekurzivni tip in ga preslika v njegov prvi odvoj, torej vzame tip \(\mu\)X.T in v telesu T zamenja vse pojavitve X z celotnim rekurzivnim tipom. Na primer, v definiciji 
 seznama: 
 \begin{equation}
-    \mu \text{List.}\langle\text{nil:Unit, cons:}\{\text{Element, List}\}\rangle \notag
+    \mu \mathtt{List.}\langle\mathtt{nil:Unit, cons:}\{\mathtt{Element, List}\}\rangle \notag
 \end{equation}
 preslikamo v
 \begin{equation}
-    \langle\text{nil:Unit, cons:}\{\text{Element,} \mu \text{List.}\langle\text{nil:Unit, cons:}\{\text{Element, List}\}\rangle\}\rangle. \notag
+    \langle\mathtt{nil:Unit, cons:}\{\mathtt{Element,} \mu \mathtt{List.}\langle\mathtt{nil:Unit, cons:}\{\mathtt{Element, List}\}\rangle\}\rangle. \notag
 \end{equation}
   
-\emph{Fold} pa stori ravno obratno, torej rekurzivni tip zavije nazaj. Definiciji teh preslikav lahko tako zapišemo kot:
+\lstinline{Fold} pa stori ravno obratno, torej rekurzivni tip zavije nazaj. Definiciji teh preslikav lahko tako zapišemo kot:
 \begin{gather}
-    unfold[\mu X.T]: \mu X.T \rightarrow [X \rightarrow \mu X.T] T \notag\\
-    fold[\mu X.T]: [X \rightarrow \mu X.T] T \rightarrow \mu X.T \notag
+    \mathtt{unfold}[\mu X.T]: \mu X.T \rightarrow [X \rightarrow \mu X.T] T \notag\\
+    \mathtt{fold}[\mu X.T]: [X \rightarrow \mu X.T] T \rightarrow \mu X.T \notag
 \end{gather}
 Ker sta preslikavi inverzni, velja:
 
@@ -533,12 +536,12 @@ Ker sta preslikavi inverzni, velja:
 Tako iso-recursive pristop rekurzivni tip in njegove odvoje ne obravnava kot enake, temveč kot izomorfne.
 
 Oba pristopa se uporabljata pri konstrukciji programskih jezikov in teoretičnih besedilih. Equi-recursive je bolj intuitiven, vednar zahteva več dela od preverjevalnika tipov in 
-lahko privede do težav pri kombinaciji z drugimi konstrukti, na primer operatorjih na tipih. Medtem iso-recursive pristop zahteva uporabo preslikav \emph{fold} in \emph{unfold}, kjerkoli 
-se uporabijo rekurzivni tipi. V svoji implementaciji sem uporabil iso-recursive pristop, ker zahteva manj dela na prevajalniku, funkciji \emph{fold} in \emph{unfold} pa sta prepuščeni uporabniku.
+lahko privede do težav pri kombinaciji z drugimi konstrukti, na primer operatorjih na tipih. Medtem iso-recursive pristop zahteva uporabo preslikav \lstinline{fold} in \lstinline{unfold}, kjerkoli 
+se uporabijo rekurzivni tipi. V svoji implementaciji sem uporabil iso-recursive pristop, ker zahteva manj dela na prevajalniku, funkciji \lstinline{fold} in \lstinline{unfold} pa sta prepuščeni uporabniku.
 
 \chapter{Vsote in variante}
 Programerji se pogosto srečujemo z različnimi strukturami ali spremenljivkami, ki lahko zavzamejo vrednosti iz množice možnosti. Na primer, vozlišče v drevesu je lahko prazno, list, ali 
-notranje vozlišče. Element v povezanem seznamu je lahko trivialna vrednost \emph{nil}, ali pa vozlišče \emph{Cons} z glavo in repom seznama. Takih primerov je veliko. Zato poznamo \textbf{}{vsote}.
+notranje vozlišče. Element v povezanem seznamu je lahko trivialna vrednost \lstinline{nil}, ali pa vozlišče \lstinline{Cons} z glavo in repom seznama. Takih primerov je veliko. Zato poznamo vsote.
 
 \section{Vsote}
 Vsote so tipi, ki izvirajo iz množice vrednosti, dobljene iz kombinacije natanko dveh tipov. Na primer, če imamo tipa
@@ -552,16 +555,16 @@ Oseba = Odrasel + Otrok.
 \end{lstlisting}
 Vsak element s tipom oseba, je tipa Odrasel, ali pa Otrok.
 
-Za ločevanje med elementi vsote, bomo uporabljali označbe \emph{inl} in \emph{inr}. Označbi prideta iz angleških izrazov \textit{inject left} in \textit{inject right}. Lahko ju razumemo kot
+Za ločevanje med elementi vsote, bomo uporabljali označbe \lstinline{inl} in \lstinline{inr}. Označbi prideta iz angleških izrazov \textit{inject left} in \textit{inject right}. Lahko ju razumemo kot
 funkciji, v tem primeru:
 \begin{gather}
     inl: Odrasel \rightarrow Oseba \notag\\
     inr: Otrok \rightarrow Oseba \notag
 \end{gather}
-vendar ju bomo uporabljali zgolj kot oznaki za ločevanje med elementi vsote. Torej, elementi tipa \emph{Oseba} so bodisi oblike \emph{inl x}, kjer je x tipa \emph{Odrasel}, ali pa \emph{inr y}, kjer je y 
-tipa \emph{Otrok}. Torej, če je \emph{od} tipa \emph{Odrasel}, je \emph{inl od} tipa \emph{Oseba}, če pa je \emph{ot} tipa \emph{Otrok}, je \emph{inr ot} tipa \emph{Oseba}.
+vendar ju bomo uporabljali zgolj kot oznaki za ločevanje med elementi vsote. Torej, elementi tipa \lstinline{Oseba} so bodisi oblike \lstinline{inl x}, kjer je x tipa \lstinline{Odrasel}, ali pa \lstinline{inr y}, kjer je y 
+tipa \lstinline{Otrok}. Torej, če je \lstinline{od} tipa \lstinline{Odrasel}, je \lstinline{inl od} tipa \lstinline{Oseba}, če pa je \lstinline{ot} tipa \lstinline{Otrok}, je \lstinline{inr ot} tipa \lstinline{Oseba}.
 
-Da lahko nato delamo z vsotami, moramo imeti funkcije, ki znajo ločevati med elementi vsote in jih obravnavati posebej. To naredimo z uporabo \emph{case} izraza. Če nas na primer zanimajo 
+Da lahko nato delamo z vsotami, moramo imeti funkcije, ki znajo ločevati med elementi vsote in jih obravnavati posebej. To naredimo z uporabo \lstinline{case} izraza. Če nas na primer zanimajo 
 informacije o izobrazbi obravnavane osebe, lahko definiramo funkcijo izobrazba:
 \begin{lstlisting}
 izobrazba: λo:Oseba.
@@ -569,24 +572,24 @@ izobrazba: λo:Oseba.
         inl x -> x.izobrazba
         inr y -> y.šola;
 \end{lstlisting}
-Ko je argument o tipa Odrasel označen z \emph{inl}, se izvede prva veja in vrne izobrazba odraslega, ko pa je argument o tipa Otrok označen z \emph{inr}, se izvede druga veja in vrne šola
-otroka. Tako je tip celotne funkcije \emph{Oseba $\rightarrow$ String}.
+Ko je argument o tipa Odrasel označen z \lstinline{inl}, se izvede prva veja in vrne izobrazba odraslega, ko pa je argument o tipa Otrok označen z \lstinline{inr}, se izvede druga veja in vrne šola
+otroka. Tako je tip celotne funkcije \lstinline{Oseba $\rightarrow$ String}.
 
-Preverjevalnik tipov tukaj nima težke naloge. Če imamo vsoto tipov \(T_1 + T_2\) in želimo pokazati, da je \emph{inl $t_1$} tipa \emph{$T_1 + T_2$}, moramo le pokazati, da je 
-\emph{$t_1$} tipa \emph{$T_1$}. Podobno velja za \emph{inr $t_2$}. Za \emph{case} moramo preveriti več stvari. Najprej, da je argument tipa \emph{$T_1$ + $T_2$}. Nato preverimo 
-obe veji, kjer predpostavimo da sta arumenta \emph{x} in \emph{y} tipov \emph{$T_1$} in \emph{$T_2$}, v tem vrstnem redu. Preverjamo, da sta tipa \emph{$T_1$} in \emph{$T_2$} 
-vrnjenih vrednosti enaka. Če je to res, označimo tip vrnjene vrednosti kot \emph{T}. Celoten izraz ima nato tip \emph{$T_1 + T_2$ $\rightarrow$ T}.
+Preverjevalnik tipov tukaj nima težke naloge. Če imamo vsoto tipov \(T_1 + T_2\) in želimo pokazati, da je \lstinline{inl $t_1$} tipa \lstinline{$T_1 + T_2$}, moramo le pokazati, da je 
+\lstinline{$t_1$} tipa \lstinline{$T_1$}. Podobno velja za \lstinline{inr $t_2$}. Za \lstinline{case} moramo preveriti več stvari. Najprej, da je argument tipa \lstinline{$T_1$ + $T_2$}. Nato preverimo 
+obe veji, kjer predpostavimo da sta arumenta \lstinline{x} in \lstinline{y} tipov \lstinline{$T_1$} in \lstinline{$T_2$}, v tem vrstnem redu. Preverjamo, da sta tipa \lstinline{$T_1$} in \lstinline{$T_2$} 
+vrnjenih vrednosti enaka. Če je to res, označimo tip vrnjene vrednosti kot \lstinline{T}. Celoten izraz ima nato tip \lstinline{$T_1 + T_2$ $\rightarrow$ T}.
 
-Ker v \emph{case} izrazu preverjamo tip izraza, ki je podan kot argument na način, da samo preverimo ali ustreza enemu od \emph{\(T_1\) in \(T_2\)} in se ne oziramo na drugi tip v vsoti, 
+Ker v \lstinline{case} izrazu preverjamo tip izraza, ki je podan kot argument na način, da samo preverimo ali ustreza enemu od \emph{\(T_1\) in \(T_2\)} in se ne oziramo na drugi tip v vsoti, 
 se lahko zgodi, da je izrazu možno dodeliti več kot en tip. To se zgodi, če ima več vsot enak seštevanec. Za primer vzemimo vsoti \emph{$\alpha$ + $\beta$} in \emph{$\gamma$ + $\beta$}.
 Obema je skupen seštevanec \emph{$\beta$}, torej lahko nekemu izrazu tipa \emph{$\beta$} dodelimo tip \emph{$\alpha$ + $\beta$} ali pa \emph{$\gamma$ + $\beta$}. To je problem, ki ga
 lahko rešujemo na različne načine. V svoji implementaciji sem se odločil, da bo prevajalnik tipov izbral prvi tip, ki ga najde, torej tistega, ki je bil nazadnje definiran. To je bila 
 najpreprostejša rešitev, vendar onemogoča, da bi v tem primeru tip \emph{$\beta$} kakorkoli prepoznal kot del vsote \emph{$\alpha$ + $\beta$}.
 
 \section{Variante}
-Binarne vsote lahko razširimo na variante, ki so kot vsote s poljubnim številom seštevancev. Zato označbi \emph{inl} in \emph{inr} ne prideta več v poštev, temveč uporabimo svoje oznake. 
-Tako se malenkost spremeni notacija. Namesto \emph{$T_1 + T_2$} pišemo \emph{<$l_1:T_1, ... , l_n:T_n$>}, kjer \(l_i\) stoji za i-to oznako, ali 'label'. Prav tako namesto \emph{inl t as 
-$T_1 + T_2$}, pišemo \emph{$\langle l_1$ = t$\rangle$ as $\langle l_1:T_1, ... , l_n:T_n\rangle$}. Tako naš primer z osebami postane:
+Binarne vsote lahko razširimo na variante, ki so kot vsote s poljubnim številom seštevancev. Zato označbi \lstinline{inl} in \lstinline{inr} ne prideta več v poštev, temveč uporabimo svoje oznake. 
+Tako se malenkost spremeni notacija. Namesto $T_1 + T_2$ pišemo $\langle l_1:T_1, ... , l_n:T_n\rangle$, kjer \(l_i\) stoji za i-to oznako, ali label. Prav tako namesto \lstinline{inl t as 
+$T_1 + T_2$}, pišemo \lstinline{$\langle l_1$ = t$\rangle$ as $\langle l_1:T_1, ... , l_n:T_n\rangle$}. Tako naš primer z osebami postane:
 \begin{lstlisting}
 Oseba = <odrasel:Odrasel, otrok:Otrok>;
 o = <odrasel=od> as Oseba;
@@ -600,12 +603,12 @@ izobrazba: λo:Oseba.
 \end{lstlisting}
 
 
-Morda zanimiva skupina variant so tiste, ki lahko vsebujejo tudi trivialne vrednosti \emph{unit}:
+Morda zanimiva skupina variant so tiste, ki lahko vsebujejo tudi trivialne vrednosti \lstinline{unit}:
 \begin{lstlisting}
 Optional =  <none:unit, some:Value>;
 \end{lstlisting}
-Ti tipi so izomorfni s tipi, ki spadajo pod oznako \emph{some} in razširjeni z opcijo trivialne vrednosti. To so na primer tipi, ki jih poznamo iz priljubljenih programskih jezikov in dopuščajo 
-vrednosti kot so \emph{null}, \emph{None} ali \emph{nil}.
+Ti tipi so izomorfni s tipi, ki spadajo pod oznako \lstinline{some} in razširjeni z opcijo trivialne vrednosti. To so na primer tipi, ki jih poznamo iz priljubljenih programskih jezikov in dopuščajo 
+vrednosti kot so \lstinline{null}, \lstinline{None} ali \lstinline{nil}.
 
 Še dve posebni vrsti variant sta dovolj zanimivi za posebno obravnavo.
 
@@ -615,35 +618,35 @@ Oštevilčenja so variante, ki vsebujejo zgolj trivialne vrendosti in so namenje
 Ocena = <pet:Unit, šest:Unit, sedem:Unit, osem:Unit, 
         devet:Unit, deset:Unit>;
 \end{lstlisting}
-Elementi takega tipa bi nato bili oblike \emph{$\langle$deset=unit$\rangle$ as Ocena}. Tako lahko sestavimo tudi funkcije, ki obravnavajo take vrendnosti. Na primer;
+Elementi takega tipa bi nato bili oblike \lstinline{$\langle$deset=unit$\rangle$ as Ocena}. Tako lahko sestavimo tudi funkcije, ki obravnavajo take vrendnosti. Na primer;
 \begin{lstlisting}
 možno_zviševanje = λ.o:Ocena.
     case o of 
      <deset=x> -> false
     | _         -> true;
 \end{lstlisting}
-je funkcija, ki sprejme eno izmed ocen in vrne odgovor na vprašanje, če jo je možno izboljšati. Tip te funkcije je \emph{Ocena $\rightarrow$ Bool}.
+je funkcija, ki sprejme eno izmed ocen in vrne odgovor na vprašanje, če jo je možno izboljšati. Tip te funkcije je \lstinline{Ocena $\rightarrow$ Bool}.
 
 \subsection{Variante enega tipa (Single-field variants)}
 Možno je ustvariti tudi variante s samo eno oznako, torej bodo vsi njeni elementi istega tipa:
 \begin{lstlisting}
 V = <l:T>;
 \end{lstlisting}
-torej tipa \emph{T}. To je lahko zelo uporabno, ker elementov tipa \emph{V} ni možno zamešati za elemente tipa \emph{T} in posledično na njih ne moremo izvajati operacij, ki jih lahko na tipu 
-\emph{T}. Tako se lahko izognemu nesmiselnim primerom. Recimo, da uporabljamo podatke o valutah. Količino denarja v posamezni valuti lahko predstavimo s tipom \emph{Float}, kot decimalno 
+torej tipa \lstinline{T}. To je lahko zelo uporabno, ker elementov tipa \lstinline{V} ni možno zamešati za elemente tipa \lstinline{T} in posledično na njih ne moremo izvajati operacij, ki jih lahko na tipu 
+\lstinline{T}. Tako se lahko izognemu nesmiselnim primerom. Recimo, da uporabljamo podatke o valutah. Količino denarja v posamezni valuti lahko predstavimo s tipom \lstinline{Float}, kot decimalno 
 število. Težava nastane, ko definiramo funkcijo, ki pretvarja med valutami:
 \begin{lstlisting}
 KuneVEvre = λx:Float. zmnoži x 0.1327;
 - : KuneVEvre : Float -> Float
 \end{lstlisting}
-kjer \emph{zmnoži} predstavlja funkcijo, ki pomnoži dve decimialni števili. Če je \emph{x}, ki ga podamo funkciji \emph{KuneVEvre} količina denarja v evrih, je vse v redu. Vendar pa nam nič ne 
-preprečuje, da bi kot argument v \emph{KuneVEvre} podali katerokoli drugo število, na primer količino denarja v dolarjih, ali še huje, število število komarjev v nekem prostoru. Taka uporaba te 
+kjer \lstinline{zmnoži} predstavlja funkcijo, ki pomnoži dve decimialni števili. Če je \lstinline{x}, ki ga podamo funkciji \lstinline{KuneVEvre} količina denarja v evrih, je vse v redu. Vendar pa nam nič ne 
+preprečuje, da bi kot argument v \lstinline{KuneVEvre} podali katerokoli drugo število, na primer količino denarja v dolarjih, ali še huje, število število komarjev v nekem prostoru. Taka uporaba te 
 funkcije je nesmiselna in se ji v večini primerov želimo izogniti. Tako lahko definiramo variante enega tipa:
 \begin{lstlisting}
 DenarVKunah = <kune:Float>;
 DenarVEvrih = <evri:Float>;
 \end{lstlisting}
-in morda še vse ostali, ki jih potrebujemo, ter funkcijo \emph{KuneVEvre} spremenimo tako, da deluje s pravilnimi tipi, torej pretvorbo omogočimo 
+in morda še vse ostali, ki jih potrebujemo, ter funkcijo \lstinline{KuneVEvre} spremenimo tako, da deluje s pravilnimi tipi, torej pretvorbo omogočimo 
 samo iz kun v evre in nič drugega:
 \begin{lstlisting}
 KuneVEvre = λx:DenarVKunah.
@@ -662,7 +665,7 @@ je dostopen na njegovem Github profilu, v repozitoriju \emph{plzoo}.
 MiniHaskell je programski jezik, ki je namenjen predstavitvi osnovnih konceptov funkcijskega programiranja. Napisan je v programskem jeziku 
 OCaml in po strukturi in načinu uporabe sledi jeziku Haskell. Omogoča uporabo celih števil (\textit{integers}), booleanov z logičnimi operacijami in primerjavami 
 celih števil ('=', '<'), urejenih parov, seznamov, funkcij in rekurzije. Temu sem dodal možnost definiranja novih tipov, rekurzivnih ali ne, in 
-uporabe \emph{case} izrazov za delo z njimi. Programski jezik sestavljajo leksična analiza, razčlenjevanje, interpreter in preverjevalnik tipov. V nadaljevanju bom predstavil kako 
+uporabe \lstinline{case} izrazov za delo z njimi. Programski jezik sestavljajo leksična analiza, razčlenjevanje, interpreter in preverjevalnik tipov. V nadaljevanju bom predstavil kako 
 delujejo v MiniHaskellu, ter kako sem jih dopolnil.
 
 \section{Leksična analiza}
@@ -670,15 +673,15 @@ Prvi korak, ki ga je potrebno narediti, ko dobimo program ali ukaz in ga želimo
 na primer presledki, in jih razdelimo na gradnike. To so vse ključne besede, ki jih jezik pozna, števila, znaki, \emph{eof} in podobno. To stori leksični analizator ali lekser. 
 Ta je v našem primeru napisan v datoteki \emph{lexer.mll}. Je datoteka, kjer so shranjeni regularni izrazi, ki opisujejo gradnike, ki jih lahko uporabljamo v programskem jeziku. 
 Kot je to storjeno v Haskellu, sem določil, da bom imena spremenljvk dovolil le z majhno začetnico, imena konstruktorjev tipov pa le z veliko. Tako sem si olajšal delo v parserju. 
-Gradnik, ki bo predstavljal imena konstruktorjev in imena tipov sem poimenoval \emph{cname}, kot okrajšavo za \textit{capital name} ali ime z veliko začetnico. Poleg načina poimenovanja 
-konstruktov je v lekserju definiranih še veliko drugih gradnikov, kot so olkepaji, znaki za operacije, ključne besede, ukaz \emph{:quit} za izhod iz \emph{minihaskell.exe} 
-in podobno. Za definicijo podatkovnih tipov sem dodal ključno besedo \emph{data}, z idejo, da bo imela enako vlogo kot tista v Haskellu. Tako imamo vse potrebno za 
-definicijo novih podatkovnih tipov, ker smo definirali besedo \emph{data}, imamo \emph{cname} za definicijo konstruktorjev in že od prej možnost definiranja spremenljivk.
-Za delo s podatkovnimi tipi, torej izraz \emph{case}, je bilo potrebno dodati še gradnike za ključne besede \emph{case}, \emph{of} in \emph{end}.\footnote{Gradnik \emph{ALTERNATIVE} 
-za znak '|' je že bil definiran, ker je MiniHaskell že imel sezname in funkcijo \emph{match} za delo z njimi.}\footnote{Gradnik \emph{TARROW} za znak \emph{$\rightarrow$}, ki bo v veji \emph{case} 
-izraza ločil med izrazom, ki ga primerjamo in posledico, ki se sproži v primeru ujemanja, je prav tako že bil definiran.} V Haskellu sicer gradnika za \emph{end} ne poznamo, vendar ker za 
+Gradnik, ki bo predstavljal imena konstruktorjev in imena tipov sem poimenoval \lstinline{cname}, kot okrajšavo za \textit{capital name} ali ime z veliko začetnico. Poleg načina poimenovanja 
+konstruktov je v lekserju definiranih še veliko drugih gradnikov, kot so olkepaji, znaki za operacije, ključne besede, ukaz \lstinline{:quit} za izhod iz \emph{minihaskell.exe} 
+in podobno. Za definicijo podatkovnih tipov sem dodal ključno besedo \lstinline{data}, z idejo, da bo imela enako vlogo kot tista v Haskellu. Tako imamo vse potrebno za 
+definicijo novih podatkovnih tipov, ker smo definirali besedo \lstinline{data}, imamo \lstinline{cname} za definicijo konstruktorjev in že od prej možnost definiranja spremenljivk.
+Za delo s podatkovnimi tipi, torej izraz \lstinline{case}, je bilo potrebno dodati še gradnike za ključne besede \lstinline{case}, \lstinline{of} in \lstinline{end}.\footnote{Gradnik \lstinline{ALTERNATIVE} 
+za znak '|' je že bil definiran, ker je MiniHaskell že imel sezname in funkcijo \lstinline{match} za delo z njimi.}\footnote{Gradnik \emph{TARROW} za znak \emph{$\rightarrow$}, ki bo v veji \emph{case} 
+izraza ločil med izrazom, ki ga primerjamo in posledico, ki se sproži v primeru ujemanja, je prav tako že bil definiran.} V Haskellu sicer gradnika za \lstinline{end} ne poznamo, vendar ker za 
 razliko od Haskella MiniHaskell ni občutljiv na zamik vrstic v kodi, in ker nisem želel z implementacijo še tega zaiti s smeri moje diplomske naloge, sem za lažje delo v parserju 
-dodal tudi ta gradnik. Da bi razumeli zakaj je potreben, si poglejmo naslednji primer: recimo, da imamo \emph{case} izraz, ki v eni od svojih vej vsebuje še en, gnezden \emph{case} 
+dodal tudi ta gradnik. Da bi razumeli zakaj je potreben, si poglejmo naslednji primer: recimo, da imamo \lstinline{case} izraz, ki v eni od svojih vej vsebuje še en, gnezden \lstinline{case} 
 izraz:
 \begin{lstlisting}
 case x of 
@@ -711,7 +714,7 @@ case x of
     e -> _.
 \end{lstlisting}
 Ker imajo različni programerji različna mnenja o tem, kateri od obeh je bolj smiselen in sem se želel izogniti kakeršnikoli dvoumnosti, sem dodal 
-\emph{end} gradnik, ki nam omogoča, da enostavno določimo, kdaj se \emph{case} izraz konča:
+\lstinline{end} gradnik, ki nam omogoča, da enostavno določimo, kdaj se \lstinline{case} izraz konča:
 \begin{lstlisting}
 case x of 
     a -> _
@@ -723,8 +726,8 @@ case x of
 end.
 \end{lstlisting}
 Prav tako imamo v MiniHaskellu težavo z vpisovanjem izrazov na zgornji način, saj je prilagojen le vpisovanju ukazov v ukazno vsrtico, ki pa 
-sprejema le nize znakov brez znaka za novo vrstico (\emph{newline} ali \emph{\textbackslash n}). Tako nastane težava pri iskanju meje med posameznimi vejami
-\emph{case}-a. Haskell za to uporablja le znake za novo vrstico, jaz pa sem dodal obvezno uporabo znaka | na začetku vsake veje, ki ni prva.
+sprejema le nize znakov brez znaka za novo vrstico (\emph{newline} ali \lstinline{\textbackslash n}). Tako nastane težava pri iskanju meje med posameznimi vejami
+\lstinline{case}-a. Haskell za to uporablja le znake za novo vrstico, jaz pa sem dodal obvezno uporabo znaka | na začetku vsake veje, ki ni prva.
 Tako bi zgornji primer izgledal takole:
 \begin{lstlisting}
 case x of 
@@ -746,7 +749,7 @@ Razčlenjevalnik ali parser je naslednji korak v procesu prevajanja progamov. Ko
 je uporabljen program parser generator, kateremu moramo podati le slovnična pravila. Ker se tukaj uporabi Menhirjev OCaml parser generator, končnica 
 datoteke ni .ml, ampak .mly. Lekser posreduje tok gradnikov, ki jih je prepoznal, naloga parserja pa je prepoznati slovnično pravilne stavke in zgraditi 
 abstraktna sintaktična drevesa. To stori s pomočjo slovničnih pravil, ki povejo, v kakšnem zaporedju pričakujemo gradnike in kje se ti smejo pojaviti. 
-V svoji implementaciji sem dodal dve gramatični pravili: eno za definicijo novih tipov in eno za \emph{case} izraz. Pravilo za definicijo novih tipov je 
+V svoji implementaciji sem dodal dve gramatični pravili: eno za definicijo novih tipov in eno za \lstinline{case} izraz. Pravilo za definicijo novih tipov je 
 sledeče:
 \begin{lstlisting}
 datadef:
@@ -778,33 +781,33 @@ lahko predstavimo z drevesom:
         level 5/.style={sibling distance=10mm},
         node/.style={inner sep=2pt}
       ]
-      \node[node] {EQUAL}
+      \node[node] {\lstinline{EQUAL}}
         child {
-          node[node] {DATA}
+          node[node] {\lstinline{DATA}}
 			child {	
-				node[node] {CNAME}
+				node[node] {\lstinline{CNAME}}
 			}
         }
         child {
-          node[node] {ALTERNATIVE}
+          node[node] {\lstinline{ALTERNATIVE}}
           	child {
-            	node[node] {CNAME}
+            	node[node] {\lstinline{CNAME}}
 					child {
-			  			node[node] {list(ty)}
+			  			node[node] {\lstinline{list(ty)}}
 					}
           	}
           	child {
-            	node[node] {ALTERNATIVE}
+            	node[node] {\lstinline{ALTERNATIVE}}
             		child {
-              			node[node] {CNAME}
+              			node[node] {\lstinline{CNAME}}
 			  				child {
-								node[node] {list(ty)}
+								node[node] {\lstinline{list(ty)}}
 							}
 					}
             		child {
-              			node[node] {CNAME}
+              			node[node] {\lstinline{CNAME}}
 			  				child {
-								node[node] {list(ty)}
+								node[node] {\lstinline{list(ty)}}
 							}
             		}
           	}
@@ -812,10 +815,10 @@ lahko predstavimo z drevesom:
       \end{tikzpicture}
 \end{center}
 
-Definicijo tipov sem kot \emph{datadeftop} definiral kot enega izmed štirih osnovnih ukazov. Pred njim so bili že definirani \emph{lettop}, ki omogoča definicijo 
-spremenljivk, \emph{exprtop}, ki omogoča definicijo izrazov in \emph{cmdtop}, ki vsebuje posebne ukaze, kot so na primer \emph{quit}.
+Definicijo tipov sem kot \lstinline{datadeftop} definiral kot enega izmed štirih osnovnih ukazov. Pred njim so bili že definirani \lstinline{lettop}, ki omogoča definicijo 
+spremenljivk, \lstinline{exprtop}, ki omogoča definicijo izrazov in \lstinline{cmdtop}, ki vsebuje posebne ukaze, kot so na primer \lstinline{quit}.
 
-Slovnično pravilo za \emph{case} izraz pa sem dodal samo pod pravilo za \emph{expr} ali izraze, ker se \emph{case} ne uporabljav v definicijo spremenljivk ali
+Slovnično pravilo za \lstinline{case} izraz pa sem dodal samo pod pravilo za \lstinline{expr} ali izraze, ker se \lstinline{case} ne uporabljav v definicijo spremenljivk ali
 definiciji tipov, niti to ni poseben ukaz. Pravilo je: 
 \begin{lstlisting}
 expr:
@@ -832,7 +835,7 @@ case_variants:
   pattern:
 | CNAME list(VAR)
 \end{lstlisting}
-in omogoča uporabo \emph{case} izrazov, kot so:
+in omogoča uporabo \lstinline{case} izrazov, kot so:
 \begin{lstlisting}
 case x of 
     Constr 1 -> _
@@ -851,34 +854,34 @@ ki jih seveda lahko prav tako zapišemo kot abstraktno sintaktično drevo:
         level 5/.style={sibling distance=10mm},
         node/.style={inner sep=2pt}
       ]
-      \node[node] {of}
+      \node[node] {\lstinline{of}}
         child {
-          node[node] {CASE}
+          node[node] {\lstinline{CASE}}
 			child {	
-				node[node] {expr}
+				node[node] {\lstinline{expr}}
 			}
         }
         child {
-          node[node] {ALTERNATIVE}
+          node[node] {\lstinline{ALTERNATIVE}}
           	child {
-            	node[node] {TARROW}
+            	node[node] {\lstinline{TARROW}}
 					child {
-			  			node[node] {CNAME}
+			  			node[node] {\lstinline{CNAME}}
 							child {
-								node[node] {list(VAR)}
+								node[node] {\lstinline{list(VAR)}}
 							}
 					}
 					child {
-						node[node] {expr}
+						node[node] {\lstinline{expr}}
 					}
           	}
 			child {
-				node[node] {ALTERNATIVE}
+				node[node] {\lstinline{ALTERNATIVE}}
 					child{
-						node[node] {...}
+						node[node] {\lstinline{...}}
 					}
 					child{
-						node[node] {...}
+						node[node] {\lstinline{...}}
 					}
 			}
 		};
@@ -888,10 +891,10 @@ ki jih seveda lahko prav tako zapišemo kot abstraktno sintaktično drevo:
 \section{Definicija in manipulacija abstraktne sintakse}
 Ko imamo zgrajena drevesa iz gradnikov, je potrebno ugotoviti, kaj pomenijo in čemu so namenjeni, preden lahko program začnemo izvajati. Tu pride na vrsto abstraktna sintaksa. 
 V datoteki \emph{syntax.ml} so najprej definirani podatkovni tipi, ki jih parser pripiše drevesom in njihovim vozliščem, ko prepozna slovnična pravila. Eden izmed njih je na primer 
-\emph{htype}, krajše za \textit{haskell type}, ki hrani vrednosti tipov, ki jih MiniHaskell pozna na začetku, torej \emph{TInt}, \emph{TBool}, \emph{TTimes}, \emph{Tarrow}, \emph{TList} in 
-\emph{TData}. Črke \emph{T} na začetku poimenovanj služijo kot oznaka, da gre za tip. Morda nesamoumeven tip je \emph{TArrow}, ki predstavlja funkcije. Hrani dva tipa, tip argumenta
+\lstinline{htype}, krajše za \textit{haskell type}, ki hrani vrednosti tipov, ki jih MiniHaskell pozna na začetku, torej \lstinline{TInt}, \lstinline{TBool}, \lstinline{TTimes}, \lstinline{Tarrow}, \lstinline{TList} in 
+\lstinline{TData}. Črke \lstinline{T} na začetku poimenovanj služijo kot oznaka, da gre za tip. Morda nesamoumeven tip je \lstinline{TArrow}, ki predstavlja funkcije. Hrani dva tipa, tip argumenta
 in tip vrnjene vrednosti. Spomnimo se, da v Haskellu ne obstajajo funkcije večih argumentov, temveč funkcije lahko vrnejo tudi nove funkcijem ki sprejmejo nove argumente in tako 
-simulirajo sprejem večih argumetnov. Na primer: funkcija, ki sešteje dve celi števili, tipa \emph{Int $\rightarrow$ Int $\rightarrow$ Int}, je v resnici funkcija, ki sprejme prvi argument tipa \emph{Int}
+simulirajo sprejem večih argumetnov. Na primer: funkcija, ki sešteje dve celi števili, tipa \lstinline{Int $\rightarrow$ Int $\rightarrow$ Int}, je v resnici funkcija, ki sprejme prvi argument tipa \lstinline{Int}
 in vrne novo funkcijo, ki sprejme drugi argument in vrne rezultat:
 \begin{lstlisting}
 seštej :: Int -> Int -> Int
@@ -902,12 +905,12 @@ v resnici izgleda kot:
 seštej :: Int -> (Int -> Int)
 seštej x = (\y -> x + y).
 \end{lstlisting}
-Med tipe, ki jih pozna MiniHaskell sem moral dodati tip \emph{TData}, ki je namenjen shranjevanju imen konstruktorjev in imen tipov. Sam ima tip \emph{string}, ampak kot omenjeno, 
+Med tipe, ki jih pozna MiniHaskell sem moral dodati tip \lstinline{TData}, ki je namenjen shranjevanju imen konstruktorjev in imen tipov. Sam ima tip \lstinline{string}, ampak kot omenjeno, 
 se vanj shranjejo le besede z veliko začetnico. 
 
-Morda bolj zanimiv je tip \emph{toplevel\_cmd} ali \textit{toplevel command}, ki kot omenjeno zgoraj, lahko zavzame eno izmed štirih vrendnosti: \emph{Expr}, ki shranjuje izraze, 
-\emph{Def}, ki shrnajuje definicije spremenljivk, \emph{DataDef}, ki shranjuje definicije novih tipov in \emph{Quit}, ki označuje ukaz za izhod iz \emph{toplevel}, torej 
-\emph{minihaskell.exe}. Odločil sem se, da bo \emph{DataDef} shranjeval definicije novih tipov, kot urejen par imena tipa in seznama konstruktorjev in njihovih argumentov:
+Morda bolj zanimiv je tip \lstinline{toplevel\_cmd} ali \textit{toplevel command}, ki kot omenjeno zgoraj, lahko zavzame eno izmed štirih vrendnosti: \lstinline{Expr}, ki shranjuje izraze, 
+\lstinline{Def}, ki shrnajuje definicije spremenljivk, \lstinline{DataDef}, ki shranjuje definicije novih tipov in \lstinline{Quit}, ki označuje ukaz za izhod iz \lstinline{toplevel}, torej 
+\emph{minihaskell.exe}. Odločil sem se, da bo \lstinline{DataDef} shranjeval definicije novih tipov, kot urejen par imena tipa in seznama konstruktorjev in njihovih argumentov:
 \begin{lstlisting}
 type toplevel_cmd =
 | Expr of expr
@@ -917,12 +920,12 @@ type toplevel_cmd =
 
 type datadef = (cname * htype list) list
 \end{lstlisting}
-Kot vidimo, so argumenti konstruktorjev tipa \emph{htype}. To pomeni, da lahko konstruktorjem podamo tudi argumente, ki so novih tipov. To nam omogoča definicijo rekurzivnih tipov:
+Kot vidimo, so argumenti konstruktorjev tipa \lstinline{htype}. To pomeni, da lahko konstruktorjem podamo tudi argumente, ki so novih tipov. To nam omogoča definicijo rekurzivnih tipov:
 \begin{lstlisting}
 data Seznam = Empty | Cons Int Seznam.
 \end{lstlisting}
 
-\emph{Case} izraz ima bolj zapleteno strukturo. Odločil sem se, da ga bom najprej razbil na dva dela: vhodni izraz in seznam vej. V abstraktnem sintaktičnem drevesu prikazanem zgoraj, 
+\lstinline{Case} izraz ima bolj zapleteno strukturo. Odločil sem se, da ga bom najprej razbil na dva dela: vhodni izraz in seznam vej. V abstraktnem sintaktičnem drevesu prikazanem zgoraj, 
 sta ta dva dela prva potomca korenskega vozlišča. Vsako vejo v seznamu sem nato razbil še naprej, na vzorec, ki ga primerjamo z vhodnim izrazom in posledico, ki se sproži v primeru ujemanja. 
 Vzorec pa je sestavljen iz imena kontruktorja in seznamom spremenljivk, ki predstavljajo njegove morebitne argumente. V kodi ta definicija igleda takole:
 \begin{lstlisting}
@@ -932,10 +935,10 @@ type expr =
 
 and pattern = cname * name list
 \end{lstlisting}
-kjer \emph{expr} predstavlja izraz, \emph{pattern} vzorec v veji, \emph{cname} ime konstruktorja z veliko začetnico in \emph{name} ime spremenljivke z malo začetnico, ki predstavlja morebitni 
+kjer \lstinline{expr} predstavlja izraz, \lstinline{pattern} vzorec v veji, \lstinline{cname} ime konstruktorja z veliko začetnico in \lstinline{name} ime spremenljivke z malo začetnico, ki predstavlja morebitni 
 argument konstruktorja. 
 
-Zdaj imamo že dovolj konstrukcij, da lahko definiramo svoj tip in funkcijo s \emph{case} izrazom: 
+Zdaj imamo že dovolj konstrukcij, da lahko definiramo svoj tip in funkcijo s \lstinline{case} izrazom: 
 \begin{lstlisting}
 data Oseba = Odrasel Int | Otrok Int Int
 
@@ -946,12 +949,12 @@ case o of
 end
 \end{lstlisting}
 
-Definiral sem tudi funkcijo za izpis \emph{case} izraza, vendar je zaradi njene preprostosti ne bom ipostavljal. Na voljo je v repozitoriju.
+Definiral sem tudi funkcijo za izpis \lstinline{case} izraza, vendar je zaradi njene preprostosti ne bom ipostavljal. Na voljo je v repozitoriju.
 
 \section{Pravilnost tipov}
  Da se program lahko izvede, se morajo vsi tipi spremenljivk, funkcij in izrazov ujemati. Preveriti, da je temu tako, je naloga preverjevalnika tipov. V MiniHaskellu je zapisan v datoteki 
- \emph{type\_check.ml}. Peverjevalnik tipov programskega jezika MiniHaskell je zelo preprost. Poleg pomožnih funkcij vsebuje kontekst, kjer hrani tipe spremenljivk, funkcijo \emph{check}, 
- ki preveri, če je tip danega izraza pravilen in funkcijo \emph{type\_of}, ki kakšnega tipa je dani izraz.
+ \emph{type\_check.ml}. Peverjevalnik tipov programskega jezika MiniHaskell je zelo preprost. Poleg pomožnih funkcij vsebuje kontekst, kjer hrani tipe spremenljivk, funkcijo \lstinline{check}, 
+ ki preveri, če je tip danega izraza pravilen in funkcijo \lstinline{type\_of}, ki kakšnega tipa je dani izraz.
  
  Da lahko preverjevalnik tipov deluje, mora poznati tipe obstoječih spremenljivk. To hrani kot seznam urejenih parov imen spremenljivk in njihovih tipov. Da pa lahko poznamo tipe spremenljivk, 
  ki so rezultat novih konstruktorjev, moramo poznati tudi njihove tipe.
@@ -960,7 +963,7 @@ data Oseba = Odrasel Int | Otrok Int Int
 
 let študent = Odrasel 20
 \end{lstlisting}
-Da lahko razberemo tip spremenljivke \emph{študent}, moramo vedeti, da je tip, ki ga prinese koonstruktor \emph{Odrasel} \emph{Oseba}. Te informacije shranimo kot seznam urejenih parov imen 
+Da lahko razberemo tip spremenljivke \lstinline{študent}, moramo vedeti, da je tip, ki ga prinese koonstruktor \lstinline{Odrasel} \lstinline{Oseba}. Te informacije shranimo kot seznam urejenih parov imen 
 tipov in njihovih konstruktorjev. Tako dobimo kontekst:
 \begin{lstlisting}
 type context = {vars: (string * Syntax.htype) list; datadefs: (Syntax.cname * Syntax.datadef) list}
@@ -974,11 +977,11 @@ let extend_var x ty ctx = {ctx with vars = (x, ty)::ctx.vars}
 let extend_datadef x constrs ctx = {ctx with datadefs = (x, constrs)::ctx.datadefs}.
 \end{lstlisting}
 
-Funkcija \emph{check} deluje zelo preprosto, primerja izračunan tip danega izraza s tistim, ki ga pričakuje in sproži napako, če se ne ujemata. Funkcija \emph{type\_of} pa s pomočjo informacij 
-v kontekstu preoblikuje podan izraz v izrazno drevo in rekurzivno izračuna tipe podizrazov. Hkrati preverja pravilnost tipov s pomočjo funkcije \emph{check}. Na primer, v operaciji seštevanja 
+Funkcija \lstinline{check} deluje zelo preprosto, primerja izračunan tip danega izraza s tistim, ki ga pričakuje in sproži napako, če se ne ujemata. Funkcija \lstinline{type\_of} pa s pomočjo informacij 
+v kontekstu preoblikuje podan izraz v izrazno drevo in rekurzivno izračuna tipe podizrazov. Hkrati preverja pravilnost tipov s pomočjo funkcije \lstinline{check}. Na primer, v operaciji seštevanja 
 dovolimo le dve celi števili, torej izračunamo tipa obeh podizrazov in če nista celi števili, sprožimo napako.
 
-Poglejmo, kako sem dopolnil \emph{type\_of}, da pravilno preverja tipe novih konstruktorjev in \emph{case} izrazov:
+Poglejmo, kako sem dopolnil \lstinline{type\_of}, da pravilno preverja tipe novih konstruktorjev in \lstinline{case} izrazov:
 \begin{lstlisting}
 and type_of (ctx:context) = function
   ...
@@ -992,8 +995,8 @@ and type_of (ctx:context) = function
       ret_type
       | _ -> type_error "%s cannot occur in a case expression" (Syntax.string_of_type t))
 \end{lstlisting}
-Osredotočimo se najprej na definicije novih tipov, torej \emph{Syntax.Constr} vejo. Tu enostavno kličemo funkcijo \emph{type\_of\_constr}, s konstruktorjem, katerega tip nas zanima in delom 
-konteksta, kjer je ta shranjen. Funkcija \emph{type\_of\_constr} izgleda takole:
+Osredotočimo se najprej na definicije novih tipov, torej \lstinline{Syntax.Constr} vejo. Tu enostavno kličemo funkcijo \lstinline{type\_of\_constr}, s konstruktorjem, katerega tip nas zanima in delom 
+konteksta, kjer je ta shranjen. Funkcija \lstinline{type\_of\_constr} izgleda takole:
 \begin{lstlisting}
 let rec type_of_constr c = function
   | [] -> type_error "unknown constructor %s" c
@@ -1007,10 +1010,10 @@ let rec type_of_constr c = function
 Funkcija se rekurzivno sprehodi skozi del konteksta, kjer so shranjeni novi tipi in njihovi konstruktorji. Za vsak tip preveri, če se med njegovimi konstruktorji nahaja želeni in če se, izračuna 
 njegov tip. 
 
-Malo več dela je bilo s preverjanjem tipa v \emph{case} izrazu. Najprej izračunamo tip izraza, ki ga primerjamo z vejami. Ker je \emph{case} smiselen le za novo definirane tipe, ker ne bi ničesar 
+Malo več dela je bilo s preverjanjem tipa v \lstinline{case} izrazu. Najprej izračunamo tip izraza, ki ga primerjamo z vejami. Ker je \lstinline{case} smiselen le za novo definirane tipe, ker ne bi ničesar 
 pridobili, če bi vstavili na primer celo število, v nasprotnem primeru sprožimo napako. Sedaj poznamo vhodni tip. Nato poiščemo konstruktorje tega tipa, da jih bomo lahko primerjali z vzorci v vejah.
-To storimo rekurzivno, na zelo podoben način, kot smo to storili v funkciji \emph{type\_of\_constr}. Preostane nam le še izračunati tip, ki ga bomo vrnili. Pri tem nam pomaga pomožna funkcija 
-\emph{cases\_type}:
+To storimo rekurzivno, na zelo podoben način, kot smo to storili v funkciji \lstinline{type\_of\_constr}. Preostane nam le še izračunati tip, ki ga bomo vrnili. Pri tem nam pomaga pomožna funkcija 
+\lstinline{cases\_type}:
 \begin{lstlisting}
 and cases_type u_def cases ctx =
 match cases with
@@ -1032,19 +1035,19 @@ match cases with
           rest_of_cases cases'
     in rest_of_cases cases'
 \end{lstlisting}
-Seveda ne želimo praznega \emph{case} izraza, zato v takem primeru sprožimo napako. Nato izračunamo tipe spremenljivk, ki predstavljajo argumente za konstruktor v dani veji. To storimo z uporabo
-funkcije \emph{find\_u}, ki poišče konstruktor v seznamu konstruktorjev in vrne tipe njegovih argumentov. Nato to dodamo v kontekst, da jih lahko uporabimo pri izračunu tipa posledice. Opazimo, 
+Seveda ne želimo praznega \lstinline{case} izraza, zato v takem primeru sprožimo napako. Nato izračunamo tipe spremenljivk, ki predstavljajo argumente za konstruktor v dani veji. To storimo z uporabo
+funkcije \lstinline{find\_u}, ki poišče konstruktor v seznamu konstruktorjev in vrne tipe njegovih argumentov. Nato to dodamo v kontekst, da jih lahko uporabimo pri izračunu tipa posledice. Opazimo, 
 da, ko dodajamo spremenljivke in njihove tipe v kontekst, posredno preverimo, da je število spremenljivk enako številu potrebnih argumentov, torej pravilno. Ko tega izračunamo in ga 
-poimenujemo \emph{t1}, se lotimo preostalih vej. Te pregledamo rekurzivno, z enakim postopkom kot pri prvi veji, vendar zdaj namesto da shranimo tip posledice, ga primerjamo s \emph{t1} in če 
-se ne ujemata, sprožimo napako. To storimo, ker želimo, da \emph{case} izraz vrne rezultat enakega tipa, neodvisno od izbrane veje.
+poimenujemo \lstinline{t1}, se lotimo preostalih vej. Te pregledamo rekurzivno, z enakim postopkom kot pri prvi veji, vendar zdaj namesto da shranimo tip posledice, ga primerjamo s \lstinline{t1} in če 
+se ne ujemata, sprožimo napako. To storimo, ker želimo, da \lstinline{case} izraz vrne rezultat enakega tipa, neodvisno od izbrane veje.
 
 \section{interpreter}
 Čas je za izračunanje vrednosti izrazov v programu. Tega se lahko brez težav lotimo, ker nam preverjevalnik tipov zagotavlja, da so ti pravilni. V MiniHaskellu izraze računamo znotraj datoteke 
 \emph{interpret.ml}. Ta deluje precej preprosto, ker smo vso pripravo naredili že prej. Najprej definira okolje za spremenljivke, nato kako shranjujemo izračunane vrednosti, funkcijo 
-\emph{interp}, ki računa vrednosti izrazov, in izpiše rezultat. 
+\lstinline{interp}, ki računa vrednosti izrazov, in izpiše rezultat. 
 
-Okolje ali \emph{environment} je seznam urejenih parov imen spremenljivk in njihovih vrednosti. Uporablja ga funkcija \emph{interp}, ki vrednosti spremenljivk uporablja za izračun 
-vrednosti izrazov. Izračune vrednosti hranimo v enem izmed konstruktov tipa \emph{value}: 
+Okolje ali \lstinline{environment} je seznam urejenih parov imen spremenljivk in njihovih vrednosti. Uporablja ga funkcija \lstinline{interp}, ki vrednosti spremenljivk uporablja za izračun 
+vrednosti izrazov. Izračune vrednosti hranimo v enem izmed konstruktov tipa \lstinline{value}: 
 \begin{lstlisting}
 and value =
 | VInt of int
@@ -1053,8 +1056,8 @@ and value =
 | VClosure of environment * Syntax.expr
 | VConstr of Syntax.cname * (environment * Syntax.expr) list
 \end{lstlisting}
-Potrebujemo način za shranjevanje osnovnih tipov MiniHaskella, torej \emph{Int} in \emph{Bool}, prazen seznam \emph{Nil} in funkcije. Za hranjenje vrednosti novih tipov sem dodal še 
-\emph{VConstr}, ki vsebuje ime konstruktorja in seznam urejenih parov okolja in izraza, ki predstavlja njegove argumente. To nam med drugim tudi omogoča izpisovanje tipov in njihovih 
+Potrebujemo način za shranjevanje osnovnih tipov MiniHaskella, torej \lstinline{Int} in \lstinline{Bool}, prazen seznam \lstinline{Nil} in funkcije. Za hranjenje vrednosti novih tipov sem dodal še 
+\lstinline{VConstr}, ki vsebuje ime konstruktorja in seznam urejenih parov okolja in izraza, ki predstavlja njegove argumente. To nam med drugim tudi omogoča izpisovanje tipov in njihovih 
 konstruktorjev:
 \begin{lstlisting}
 let rec print_result n v =
@@ -1074,9 +1077,9 @@ let rec print_result n v =
 ) ;
 \end{lstlisting}
 
-Za \emph{case} je bilo potrebno dopolniti funkcijo \emph{interp}, da zna poiskati pravo vejo in vrniti njeno posledico. Kot je tudi navada v splošnem, sem omogočil tudi vzorec oblike '\_', ki 
+Za \lstinline{case} je bilo potrebno dopolniti funkcijo \lstinline{interp}, da zna poiskati pravo vejo in vrniti njeno posledico. Kot je tudi navada v splošnem, sem omogočil tudi vzorec oblike '\_', ki 
 pomeni "vsi preostali primeri". Ker vemo, da preverjevalnik tipov zagotavlja pravilno število spremenljivk za konstruktorji v vejah, lahko le enostavno primerjamo ime podanega 
-konstruktorja z vsemi v \emph{case} izrazu. Če najdemo pravega, dodamo njegove argumente v okolje in izračunamo posledico. V nasprotnem primeru sprožimo napako. 
+konstruktorja z vsemi v \lstinline{case} izrazu. Če najdemo pravega, dodamo njegove argumente v okolje in izračunamo posledico. V nasprotnem primeru sprožimo napako. 
 \begin{lstlisting}
 let rec extend_env env xs vs =
     match xs, vs with
@@ -1100,7 +1103,7 @@ let rec extend_env env xs vs =
 \end{lstlisting}
 
 \section{minihaskell.ml}
-Preostane le še glavna datoteka, ki poganja programe s uporabo vseh zgoraj opisanih datotek. Definira lekser in parser, okolje in funkcijo \emph{exec}, ki izvaja ukaze. Okolje je sestavljeno 
+Preostane le še glavna datoteka, ki poganja programe s uporabo vseh zgoraj opisanih datotek. Definira lekser in parser, okolje in funkcijo \lstinline{exec}, ki izvaja ukaze. Okolje je sestavljeno 
 iz konteksta preverjevalnika tipov in okolja intepretatorja. Tako pozna vrednosti in tipe vseh spremenljivk. Moral sem le dodati, kaj se zgodi, ko uporabnik definira nov tip:
 \begin{lstlisting}
 let exec (ctx, env) = function
@@ -1123,10 +1126,10 @@ definiran tip seznama:
 data Element = Nil | Num Int | Boolean Bool | Pair A B
 data Seznam = Empty | Cons Element Seznam
 \end{lstlisting}
-Definirali smo seznam kot nov podatkovni tip, ki lahko vsebuje elemente tipa \emph{Int}, \emph{Bool} ali \emph{Pair}\footnote{\emph{Pair} ni zares notacija, ki se uporablja v MiniHaskellu, 
-temveč sem jo poenostavil za uporabo v tem primeru.}. Konstruktorja Num in Boolean uporabimo, ker sta besedi \emph{Int} in \emph{Bool} že rezervirani in ju ne moremo ponovno uporabiti. Dodajmo 
-še nekaj funkcij za uporabo novih seznamov. Najbolj uporabne funkcije so \emph{head}, ki vrne prvi element seznama, \emph{tail},ki vrne vse elemente razen prvega, \emph{length} za računanje 
-dolžine seznama, \emph{append}, ki doda element na konec seznama in \emph{map}, ki uporabi funkcijo na vsakem elementu seznama. 
+Definirali smo seznam kot nov podatkovni tip, ki lahko vsebuje elemente tipa \lstinline{Int}, \lstinline{Bool} ali \lstinline{Pair}\footnote{\lstinline{Pair} ni zares notacija, ki se uporablja v MiniHaskellu, 
+temveč sem jo poenostavil za uporabo v tem primeru.}. Konstruktorja Num in Boolean uporabimo, ker sta besedi \lstinline{Int} in \lstinline{Bool} že rezervirani in ju ne moremo ponovno uporabiti. Dodajmo 
+še nekaj funkcij za uporabo novih seznamov. Najbolj uporabne funkcije so \lstinline{head}, ki vrne prvi element seznama, \lstinline{tail},ki vrne vse elemente razen prvega, \lstinline{length} za računanje 
+dolžine seznama, \lstinline{append}, ki doda element na konec seznama in \lstinline{map}, ki uporabi funkcijo na vsakem elementu seznama. 
 \begin{lstlisting}
 let head = fun s : Seznam => 
     case s of
@@ -1165,7 +1168,7 @@ Imamo funkcije za delo s seznami. Potrebujemo še seznam, na katerem jih bomo up
 \begin{lstlisting}
 let enke = Cons (Num 1) (Cons (Num 1) (Cons (Num 1) Empty))
 \end{lstlisting}
-\emph{Enke} so torej seznam sestavljen iz treh enic. Dodajmo še funkcijo, ki jo bomo kot argument podali funkciji \emph{map}:
+\lstinline{Enke} so torej seznam sestavljen iz treh enic. Dodajmo še funkcijo, ki jo bomo kot argument podali funkciji \lstinline{map}:
 \begin{lstlisting}
 let plus_ena = fun x : Element => case x of Num n -> Num (n + 1) | _ -> x end
 \end{lstlisting}
@@ -1187,7 +1190,7 @@ MiniHaskell> map plus_ena enke
 - : Seznam = Cons (Num (2) (Cons (Num (2) (Cons (Num (2) (Empty))))))
 \end{lstlisting}
 Torej, z implementacijo novih tipov smodobili tudi možnost delanja s seznami. Torej seznamov, kot so bili definirani v MiniHaskellu, ne potrebujemo več. Vprašanje je, kaj še vse lahko nadomestimo.
-Poskusimo še ustvariti nov tip \emph{Boolean}, ki bo zamenjal osnovni tip \emph{Bool} in nekaj pripadajočih funkcij:
+Poskusimo še ustvariti nov tip \lstinline{Boolean}, ki bo zamenjal osnovni tip \lstinline{Bool} in nekaj pripadajočih funkcij:
 \begin{lstlisting}
 data Boolean = True | False
 	
@@ -1209,7 +1212,7 @@ case of b1 of
 	end
 end
 \end{lstlisting}
-Podobno bi lahko definirali tudi funkciji \emph{and} in \emph{or}, vendar tu nista ključnega pomena. Oglejmo si rezultate:
+Podobno bi lahko definirali tudi funkciji \lstinline{and} in \lstinline{or}, vendar tu nista ključnega pomena. Oglejmo si rezultate:
 \begin{lstlisting}
 MiniHaskell> let a = True
 val a : Boolean
@@ -1229,9 +1232,9 @@ MiniHaskell> xor a b
 MiniHaskell> xor a a
 - : Boolean = False
 \end{lstlisting}
-Preostanejo nam še cela števila ali \emph{Int}, urejeni pari in funkcije. Slednje se samo s tipi ne dajo reproducirati, lahko pa se lotimo števil. Najbolj enostaven primer in tak, ki se izogne pisanju neštetega števila 
+Preostanejo nam še cela števila ali \lstinline{Int}, urejeni pari in funkcije. Slednje se samo s tipi ne dajo reproducirati, lahko pa se lotimo števil. Najbolj enostaven primer in tak, ki se izogne pisanju neštetega števila 
 konstruktorjev, so Churchova števila. Delujejo tako, da definirajo število nič in naslednika števila. Tako lahko zapišemo vsa naravna števila, kot bi to naredili v eniškem sistemu. Z negativnimi števili je več težav, 
-zato se jim ne bomo posebej posvečali. Definiramo tudi funkcijo \emph{plus}, ki sešteje dve Churchevi števili na način, da vemo, da je vsota nič in nekemu številu to drugo število in to uporabimo tako, da rekurzivno 
+zato se jim ne bomo posebej posvečali. Definiramo tudi funkcijo \lstinline{plus}, ki sešteje dve Churchevi števili na način, da vemo, da je vsota nič in nekemu številu to drugo število in to uporabimo tako, da rekurzivno 
 zmanjšujemo prvi seštevanec do nič in sproti povečujemo vsoto. Na koncu samo prištejemo drugi seštevanec.
 \begin{lstlisting}
 data Stevilo = Nic | Naslednik Stevilo
@@ -1274,9 +1277,9 @@ MiniHaskell> prvi par
 MiniHaskell> drugi par
 - : Element = S (Naslednik (Nic))
 \end{lstlisting}
-Tako lahko nadomestimo tudi urejene pare. Funkcij pa ne moremo, ker jih potrebujemo za delo s tipi. Vanje vstavljamo \emph{case} izraze. 
+Tako lahko nadomestimo tudi urejene pare. Funkcij pa ne moremo, ker jih potrebujemo za delo s tipi. Vanje vstavljamo \lstinline{case} izraze. 
 
-Zelo pogosto upoabljen primer rekurzivnih tipov so drevesa. Definirajmo tip \emph{Drevo}, ki bo predstavljalo binarno drevo in funkcijo, ki bo preštela število elementov v drevesu:
+Zelo pogosto upoabljen primer rekurzivnih tipov so drevesa. Definirajmo tip \lstinline{Drevo}, ki bo predstavljalo binarno drevo in funkcijo, ki bo preštela število elementov v drevesu:
 \begin{lstlisting}	
 data Drevo = Empty | List Stevilo | Vozlisce Stevilo Drevo Drevo
 
@@ -1293,16 +1296,16 @@ let lipa = Vozlisce Nic (List (Naslednik Nic)) (List (Naslednik (Naslednik Nic))
 MiniHaskell> st_vozlisc lipa
 - : Stevilo = Naslednik (Naslednik (Naslednik (Nic)))
 \end{lstlisting}
-Definirali smo drevo \emph{lipa}, ki ima korensko vozlišče in dva lista. Funkcija \emph{st\_vozlisc} vrne število tri.
+Definirali smo drevo \lstinline{lipa}, ki ima korensko vozlišče in dva lista. Funkcija \lstinline{st\_vozlisc} vrne število tri.
 
 V teoretičnem delu smo spoznali lačne funkcije. Spomnimo se, da so to funkcije, ki sprejmejo argument in vrnejo funkcijo, ki sprejme spet nov argument in vrne funkcijo, ... Definicija 
-takih funkcij je zaradi iso rekurzivnega pristopa bolj zapletena, ker potrebujemo izomorfizem med tipom in njegovim odvojem. V tem primeru bomo potrebovali funkcicjo \emph{fold}. 
-Definirajmo tip \emph{Lačna}, ki bo predstavljal lačne funkcije. Potrebujemo konstruktor, poimenujmo ga \emph{Fun}:
+takih funkcij je zaradi iso rekurzivnega pristopa bolj zapletena, ker potrebujemo izomorfizem med tipom in njegovim odvojem. V tem primeru bomo potrebovali funkcicjo \lstinline{fold}. 
+Definirajmo tip \lstinline{Lacna}, ki bo predstavljal lačne funkcije. Potrebujemo konstruktor, poimenujmo ga \lstinline{Fun}:
 \begin{lstlisting}
 data Element = Nil | Num Int | B Bool
 data Lacna = Fun (Element -> Lacna)
 \end{lstlisting}
-Definirajmo še izomorfizem \emph{fold}, ki nam bo omogočal, da bomo lahko slikali tipe \emph{Element $\rightarrow (Element \rightarrow Lacna)$} v \emph{Element $\rightarrow$ Lacna} 
+Definirajmo še izomorfizem \lstinline{fold}, ki nam bo omogočal, da bomo lahko slikali tipe \lstinline{Element $\rightarrow (Element \rightarrow Lacna)$} v \lstinline{Element $\rightarrow$ Lacna} 
 ker tipa izomorfna, torej bomo lahko izhode lačnih funkcij obravnavali kot lačne funkcije.
 \begin{lstlisting}
 let fold = fun l : Lacna =>
@@ -1310,7 +1313,7 @@ let fold = fun l : Lacna =>
     Fun f -> f
   end
 \end{lstlisting}
-Definirajmo še primer lačne funkcije. Za preprostejšo notacijo, definirajmo še spremenljivko \emph{e : Element}:
+Definirajmo še primer lačne funkcije. Za preprostejšo notacijo, definirajmo še spremenljivko \lstinline{e : Element}:
 \begin{lstlisting}
 let lacna = rec lacna : Element -> Lacna is
   (fun e : Element => Fun lacna)
@@ -1330,7 +1333,7 @@ MiniHaskell> fold (fold (fold (fold ((fold (lacna e)) e) e) e) e)
 - : Element -> Lacna = <fun>
 \end{lstlisting}
 
-Še malo bolj zapletene lačne funkcije so tokovi, ki za vsak prejeto \emph{unit} vrednost, vrnejo naslednji element toka. Ker vračajo urejeni 
+Še malo bolj zapletene lačne funkcije so tokovi, ki za vsak prejeto \lstinline{unit} vrednost, vrnejo naslednji element toka. Ker vračajo urejeni 
 par elementa in toka, potrebujemo še dodatni funkciji, ki vračata posamezne elemente para.
 \begin{lstlisting}
 data Unit = Nil
@@ -1411,7 +1414,7 @@ MiniHaskell> naravna
 Dobimo neskončen seznam naravnih števil. Program seveda ne izpiše vseh, da lahko nadaljujemo z vpisovanjem ukazev. 
 Taka definicija nam poda le neskončen seznam, medtem ko definicija z uporabo lačne funkcije vsakič vrne le en par 
 in nas tako ne zasuje z neskončno vrednostmi. Seveda lahko tudi iz neskončnega seznama izluščimo končno mnogo 
-elementov, če definiramo funkciji \emph{glava}, ki vrne prvi element seznama in \emph{rep}, ki vrne vse neprve elemente. 
+elementov, če definiramo funkciji \lstinline{glava}, ki vrne prvi element seznama in \lstinline{rep}, ki vrne vse neprve elemente. 
 \begin{lstlisting}
 let glava = fun t : Tok =>
   case t of 
@@ -1424,8 +1427,8 @@ let rep = fun t : Tok =>
   end
 \end{lstlisting}
 
-Če definicijo tokov malenkost spremenimo, lahko definiramo tudi procese. Ti namesto \emph{unit} vrednosti sprejemejo poljubne elemente, ki 
-vplivajo na izhos funkcije. Ohranimo lahko funkciji \emph{prvi} in \emph{drugi} iz definicije tokov. Poglejmo si primer, ki vrne vsoto 
+Če definicijo tokov malenkost spremenimo, lahko definiramo tudi procese. Ti namesto \lstinline{unit} vrednosti sprejemejo poljubne elemente, ki 
+vplivajo na izhos funkcije. Ohranimo lahko funkciji \lstinline{prvi} in \lstinline{drugi} iz definicije tokov. Poglejmo si primer, ki vrne vsoto 
 vseh dosedanjih vhodov:
 \begin{lstlisting}
 data Par = Out Int Proces
