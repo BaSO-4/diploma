@@ -17,8 +17,7 @@
 
 \lstset{
     xleftmargin=2em,
-    basicstyle= \small,
-    stringstyle=\ttfamily,
+    basicstyle=\small\ttfamily,
     literate=%
         {č}{{\v{c}}}1
         {š}{{\v{s}}}1
@@ -74,7 +73,6 @@ FAKULTETA ZA RAČUNALNIŠTVO IN INFORMATIKO\\
 \vspace{3cm}
 {\LARGE Luka Sabotič}\\
 
-% todo: linebreaks
 \vspace{2cm}
 {\LARGE
 \textsc{\textbf{Implementacija rekurzivnih podatkovnih tipov}}\par}
@@ -355,7 +353,7 @@ data Seznam = Empty | Cons Int Seznam
 Primer seznama celih števil, ki vsebuje elemente 1, 2 in 3:
 \begin{lstlisting}
 let enaDoTri = Cons 1 (Cons 2 (Cons 3 Empty))
-- : val enaDoTri : Seznam
+val enaDoTri : Seznam
 \end{lstlisting}
 
 Seznamom podoben primer so drevesa. Ta so sestavljena iz vozlišč, vsako je lahko končno, ali pa ima potomce, ki so spet drevesa.
@@ -366,7 +364,7 @@ Primer drevesa, ki vsebuje cela števila:
 \begin{lstlisting}
 let smreka = Vozlisce 0 (Vozlisce 1 (List 2) Empty)
     (Vozlisce 3 Empty (List 4))
-- : val smreka : Drevo
+val smreka : Drevo
 \end{lstlisting}
 Drevesa si pogosto predstavljamo kot grafe. Vrednost spremenljivke \lstinline{smreka} torej izgleda kot
 \begin{center} 
@@ -401,7 +399,7 @@ Seveda pa so to hkrati le osnovni primeri rekurzivnih tipov. V nadaljevanju bom 
 
 \section{Koinduktivni podatkovni tipi}
 Seznami in drevesa so induktivni rekurzivni tipi, kar je lahko zelo prikladno, ker jih lahko podamo v algoritme. Lahko pa se zgodi, da porebujemo podatkovni tip, ki nam omogoča dostop do 
-neomejene količine podatkov, za kar potrebujemo koinduktivne tipe. Koinduktivne tipe v splošnem najdemo v procesih, ki so lahko neskončni, najbolj so povezani z uporabo v komunikacijah, kjer ni potrebe da se kanal kdaj zapre.
+neomejene količine podatkov, za kar potrebujemo koinduktivne tipe. Koinduktivne tipe v splošnem najdemo v procesih, ki so lahko neskončni, najbolj so povezani z uporabo v komunikacijah, kjer ni potrebe, da se kanal kdaj zapre.
 
 Primer koinduktivnih tipov je tip lačnih funkcij. To so funkcije, ki sprejmejo argument in vrnejo novo funkcijo, ki je lačna novega argumenta.
 \begin{equation}
@@ -409,53 +407,53 @@ Primer koinduktivnih tipov je tip lačnih funkcij. To so funkcije, ki sprejmejo 
 \end{equation}
 Na primer, lahko imamo funkcijo, ki sprejme število in vrne funkcijo, ki sprejme novo število:
 \begin{lstlisting}
-f = λn:Int. f
-- : f : Lacna
+let f = λ n : Int -> f
+val f : Lacna  
 \end{lstlisting}
 Ko pokličemo f, bo ta vrnila novo funkcijo, ki bo lačna novega argumenta:
 \begin{lstlisting}
-l_1 = f 1;
-- : l_1 : Lacna
+let lacna1 = f 1
+val lacna1 : Lacna
 \end{lstlisting}
 Rezultatu lahko nato podamo nov argument in dobili bomo enak rezultat:
 \begin{lstlisting}
-l_2 = l_1 2;
-- : l_2 : Lacna  
+let lacna2 = lacna1 2
+val lacna2 : Lacna  
 \end{lstlisting}
 Tako funkcijo lahko gledamo tudi kot funkcijo, ki sprejme neomejeno količino argumentov in bo še vedno lačna novih:
 \begin{lstlisting}
-zelo_lacna = f 1 2 3 4 5 6 7 8 9 10;
-- : zelo_lacna : Lacna
+let zeloLacna = f 1 2 3 4 5 6 7 8 9 10
+val zeloLacna : Lacna
 \end{lstlisting}
-V resnici je \lstinline{zelo_lacna} sestavljena iz več lačnih funkcij, ki se poračunajo sproti z vsakim argumentom. Lahko bi jo zapisali tudi kot:
+V resnici je \lstinline{zeloLacna} sestavljena iz več lačnih funkcij, ki se poračunajo sproti z vsakim argumentom. Lahko bi jo zapisali tudi kot:
 \begin{lstlisting}
-zelo_lacna = (((((((((f 1) 2) 3) 4) 5) 6) 7) 8) 9) 10
-- : zelo_lacna : Lacna
+let zeloLacna = (((((((((f 1) 2) 3) 4) 5) 6) 7) 8) 9) 10
+zeloLacna : Lacna
 \end{lstlisting}
 Tako se \lstinline{1} uporabi kot argument na funkciji \lstinline{f}, \lstinline{2} na funkciji, ki jo vrne \lstinline{f}, ko sprejme \lstinline{1} in tako naprej.
 
-Zgornji primer je zabaven, ampak ni preveč uporaben v praksi. Poglejmo si bolj znane lačne funkcije; tokove. To so funkcije, ki sprejmejo prazne vrednosti (\lstinline{Unit}) in vrnejo pare elementov in novih tokov:
+Zgornji primer je zabaven, ampak ni preveč uporaben v praksi. Poglejmo si bolj znane lačne funkcije -- tokove. To so funkcije, ki sprejmejo enotske vrednosti (\lstinline{Unit}) in vrnejo pare elementov in novih tokov:
 \begin{equation}
     \mathtt{Tok} = \mathtt{Unit} \rightarrow \mathtt{Element} \times \mathtt{X} \notag
 \end{equation}
 Tokove si lahko predstavljamo kot neskončne sezname, sestavljene iz parov njihovih elementov in novih tokov. Na primer, lahko imamo tok naravnih števil:
 \begin{lstlisting}
-naravna = λn:Int. (n, naravna (n+1))
-- : naravna : Tok
+let naravna = λn : Int. (n, naravna (n+1))
+naravna : Tok
 \end{lstlisting}
 Za delo s tako funkcijo potrebujemo še nekaj pomožnih funkcij. Najprej funkcijo, ki vrne prvi element, ali glavo toka: (imejmo 1 za indeks prvega elementa in 2 za indeks drugega)
 \begin{lstlisting}
-glava = λt:Tok. t.1;
-- : Tok : Tok -> Int
+let glava = λt : Tok. t.1
+val glava : Tok -> Int
 \end{lstlisting}
 in še funkcijo, ki vrne rep toka:
 \begin{lstlisting}
-rep = λt:Tok. t.2;
-- : rep : Tok -> Tok
+let rep = λt:Tok. t.2
+val rep : Tok -> Tok
 \end{lstlisting}
 Tako lahko dostopamo do poljubnega elementa v toku:
 \begin{lstlisting}
-tri = glava (rep (rep (rep naravna)));
+glava (rep (rep (rep naravna)))
 - : 3 : Int
 \end{lstlisting}
 Tokovi se uporabljajo, ko pričakujemo neskončno zaporedje podatkov. V lenih programskih jezikih, kot je tudi MiniHaskell, rep neskončne dolžine
@@ -466,157 +464,144 @@ Oglejmo si še nadgradnjo tokov, enostavne procese. To so funkcije, ki sprejmejo
 \end{equation}
 Primer procesa je recimo enocelični pomnilnik, ki shranjuje po eno vrednost in ob prejemu argumenta vrne do sedaj shranjen element in shrani novega:
 \begin{lstlisting}
-(buffer, e) = λx:Int. (e, (buffer, x)) --zelo cudno, poskusi drugace
-- : (buffer, e) : Proces
+let buffer(e) = λx:Int. (e, buffer(x)) --zelo cudno, poskusi drugace
+val buffer(e) : Proces
 \end{lstlisting}
 Podobno kot pri tokovih, za delo s procesi potrebujemo pomožne funkcije, kot je na primer funkcija, ki vrne vrnjeno vrednost procesa:
 \begin{lstlisting}
-vrednost = λp:Proces. p.1;
-- : vrednost : Proces -> Int
+let vrednost = λp : Proces. p.1;
+val vrednost : Proces -> Int
 \end{lstlisting}
 Koinduktivni tipi so torej zelo uporabni, ker nam omogočajo delo z neskončnimi podatki. Vendar je potrebno biti previden, ker lahko hitro pride do neskončnih zank. 
 Lažje jih je obvladovati v lenih programskih jezikih, ker se njihova vsebina nikoli ne izračuna do konca, vedno samo po potrebi.
 
-\section{Ekvirekurzivni ali izorekurzivni pristop?}
-Ko implementiramo rekurzivne tipe, se moramo slej ko prej vprašati, kaj je razlika med tipom in čemer dobimo, ko ta tip enkrat "odvijemo". Na primer, kaj je razlika med tipom \lstinline{Seznam}
-in njegovim enkratnim odvojem \lstinline{Empty | Cons Int Seznam}? V literaturi pojavita dva pristopa k temu vprašanju: ekvirekurziven in izorekurziven. Definirajmo $\mu$ operator $\mu x.y \iff x:x=y$.
+\section{Ekvirekurziven ali izorekurziven pristop?}
+Ko implementiramo rekurzivne tipe, se moramo slej ko prej vprašati, kaj je razlika med tipom in čemer dobimo, ko ta tip enkrat ">odvijemo"<. Na primer, kaj je razlika med tipom \lstinline{Seznam}
+in njegovim enkratnim odvojem \lstinline{Empty | Cons Int Seznam}? V literaturi pojavita dva pristopa k temu vprašanju: ekvirekurziven in izorekurziven.
+
+Definirajmo operator $\mu$, ki računa negibne točke. Za dano funkcijo $F$, ki slika tipe v tipe, naj bo $\mu(F)$ tip, za katerega velja $\mu(F) = F(\mu(F))$. Običajno namesto $\mu (\lambda X . T)$ 
+pišem $\mu X . T$. Na primer, tip seznamov celih števil lahko zapišemo kot $\mu (\lambda X . \ \mathtt{Empty} \mid \ \mathtt{Cons} \ \mathtt{Int} \ X)$ ali raje $\mu X . \mathtt{Empty} \mid \mathtt{Cons} \ \mathtt{Int} \ X$.
+
 \subsection{Ekvirekurziven pristop}
 Ekvirekurziven pristop pravi, da je tip \emph{\(\mu\)X.F(X)} po definiciji enak njegovemu odvoju \emph{F(\(\mu\)X.F(X))}, ker oba predstavljata enaka neskončna drevesa. Ta pristop nato od 
-preverjevalnika tipov zahteva, da poskrbi, da se lahko oba zapisa uporabljata kot argumenta v funkcijah in podobno.
+preverjevalnika tipov zahteva, da upošteva enačbo $\mu X . F(X) = F(\mu X . F(X))$, kakor tudi vse enačbe, ki sledijo iz te, na primer $\mu X. F(X) = F(F(F(\mu X . F(X))))$. 
 
 \subsection{Izorekurziven pristop}
-Izorekurziven način pa ubere na prvi pogled nekoliko bolj zapleteno pot. Definira dve preslikavi, ki sta med seboj inverzni, imenujmo ju \lstinline{fold} in \lstinline{unfold}. 
-\lstinline{Unfold} vzame rekurzivni tip in ga preslika v njegov prvi odvoj. Na primer, v definiciji 
-seznama: 
-\begin{equation}
-    \mathtt{Seznam} = \mathtt{Empty} \mid \mathtt{Cons} \ \mathtt{Int} \ \mathtt{Seznam} \notag
-\end{equation}
-preslikamo desno stran:
-\begin{equation}
-     \mathtt{unfold(Empty} \mid \mathtt{Cons} \ \mathtt{Int} \ \mathtt{Seznam)} = \mathtt{Empty} \mid \mathtt{Cons} \ \mathtt{Int} \ \mathtt{(Empty} \mid \mathtt{Cons} \ \mathtt{Int} \ \mathtt{Seznam)}\notag
-\end{equation}
-  
-\lstinline{Fold} pa stori ravno obratno, torej rekurzivni tip zavije nazaj. Definiciji teh preslikav lahko tako zapišemo kot:
-\begin{gather}
-    \mathtt{unfold}[\mu X.T]: \mu X.T \rightarrow [X \rightarrow \mu X.T] T \notag\\
-    \mathtt{fold}[\mu X.T]: [X \rightarrow \mu X.T] T \rightarrow \mu X.T \notag
-\end{gather}
-Ker sta preslikavi inverzni, velja:
-
-\begin{center}
-    \begin{tikzpicture}
-        % Left text
-        \node[align=center] at (-0.5,0) {$\mu X.T$};
-
-        % Right text
-        \node[align=center] at (5,0) {$[\mu \rightarrow \mu X.T]T$};
-
-        % Curved arrow from left to right
-        \draw[->, bend left=30, line width=1.25pt] (0.5,0.2) to node[above] {\lstinline{unfold} $[\mu X.T]$} (3.5,0.2);
-
-        % Curved arrow from right to left
-        \draw[->, bend left=30, line width=1.25pt] (3.5,-0.2) to node[below] {\lstinline{fold} $[\mu X.T]$} (0.5,-0.2);
-    \end{tikzpicture}
-\end{center}
-
-Tako izorekurziven pristop rekurzivni tip in njegove odvoje ne obravnava kot enake, temveč kot izomorfne.
+Izorekurziven način pa ubere na prvi pogled nekoliko bolj zapleteno pot. Definira dve preslikavi, imenujmo ju \lstinline{fold} in \lstinline{unfold}, ki nam omogočata prehode med rekurzivnimi tipi in njihovimi odvoji. 
+\lstinline{Fold} sprejme element odvitega tipa in ga preslika v element rekurzivnega tipa, \lstinline{unfold} pa ravno obratno, element rekurzivnega tipa preslika v element odvitega tipa.
+\begin{align*}
+    \mathtt{fold} : F \ (\mu F) \mapsto (\mu F)\\
+    \mathtt{unfold} : (\mu F) \mapsto F \ (\mu F)
+\end{align*}
+Preslikavi sta inverzni, torej sta izomorfizma.
+\begin{align*}
+  \mathtt{fold\(unfold\(x\)\) = x}\\
+  \mathtt{unfold\(fold\(y\)\) = y}
+\end{align*}
+Na primeru seznamov:
+\begin{align*}
+  \mathtt{fold} : (\mathtt{Empty} \mid \mathtt{Cons} \ \mathtt{Int} \ \mathtt{Seznam}) \mapsto \mathtt{Seznam}\\
+  \mathtt{fold} : \mathtt{Seznam} \mapsto (\mathtt{Empty} \mid \mathtt{Cons} \ \mathtt{Int} \ \mathtt{Seznam})
+\end{align*}
 
 Oba pristopa se uporabljata pri konstrukciji programskih jezikov in teoretičnih besedilih. Ekvirekurziven je bolj intuitiven, vednar zahteva več dela od preverjevalnika tipov in 
-lahko privede do težav pri kombinaciji z drugimi konstrukti, na primer operatorjih na tipih. Medtem izorekurziven pristop zahteva uporabo preslikav \lstinline{fold} in \lstinline{unfold}, kjerkoli 
-se uporabijo rekurzivni tipi. V svoji implementaciji sem uporabil slednjega, ker je v pogosteje uporabljen, zahteva pa tudi manj dela na prevajalniku. Funkciji \lstinline{fold} in \lstinline{unfold} sta prepuščeni uporabniku.
+lahko privede do težav pri kombinaciji z drugimi konstrukti, na primer operatorjih na tipih. Medtem izorekurziven pristop zahteva uporabo izomorfizmov in več dela preloži na programerja. 
+V svoji implementaciji sem uporabil slednjega, ker je pogosteje uporabljen, zahteva pa tudi manj dela na prevajalniku. Funkciji \lstinline{fold} in \lstinline{unfold} lahko uporabnik definira po potrebi, 
+vendar v veliko primerih to ni potrebno, ker zadoščuje uporaba konstruktorjev in izrazov \lstinline{case}.
 
-\chapter{Variante}
+\chapter{Vsote tipov}
 Programerji se pogosto srečujemo z različnimi strukturami ali spremenljivkami, ki lahko zavzamejo vrednosti iz množice možnosti. Na primer, vozlišče v drevesu je lahko prazno, list, ali 
-notranje vozlišče. Element v povezanem seznamu je lahko trivialna vrednost \lstinline{nil}, ali pa vozlišče \lstinline{Cons} z glavo in repom seznama. Takih primerov je veliko. Zato poznamo variante.
+notranje vozlišče. Element v povezanem seznamu je lahko trivialna vrednost \lstinline{nil}, ali pa vozlišče \lstinline{Cons} z glavo in repom seznama. Takih primerov je veliko, zato poznamo vsote tipov.
 
-Variante so tipi, ki izvirajo iz množice vrednosti, dobljene iz kombinacije več tipov. Na primer, če imamo tipa
-\begin{gather}
-\mathtt{Odrasel = Int \times Bool} \notag \\
-\mathtt{Otrok = Int \times Bool} \notag
-\end{gather}
-in njuni definiciji v MiniHaskellu
+Vsote tipov so podatkovni tipi, ki izvirajo iz množice vrednosti, dobljene iz kombinacije več tipov. Na primer, če imamo tipa
 \begin{lstlisting}
-    data Odrasel = Odr Int Bool
-    data Otrok = Otr Int Bool
+data Odrasel = Odr Int Bool Int
+data Otrok = Otr Int
 \end{lstlisting}
-Če želimo obravnavati oba tipa kot enega samega, da bi lahko na primer naredili seznam, ki vključuje oba, lahko definiramo varianto \lstinline{Oseba}
-\begin{equation}
-\mathtt{Oseba = Odrasel + Otrok} \notag
-\end{equation}
-Vsak element s tipom oseba, je tipa Odrasel, ali pa Otrok.
-
-Da lahko nato delamo z variantami, moramo imeti funkcije, ki znajo ločevati med njihovimi elementi in jih obravnavati posebej. To naredimo z uporabo \lstinline{case} izraza. Če nas na primer zanima 
-številska vrednost spremenljivke tipa \lstinline{Oseba}, lahko definiramo funkcijo izobrazba:
+s katerima povemo koliko je odrasel star, če je poročen in koliko otrok ima, ter koliko je star otrok in ju želimo združiti v en tip, da bi lahko na primer naredili seznam, ki vključuje odrasle in otroke, lahko definiramo vsoto \lstinline{Oseba}.
 \begin{lstlisting}
-let stevilo = fun o:Oseba =>
+data Oseba = Odr Int Bool Int | Otr Int
+\end{lstlisting}
+Vsak element tipa \lstinline{Oseba} je označen kot varianta \lstinline{Odr}, ki ustreza tipu \lstinline{Odrasel}, ali kot varianta \lstinline{Otr}, ki ustreza tipu \lstinline{Otrok}.
+
+Da lahko nato delamo z vsotami, moramo imeti funkcije, ki znajo ločevati med njihovimi elementi in jih obravnavati posebej. To naredimo z uporabo izraza \lstinline{case}. Če nas na primer zanima 
+starost vrednosti tipa \lstinline{Oseba}, lahko definiramo funkcijo \lstinline{starost}:
+\begin{lstlisting}
+let starost = fun o:Oseba =>
     case o of
-        Odr x y -> x
-      | Otr x y -> x
+        Odr x y z -> x
+      | Otr x -> x
     end
 \end{lstlisting}
-Ko je argument \lstinline{o} tipa \lstinline{Odrasel}, se izvede prva veja in vrne izobrazba odraslega, ko pa je argument o tipa \lstinline{Otrok}, se izvede druga veja. Tako je tip celotne funkcije \lstinline{Oseba $\rightarrow$ Int}.
+Ko je argument \lstinline{o} tipa \lstinline{Odrasel}, se izvede prva veja in vrne izobrazba odraslega, ko pa je argument o tipa \lstinline{Otrok}, se izvede druga veja. Tako je tip celotne funkcije 
+\lstinline{Oseba} $\rightarrow$ \lstinline{Int}. Seveda zahtevamo, da vse veje vrnejo izraz istega tipa.
 
-Preverjevalnik tipov tukaj nima težke naloge. Če imamo varianto \lstinline{Odrasel + Oseba} in želimo pokazati, da je prva veja \lstinline{Odr x y} tipa \lstinline{Odrasel + Oseba}, moramo le pokazati, da je tipa \lstinline{Odrasel}. Podobno velja za vejo \lstinline{Otrok x y}. Za \lstinline{case} moramo preveriti več stvari. Najprej, da je argument tipa \lstinline{Odrasel + Oseba}. Nato preverimo 
-obe veji, kjer predpostavimo da sta argumenta \lstinline{x} in \lstinline{y} tipov \lstinline{Odrasel} in \lstinline{Otrok}, v tem vrstnem redu. Preverjamo, da sta tipa $T_1$ in $T_2$ 
-vrnjenih vrednosti enaka. Če je to res, označimo tip vrnjene vrednosti kot \lstinline{T}. Celoten izraz ima nato tip \lstinline{Odrasel + Otrok} $\rightarrow$ \lstinline{T}.
+Ker v izrazu \lstinline{case} preverjamo tip argumenta na način, da samo preverimo ali ustreza kakšni izmed variant in se ne oziramo na preostale tipe v tisti vsoti, 
+se lahko zgodi, da je izrazu možno dodeliti več kot en tip. To se zgodi, če ima več vsot enak seštevanec. Za primer vzemimo vsoti
+\begin{lstlisting}
+data A = Foo Int | Bar Bool
+data B = Foo Int | Baz Unit
+\end{lstlisting}
+Obe imata varianto, označeno s \lstinline{Foo}, torej kateremu tipu pripada izraz \lstinline{Foo 42}? V praksi se ta problem rešuje na različne načine, jaz pa sem v svoji implementaciji določil, da se vrednosti 
+dodeli tip, ki ga preverjevalnik tipov najprej najde, torej tistega, ki je bil definiran nazadnje. V tem primeru je to tip \lstinline{B}.
+\begin{lstinline}
+Foo 42
+- :  B = 42
+\end{lstinline}
 
-Ker v \lstinline{case} izrazu preverjamo tip izraza, ki je podan kot argument, na način, da samo preverimo ali ustreza enemu od \(T_1\) in \(T_2\) in se ne oziramo na drugi tip v vsoti, 
-se lahko zgodi, da je izrazu možno dodeliti več kot en tip. To se zgodi, če ima več variant enak seštevanec. Za primer vzemimo varianti \emph{$\alpha$ + $\beta$} in \emph{$\gamma$ + $\beta$}.
-Obema je skupen seštevanec \emph{$\beta$}, torej lahko nekemu izrazu tipa \emph{$\beta$} dodelimo tip \emph{$\alpha$ + $\beta$} ali pa \emph{$\gamma$ + $\beta$}. To je problem, ki ga
-lahko rešujemo na različne načine. V svoji implementaciji sem se odločil, da bo prevajalnik tipov izbral prvi tip, ki ga najde, torej tistega, ki je bil nazadnje definiran. To je bila 
-najpreprostejša rešitev, vendar onemogoča, da bi v tem primeru tip \emph{$\beta$} kakorkoli prepoznal kot del vsote \emph{$\alpha$ + $\beta$}.
-
-Morda zanimiva skupina variant so tiste, ki lahko vsebujejo tudi trivialne vrednosti \lstinline{unit}:
-\begin{equation}
-    \mathtt{Optional =  \{Unit, Value\}} \notag
-\end{equation}
-Ti tipi so izomorfni s tistimi, ki dajejo \lstinline{Value} in razširjeni z opcijo trivialne vrednosti. To so na primer tipi, ki jih poznamo iz priljubljenih programskih jezikov in dopuščajo 
+Morda zanimiva skupina vsot so tiste, ki lahko vsebujejo tudi trivialne vrednosti \lstinline{Unit}, ki je
+\begin{lstlisting}
+data Opcijsko = Nic | V Vrednost
+\end{lstlisting}
+Ti tipi so izomorfni s tistimi, ki dajejo \lstinline{Vrednost} in razširjeni z možnostjo trivialne vrednosti. To so na primer tipi, ki jih poznamo iz priljubljenih programskih jezikov in dopuščajo 
 vrednosti kot so \lstinline{null}, \lstinline{None} ali \lstinline{nil}.
 
-Še dve posebni vrsti variant sta dovolj zanimivi za posebno obravnavo.
+Še dve posebni vrsti vsot sta dovolj zanimivi za posebno obravnavo.
 
-\subsection{Oštevilčenja (enumerations)}
-Oštevilčenja so variante, ki vsebujejo zgolj trivialne vrendosti in so namenjene predstavljanju konstant. Na primer, če želimo predstaviti ocene, ki jih lahko dobi študent, definiramo varianto:
+\section{Oštevilčenja}
+Oštevilčenja so vsote, ki vsebujejo zgolj trivialne vrendosti in so namenjene predstavljanju tipov, ki sestojijo iz končno mnogo konstant. Na primer, če želimo predstaviti del dneva, definiramo vsoto
 \begin{lstlisting}
-data Ocena = Pet | Sest | Sedem | Osem | Devet | Deset
+data DelDneva = Jutro | Dopoldan | Popoldan | Vecer | Noc
 \end{lstlisting}
-Lahko sestavimo tudi funkcije, ki obravnavajo take vrednosti. Na primer;
+Lahko sestavimo tudi funkcije, ki obravnavajo take vrednosti. Na primer
 \begin{lstlisting}
-let možno_zvisevanje = fun o:Ocena =>
-    case o of 
-         Deset -> false
-        | _    -> true
+let primerenZaZajtrkovanje = fun d:DelDneva =>
+    case d of 
+         Jutro  	-> true
+       | Dopoldan -> true
+       | _       -> false
     end
 \end{lstlisting}
-je funkcija, ki sprejme eno izmed ocen in vrne odgovor na vprašanje, če jo je možno izboljšati. Tip te funkcije je \lstinline{Ocena} $\rightarrow$ \lstinline{Bool}.
+je funkcija, ki sprejme eno izmed delov dneva in vrne odgovor na vprašanje, če takrat običajno zajtrkujemp. Tip te funkcije je \lstinline{DelDneva} $\rightarrow$ \lstinline{Bool}.
 
-\subsection{Variante enega tipa (Single-field variants)}
-Možno je ustvariti tudi variante s samo eno oznako, torej bodo vsi njeni elementi istega tipa:
-\begin{equation}
-\mathtt{V = T} \notag
-\end{equation}
-torej tipa \lstinline{T}. To je lahko zelo uporabno, ker elementov tipa \lstinline{V} ni možno zamešati za elemente tipa \lstinline{T} in posledično na njih ne moremo izvajati operacij, ki jih lahko na tipu 
-\lstinline{T}. Tako se lahko izognemo nesmiselnim primerom. Recimo, da uporabljamo podatke o valutah. Količino denarja v posamezni valuti lahko predstavimo s tipom \lstinline{Float}, kot decimalno 
+\section{Vsote z eno varianto}
+Možno je ustvariti tudi vsote s samo eno varianto, torej bodo vsi njeni elementi istega tipa:
+\begin{lstlisting}
+data V = C T
+\end{lstlisting}
+torej tipa \lstinline{V}. To je lahko zelo uporabno, ker tako elementov tipa \lstinline{T} ni možno zamešati za elemente tipa \lstinline{V} in posledično na njih ne moremo izvajati operacij, ki jih lahko na tipu 
+\lstinline{V}. Tako se lahko izognemo nesmiselnim primerom. Recimo, da uporabljamo podatke o valutah. Količino denarja v posamezni valuti lahko predstavimo s tipom \lstinline{Float}, kot decimalno 
 število. Težava nastane, ko definiramo funkcijo, ki pretvarja med valutami:
 \begin{lstlisting}
-KuneVEvre = λx:Float. zmnoži x 0.1327;
-- : KuneVEvre : Float -> Float
+let dolarjiVEvre = fun d:Float =>
+  zmnozi x 0.92
+dolarjiVEvre : Float -> Float
 \end{lstlisting}
-kjer \lstinline{zmnoži} predstavlja funkcijo, ki pomnoži dve decimialni števili. Če je \lstinline{x}, ki ga podamo funkciji \lstinline{KuneVEvre} količina denarja v evrih, je vse v redu. Vendar pa nam nič ne 
-preprečuje, da bi kot argument v \lstinline{KuneVEvre} podali katerokoli drugo število, na primer količino denarja v dolarjih, ali še huje, število število komarjev v nekem prostoru. Taka uporaba te 
-funkcije je nesmiselna in se ji v večini primerov želimo izogniti. Tako lahko, če predpostavimo da imamo tip realnih števil \lstinline{Float}, definiramo variante enega tipa:
+kjer \lstinline{zmnozi} predstavlja funkcijo, ki pomnoži dve decimialni števili. Če je \lstinline{d}, ki ga podamo funkciji \lstinline{dolarjiVEvre} količina denarja v dolarjih, je vse v redu. Vendar pa nam nič ne 
+preprečuje, da bi kot argument v \lstinline{dolarjiVEvre} podali katerokoli drugo število, na primer količino denarja v frankih, ali še huje, število število komarjev v nekem prostoru. Taka uporaba te 
+funkcije je nesmiselna in se ji v večini primerov želimo izogniti. Tako lahko, definiramo vsote z eno varianto:
 \begin{lstlisting}
-data DenarVKunah = Kune Float
+data DenarVDolarjih = Dolarji Float
 data DenarVEvrih = Evri Float
 \end{lstlisting}
-in morda še vse ostali, ki jih potrebujemo, ter funkcijo \lstinline{KuneVEvre} spremenimo tako, da deluje s pravilnimi tipi, torej pretvorbo omogočimo 
-samo iz kun v evre in nič drugega:
+in morda še vse ostale, ki jih potrebujemo, ter funkcijo \lstinline{dolarjiVEvre} spremenimo tako, da deluje s pravilnimi tipi, torej pretvorbo omogočimo 
+samo iz dolarjev v evre in nič drugega:
 \begin{lstlisting}
-let kuneVEvre = fun x:DenarVKunah =>
-    case k of 
-        Kune k -> Evri (zmnozi x 0.1327)
+let dolarjiVEvre = fun d:DenarVDolarjih =>
+    case d of 
+        Dolarji x -> Evri (zmnozi x 0.92)
     end
-- : kuneVEvre : DenarVKunah -> DenarVEvrih
+val dolarjiVEvre : DenarVDolarjih -> DenarVEvrih
 \end{lstlisting}
 Tako se zavarujemo pred napakami.
 \newpage
@@ -871,7 +856,7 @@ se vanj shranjejo le besede z veliko začetnico.
 
 Morda bolj zanimiv je tip \lstinline{toplevel\_cmd} ali \textit{toplevel command}, ki kot omenjeno zgoraj, lahko zavzame eno izmed štirih vrendnosti: \lstinline{Expr}, ki shranjuje izraze, 
 \lstinline{Def}, ki shrnajuje definicije spremenljivk, \lstinline{DataDef}, ki shranjuje definicije novih tipov in \lstinline{Quit}, ki označuje ukaz za izhod iz \lstinline{toplevel}, torej 
-\emph{minihaskell.exe}. Odločil sem se, da bo \lstinline{DataDef} shranjeval definicije novih tipov, kot urejen par imena tipa in seznama konstruktorjev in njihovih argumentov:
+\emph{minihaskell.exe}. Odločil sem se, da bo \lstinline{DataDef} shranjeval definicije novih tipov kot urejen par imena tipa in seznama konstruktorjev in njihovih argumentov:
 \begin{lstlisting}
 type toplevel_cmd =
 | Expr of expr
@@ -886,7 +871,7 @@ Kot vidimo, so argumenti konstruktorjev tipa \lstinline{htype}. To pomeni, da la
 data Seznam = Empty | Cons Int Seznam.
 \end{lstlisting}
 
-\lstinline{Case} izraz ima bolj zapleteno strukturo. Odločil sem se, da ga bom najprej razbil na dva dela: vhodni izraz in seznam vej. V abstraktnem sintaktičnem drevesu prikazanem zgoraj, 
+Izraz \lstinline{case} ima bolj zapleteno strukturo. Odločil sem se, da ga bom najprej razbil na dva dela: vhodni izraz in seznam vej. V abstraktnem sintaktičnem drevesu prikazanem zgoraj, 
 sta ta dva dela prva potomca korenskega vozlišča. Vsako vejo v seznamu sem nato razbil še naprej, na vzorec, ki ga primerjamo z vhodnim izrazom in posledico, ki se sproži v primeru ujemanja. 
 Vzorec pa je sestavljen iz imena kontruktorja in seznamom spremenljivk, ki predstavljajo njegove morebitne argumente. V kodi ta definicija igleda takole:
 \begin{lstlisting}
@@ -899,18 +884,18 @@ and pattern = cname * name list
 kjer \lstinline{expr} predstavlja izraz, \lstinline{pattern} vzorec v veji, \lstinline{cname} ime konstruktorja z veliko začetnico in \lstinline{name} ime spremenljivke z malo začetnico, ki predstavlja morebitni 
 argument konstruktorja. 
 
-Zdaj imamo že dovolj konstrukcij, da lahko definiramo svoj tip in funkcijo s \lstinline{case} izrazom: 
+Zdaj imamo že dovolj konstrukcij, da lahko definiramo svoj tip in funkcijo z izrazom \lstinline{case}: 
 \begin{lstlisting}
-data Oseba = Odrasel Int | Otrok Int Int
+data Oseba = Odrasel Int Bool Int | Otrok Int
 
 let starost = fun o : Oseba => 
 case o of 
-    Odrasel x -> x 
-  | Otrok x y -> y
+    Odrasel x z y -> x 
+  | Otrok x       -> x
 end
 \end{lstlisting}
 
-Definiral sem tudi funkcijo za izpis \lstinline{case} izraza, vendar je zaradi njene preprostosti ne bom ipostavljal. Na voljo je v repozitoriju.
+Definiral sem tudi funkcijo za izpis izraza \lstinline{case}, vendar je zaradi njene preprostosti ne bom ipostavljal. Na voljo je v repozitoriju.
 
 \section{Pravilnost tipov}
  Da se program lahko izvede, se morajo vsi tipi spremenljivk, funkcij in izrazov ujemati. Preveriti, da je temu tako, je naloga preverjevalnika tipov. V MiniHaskellu je zapisan v datoteki 
@@ -920,11 +905,12 @@ Definiral sem tudi funkcijo za izpis \lstinline{case} izraza, vendar je zaradi n
  Da lahko preverjevalnik tipov deluje, mora poznati tipe obstoječih spremenljivk. To hrani kot seznam urejenih parov imen spremenljivk in njihovih tipov. Da pa lahko poznamo tipe spremenljivk, 
  ki so rezultat novih konstruktorjev, moramo poznati tudi njihove tipe.
  \begin{lstlisting}
-data Oseba = Odrasel Int | Otrok Int Int
+data Oseba = Odrasel Int Bool Int | Otrok Int
 
-let študent = Odrasel 20
+let student = Odrasel 20 false 0
+val student : Oseba
 \end{lstlisting}
-Da lahko razberemo tip spremenljivke \lstinline{študent}, moramo vedeti, da je tip, ki ga prinese koonstruktor \lstinline{Odrasel} \lstinline{Oseba}. Te informacije shranimo kot seznam urejenih parov imen 
+Da lahko razberemo tip spremenljivke \lstinline{student}, moramo vedeti, da je tip, ki ga prinese konstruktor \lstinline{Odrasel}, tip \lstinline{Oseba}. Te informacije shranimo kot seznam urejenih parov imen 
 tipov in njihovih konstruktorjev. Tako dobimo kontekst:
 \begin{lstlisting}
 type context = {vars: (string * Syntax.htype) list; 
@@ -1216,21 +1202,21 @@ konstruktorjev, so Churchova števila. Delujejo tako, da definirajo število ni�
 zato se jim ne bomo posebej posvečali. Definiramo tudi funkcijo \lstinline{plus}, ki sešteje dve Churchevi števili na način, da vemo, da je vsota nič in nekemu številu to drugo število in to uporabimo tako, da rekurzivno 
 zmanjšujemo prvi seštevanec do nič in sproti povečujemo vsoto. Na koncu samo prištejemo drugi seštevanec.
 \begin{lstlisting}
-data Stevilo = Nic | Naslednik Stevilo
+data Stevilo = Nic | Naslednjik Stevilo
 
 let plus = rec plus : Stevilo -> Stevilo -> Stevilo is
 fun x : Stevilo => fun y : Stevilo =>
 case x of
 Nic -> y
-| Naslednik a -> Naslednik (plus a y)
+| Naslednjik a -> Naslednjik (plus a y)
 end
 
-let ena = Naslednik Nic
+let ena = Naslednjik Nic
 
-let dva = Naslednik (Naslednik Nic)
+let dva = Naslednjik (Naslednjik Nic)
 
 MiniHaskell> plus ena dva
-- : Stevilo = Naslednik (Naslednik (Naslednik (Nic)))
+- : Stevilo = Naslednjik (Naslednjik (Naslednjik (Nic)))
 \end{lstlisting}
 Opazimo, da seštevanje deluje pravilno. 
 
@@ -1249,13 +1235,13 @@ let drugi = fun p : Par =>
     Par x y -> y
   end
 
-let par = Par (S (Naslednik (Naslednik Nic))) 
-    (S (Naslednik Nic))
+let par = Par (S (Naslednjik (Naslednjik Nic))) 
+    (S (Naslednjik Nic))
 
 MiniHaskell> prvi par
-- : Element = S (Naslednik (Naslednik (Nic)))
+- : Element = S (Naslednjik (Naslednjik (Nic)))
 MiniHaskell> drugi par
-- : Element = S (Naslednik (Nic))
+- : Element = S (Naslednjik (Nic))
 \end{lstlisting}
 Tako lahko nadomestimo tudi urejene pare. Funkcij pa ne moremo, ker jih potrebujemo za delo s tipi. Vanje vstavljamo \lstinline{case} izraze. 
 
@@ -1264,21 +1250,21 @@ Zelo pogosto upoabljen primer rekurzivnih tipov so drevesa. Definirajmo tip \lst
 data Drevo = Empty | List Stevilo | 
     Vozlisce Stevilo Drevo Drevo
 
-let st_vozlisc = rec st_vozlisc : Drevo -> Stevilo is
+let stVozlisc = rec st_vozlisc : Drevo -> Stevilo is
   fun d : Drevo =>
     case d of
       Empty -> Nic
-      | List s -> Naslednik Nic
+      | List s -> Naslednjik Nic
       | Vozlisce s l r ->
-        plus (Naslednik Nic) (plus (st_vozlisc l) 
-            (st_vozlisc r))
+        plus (Naslednjik Nic) (plus (stVozlisc l) 
+            (stVozlisc r))
     end
 
-let lipa = Vozlisce Nic (List (Naslednik Nic)) 
-    (List (Naslednik (Naslednik Nic)))
+let lipa = Vozlisce Nic (List (Naslednjik Nic)) 
+    (List (Naslednjik (Naslednjik Nic)))
 
 MiniHaskell> st_vozlisc lipa
-- : Stevilo = Naslednik (Naslednik (Naslednik (Nic)))
+- : Stevilo = Naslednjik (Naslednjik (Naslednjik (Nic)))
 \end{lstlisting}
 Definirali smo drevo \lstinline{lipa}, ki ima korensko vozlišče in dva lista. Funkcija \lstinline{st_vozlisc} vrne število tri.
 
@@ -1359,7 +1345,7 @@ MiniHaskell> prvi ((fold (drugi ((fold (drugi
 - : int = 2
 \end{lstlisting}
 
-Ker lahko na tokove gledamo tudi kot na neskončne sezname, jih lahko tudi definiramo podobno kot smo zgoraj sezname. Seveda tudi tukaj 
+Ker lahko na tokove gledamo tudi kot na neskončne sezname, jih lahko tudi definiramo podobno kot smo sezname zgoraj. Seveda tudi tukaj 
 potrebujemo funkcijo na začetnem elementu.
 \begin{lstlisting}
 data Tok = Cons Int Tok
@@ -1399,9 +1385,9 @@ MiniHaskell> naravna
 ))))))))))))))))))))))))))))))))))))))))))))))))))
 \end{lstlisting}
 Dobimo neskončen seznam naravnih števil. Program seveda ne izpiše vseh, da lahko nadaljujemo z vpisovanjem ukazev. 
-Taka definicija nam poda le neskončen seznam, medtem ko definicija z uporabo lačne funkcije vsakič vrne le en par 
-in nas tako ne zasuje z neskončno vrednostmi. Seveda lahko tudi iz neskončnega seznama izluščimo končno mnogo 
-elementov, če definiramo funkciji \lstinline{glava}, ki vrne prvi element seznama in \lstinline{rep}, ki vrne vse neprve elemente. 
+Taka definicija nam poda neskončen seznam, medtem ko definicija z uporabo lačne funkcije vsakič vrne le en par. 
+Seveda lahko tudi iz neskončnega seznama izluščimo končno mnogo elementov, če definiramo funkciji \lstinline{glava}, 
+ki vrne prvi element seznama in \lstinline{rep}, ki vrne vse neprve elemente. 
 \begin{lstlisting}
 let glava = fun t : Tok =>
   case t of 
@@ -1413,6 +1399,8 @@ let rep = fun t : Tok =>
     Cons e tok -> tok
   end
 \end{lstlisting}
+V lenih programskih jezikih delujeta obe definiciji, medtem ko 
+bi neučakani jeziki po drugi definiciji hoteli najprej izračunati vse vrednosti do konca, kar seveda ni mogoče.  
 
 Če definicijo tokov malenkost spremenimo, lahko definiramo tudi procese. Ti namesto \lstinline{unit} vrednosti sprejemejo poljubne elemente, ki 
 vplivajo na izhos funkcije. Ohranimo lahko funkciji \lstinline{prvi} in \lstinline{drugi} iz definicije tokov. Poglejmo si primer, ki vrne vsoto 
@@ -1449,30 +1437,6 @@ Dobili smo šest, kar je vsota enke, dvojice in trojke.
 %********************************************
 
 \appendix
-
-%\addcontentsline{toc}{chapter}{\protect Dodatki}
-
-\chapter{Kaj so priloge ali dodatki}
-
-Priloge (slike, diagrami, algoritmi, načrti), 
-če so potrebne, kandidat izdela kot posebna poglavja (Dodatek A, Dodatek B, \ldots), ki jih zaradi preglednosti ni smiselno vključiti v glavni
-del naloge. Vsi dodatki morajo biti naslovljeni in oštevilčeni, običajno z velikimi tiskanimi črkami. 
-
-\newpage
-
-\addcontentsline{toc}{chapter}{Seznam slik}
-\addtocontents{toc}{\protect\vspace{-2ex}}
-\listoffigures
-
-\newpage
-
-\addcontentsline{toc}{chapter}{Seznam tabel}
-\listoftables
-
-%\listofalgorithms
-
-
-%********************************************
 
 \newpage
 
