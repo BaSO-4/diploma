@@ -68,6 +68,7 @@
 {\large 
 UNIVERZA V LJUBLJANI\\
 FAKULTETA ZA RAČUNALNIŠTVO IN INFORMATIKO\\
+FAKULTETA ZA MATEMATIKO IN FIZIKO\\
 }
 
 \vspace{3cm}
@@ -79,7 +80,7 @@ FAKULTETA ZA RAČUNALNIŠTVO IN INFORMATIKO\\
 
 \vspace{2cm}
 { DIPLOMSKO DELO}\\
-{ NA INTERDISCIPLINARNEM UNIVERZITETNEM ŠTUDIJU\\
+{ NA UNIVERZITETNEM ŠTUDIJSKEM PROGRAMU PRVE STOPNJE RAčUNALNIŠTVO IN MATEMATIKA\\
 }
 
 \vspace{2cm} 
@@ -273,20 +274,12 @@ Seznam uporabljenih kratic in simbolov, ki morajo biti enotni v celotnem delu, n
 \chapter*{Povzetek}
 
 \addcontentsline{toc}{chapter}{Povzetek}
-
-Povzetek naj posreduje bralcu kratko vsebino dela. Zajema naj namen dela, področje, na katerega se delo nanaša,
-uporabljene metode, poglavitne rezultate dela, zaključke in priporočila. 
-Povzetek naj ne obsega več kot eno stran, obi\v cajno ima le 200 do 300 besed. Napiše se povsem na koncu,
-ko je že jasna vsebina vseh ostalih poglavij.
-
-Ta dokument vsebuje navodilo za izdelavo diplomskega dela v obliki in strukturi, ki je v teh navodilih predpisan za
-pisanje diplomskih nalog. Struktura dokumenta je namenjena obojestranskemu tiskanju, kjer se novo poglavje vedno za\v cne na lihi strani.
-V dejanski diplomi poglavja in podpogla\-vja  obi\v cajno niso tako kratka kot v teh navodilih.
-
-Za oblikovanje tega dokumenta je bil uporabljen sistem \LaTeX.
-Ve\v c o \LaTeX-u lahko izve\v s na spletni strani \texttt{http://www.ctan.org/}.
-Kandidati, ki bodo svoje diplomsko delo oblikovali s pomo\v cjo
-\LaTeX-a, lahko izvorno kodo tega dokumenta neposredno uporabijo kot vzorec za pisanje svoje diplomske naloge.
+Diplomsko delo obravnava rekurzivne podatkovne tipe, tako induktivne, kot tudi koinduktivne. Podaja njihovo definicijo in predstavi nekaj 
+primerov, ter opiše različne pristope k njihovi implementaciji. V nadaljevanju se posveti vsotam tipov in izrazu \lstinline{case}, ki lahko razčleni 
+vsote na posamezne variante in je potreben za delo z rekurzivnimi tipi. Predstavi korake implementacije teh struktur v programskem jeziku 
+MiniHaskell in pokaže potrebne spremembe v leksičnem analizatorju, razčlenjevalniku, preverjevalniku tipov in tolmaču. Osnovni poudarek je 
+na praktični integraciji teh struktur v progrmaski jezik MiniHaskell, v katerem je prikazanih več primerov uporabe, ki ilustrirajo uporabnost 
+teh struktur in odpirajo možnosti za morebitne nadaljnje razširitve.
 
 \vspace{1.3cm}
 \noindent
@@ -294,14 +287,19 @@ Kandidati, ki bodo svoje diplomsko delo oblikovali s pomo\v cjo
 
 \vspace{0.5cm}
 \noindent
-diploma, mentor, zagovor, podaljšanje, pisanje, struktura
+podatkovne strukture, rekurzivni tipi, case, vsote tipov, MiniHaskell
 
 
 \chapter*{Abstract}
 
 \addcontentsline{toc}{chapter}{Abstract}
 
-Povzetek naj bo napisan v angleškem jeziku.
+The thesis addresses recursive data types, both inductive and coinductive. It provides their definition and presents some examples, as well as 
+describing various approaches to their implementation. Subsequently, it focuses on sum types and the expression case, which can 
+decompose sums into individual variants and is essential for working with recursive types. It outlines the steps for implementing these 
+structures in the MiniHaskell programming language and illustrates the necessary changes in the lexer, parser, type checker and interpreter. 
+The primary emphasis lies on the practical integration of these structures into the MiniHaskell programming language, where several usage 
+examples are demonstrated, showcasing the utility of these structures and paving the way for potential further extensions.
 
 \vspace{1.3cm}
 \noindent
@@ -309,7 +307,7 @@ Povzetek naj bo napisan v angleškem jeziku.
 
 \vspace{0.5cm}
 \noindent
-Ključne besede v angleškem jeziku.
+data structures, recursive types, case, sum types, MiniHaskell
 
 
 %********************************************
@@ -330,8 +328,8 @@ postanejo starši. Rekurzivne strukture omogočajo, da te kompleksne odnose opi�
 
 V programskih jezikih podatkovne strukture predstavimo s podatkovnimi tipi. Če so strukture rekurzivne, so taki tudi tipi. Rekurzivne tipe lahko ločimo na induktivne in koinduktivne. Elementi prvih lahko nosijo le končne podatke, elementi drugih pa so lahko tudi neskončni. 
 Morda najbolj osnoven primer rekurzivnega tipa je seznam. Ta je lahko prazen, ali pa vsebuje urejen par nekega elementa in drugega seznama. Elementu ponavadi rečemo glava, seznamu, 
-ki glavi sledi, pa rep. Tako ima poljubno dolžino, lahko pa je tudi prazen. V prikazovanju primerov bom za prazen seznam uporabljal konstruktor \lstinline{Empty}, ki ne sprejme nobenega argumenta in predstavlja odsotnost vrednosti, pogosto označena kot \lstinline{nil}. Konstruktor \lstinline{Element} pa bo predstavljal vrednost, ki je vsebovana v seznamu in je seveda odvisna od tipa seznama. Če bi na primer hoteli seznam celih števil, 
-bi definicija izgledala tako:
+ki glavi sledi, pa rep. Tako ima poljubno dolžino, lahko pa je tudi prazen. V prikazovanju primerov bom za prazen seznam uporabljal konstruktor \lstinline{Empty}, ki ne sprejme nobenega argumenta in predstavlja odsotnost vrednosti, pogosto označena kot \lstinline{nil}. 
+Oglejmo si seznam celih števil:
 \begin{lstlisting}
 data Seznam = Empty | Cons Int Seznam
 \end{lstlisting}
@@ -419,7 +417,7 @@ Tako se \lstinline{1} uporabi kot argument na funkciji \lstinline{f}, \lstinline
 
 Zgornji primer je zabaven, ampak ni preveč uporaben v praksi. Poglejmo si bolj znane lačne funkcije -- tokove. To so funkcije, ki sprejmejo enotske vrednosti (\lstinline{Unit}) in vrnejo pare elementov in novih tokov:
 \begin{equation}
-    \mathtt{Tok} = \mathtt{Unit} \rightarrow \mathtt{Element} \times \mathtt{X} \notag
+    \mathtt{Tok} = \mathtt{Unit} \rightarrow \mathtt{Int} \times \mathtt{X} \notag
 \end{equation}
 Tokove si lahko predstavljamo kot neskončne sezname, sestavljene iz parov njihovih elementov in novih tokov. Na primer, lahko imamo tok naravnih števil:
 \begin{lstlisting}
@@ -445,7 +443,7 @@ Tokovi se uporabljajo, ko pričakujemo neskončno zaporedje podatkov. V lenih pr
 ne predstavlja problema, saj se vrednosti računajo le po potrebi.
 Oglejmo si še nadgradnjo tokov, enostavne procese. To so funkcije, ki sprejmejo nek element in vrnejo par elementa in novega procesa:
 \begin{equation}
-    \mathtt{Proces} = \mathtt{Element} \rightarrow \mathtt{Element} \times \mathtt{Proces} \notag
+    \mathtt{Proces} = \mathtt{Int} \rightarrow \mathtt{Int} \times \mathtt{Proces} \notag
 \end{equation}
 Primer procesa je recimo enocelični pomnilnik, ki shranjuje po eno vrednost in ob prejemu argumenta vrne do sedaj shranjen element in shrani novega:
 \begin{lstlisting}
@@ -604,7 +602,7 @@ je dostopen v repozitoriju~\cite{bauer:plzoo}.
 MiniHaskell je programski jezik, ki je namenjen predstavitvi osnovnih konceptov funkcijskega programiranja. Napisan je v programskem jeziku 
 OCaml in po strukturi in načinu uporabe sledi jeziku Haskell. Omogoča uporabo celih števil, boolovih vrednosti z logičnimi operacijami in primerjavami 
 celih števil, urejenih parov, seznamov, funkcij in rekurzije. Temu sem dodal možnost definiranja novih tipov, rekurzivnih ali ne, in 
-uporabe \lstinline{case} izrazov za delo z njimi. Programski jezik sestavljajo leksična analiza, razčlenjevalnik, tolmač in preverjevalnik tipov. V nadaljevanju bom predstavil kako 
+uporabe izrazov \lstinline{case} za delo z njimi. Programski jezik sestavljajo leksična analiza, razčlenjevalnik, tolmač in preverjevalnik tipov. V nadaljevanju bom predstavil kako 
 delujejo v MiniHaskellu, ter kako sem jih dopolnil.
 
 \section{Leksična analiza}
@@ -620,8 +618,7 @@ Za delo s podatkovnimi tipi, torej izraz \lstinline{case}, je bilo potrebno doda
 za znak $\mid$ je že bil definiran, ker je MiniHaskell že imel sezname in funkcijo \lstinline{match} za delo z njimi.}\footnote{Gradnik \emph{TARROW} za znak \emph{$\rightarrow$}, ki bo v veji \emph{case} 
 izraza ločil med izrazom, ki ga primerjamo in posledico, ki se sproži v primeru ujemanja, je prav tako že bil definiran.} V Haskellu sicer gradnika za \lstinline{end} ne poznamo, vendar ker za 
 razliko od Haskella MiniHaskell ni občutljiv na zamik vrstic v kodi, in ker nisem želel z implementacijo še tega zaiti s smeri moje diplomske naloge, sem za lažje delo v razčlenjevalnikju 
-dodal tudi ta gradnik. Da bi razumeli zakaj je potreben, si poglejmo naslednji primer: recimo, da imamo \lstinline{case} izraz, ki v eni od svojih vej vsebuje še en, gnezden \lstinline{case} 
-izraz:
+dodal tudi ta gradnik. Da bi razumeli zakaj je potreben, si poglejmo naslednji primer: recimo, da imamo izraz \lstinline{case}, ki v eni od svojih vej vsebuje še en, gnezden izraz \lstinline{case}:
 \begin{lstlisting}
 case x of 
     a -> _
@@ -680,7 +677,7 @@ Razčlenjevalnik ali parser je naslednji korak v procesu prevajanja progamov. Ko
 je uporabljen generator razčlenjevalnikov. To je program, ki iz podanih slovničnih pravil sestavi kodo za pripadajoči razčlenjevalnik. Ker se tukaj uporabi Menhirjev OCaml parser generator, končnica 
 datoteke ni .ml, ampak .mly. Lekser posreduje tok gradnikov, ki jih je prepoznal, naloga razčlenjevalnikja pa je prepoznati slovnično pravilne stavke in zgraditi 
 abstraktna sintaktična drevesa. To stori s pomočjo slovničnih pravil, ki povejo, v kakšnem zaporedju pričakujemo gradnike in kje se ti smejo pojaviti. 
-V svoji implementaciji sem dodal dve gramatični pravili: eno za definicijo novih tipov in eno za \lstinline{case} izraz. Pravilo za definicijo novih tipov je 
+V svoji implementaciji sem dodal dve gramatični pravili: eno za definicijo novih tipov in eno za izraz \lstinline{case}. Pravilo za definicijo novih tipov je 
 sledeče:
 \begin{lstlisting}
 datadef:
@@ -751,7 +748,7 @@ lahko predstavimo z drevesom:
 Definicijo tipov sem kot \lstinline{datadeftop} definiral kot enega izmed štirih osnovnih ukazov. Pred njim so bili že definirani \lstinline{lettop}, ki omogoča definicijo 
 spremenljivk, \lstinline{exprtop}, ki omogoča definicijo izrazov in \lstinline{cmdtop}, ki vsebuje posebne ukaze, kot so na primer \lstinline{quit}.
 
-Slovnično pravilo za \lstinline{case} izraz pa sem dodal samo pod pravilo za \lstinline{expr} ali izraze, ker se \lstinline{case} ne uporabljav v definicijo spremenljivk ali
+Slovnično pravilo za izraz \lstinline{case} pa sem dodal samo pod pravilo za \lstinline{expr} ali izraze, ker se \lstinline{case} ne uporabljav v definicijo spremenljivk ali
 definiciji tipov, niti to ni poseben ukaz. Pravilo je: 
 \begin{lstlisting}
 expr:
@@ -768,7 +765,7 @@ case_variants:
   pattern:
 | CNAME list(VAR)
 \end{lstlisting}
-in omogoča uporabo \lstinline{case} izrazov, kot so:
+in omogoča uporabo izrazov \lstinline{case}, kot so:
 \begin{lstlisting}
 case x of 
     Constr 1 -> _
@@ -918,7 +915,7 @@ Funkcija \lstinline{check} deluje zelo preprosto, primerja izračunan tip danega
 v kontekstu preoblikuje podan izraz v izrazno drevo in rekurzivno izračuna tipe podizrazov. Hkrati preverja pravilnost tipov s pomočjo funkcije \lstinline{check}. Na primer, v operaciji seštevanja 
 dovolimo le dve celi števili, torej izračunamo tipa obeh podizrazov in če nista celi števili, sprožimo napako.
 
-Poglejmo, kako sem dopolnil \lstinline{type_of}, da pravilno preverja tipe novih konstruktorjev in \lstinline{case} izrazov:
+Poglejmo, kako sem dopolnil \lstinline{type_of}, da pravilno preverja tipe novih konstruktorjev in izrazov \lstinline{case}:
 \begin{lstlisting}
 and type_of (ctx:context) = function
   ...
@@ -951,7 +948,7 @@ let rec type_of_constr c = function
 Funkcija se rekurzivno sprehodi skozi del konteksta, kjer so shranjeni novi tipi in njihovi konstruktorji. Za vsak tip preveri, če se med njegovimi konstruktorji nahaja želeni in če se, izračuna 
 njegov tip. 
 
-Malo več dela je bilo s preverjanjem tipa v \lstinline{case} izrazu. Najprej izračunamo tip izraza, ki ga primerjamo z vejami. Ker je \lstinline{case} smiselen le za novo definirane tipe, ker ne bi ničesar 
+Malo več dela je bilo s preverjanjem tipa v izrazu \lstinline{case}. Najprej izračunamo tip izraza, ki ga primerjamo z vejami. Ker je \lstinline{case} smiselen le za novo definirane tipe, ker ne bi ničesar 
 pridobili, če bi vstavili na primer celo število, v nasprotnem primeru sprožimo napako. Sedaj poznamo vhodni tip. Nato poiščemo konstruktorje tega tipa, da jih bomo lahko primerjali z vzorci v vejah.
 To storimo rekurzivno, na zelo podoben način, kot smo to storili v funkciji \lstinline{type_of_constr}. Preostane nam le še izračunati tip, ki ga bomo vrnili. Pri tem nam pomaga pomožna funkcija 
 \lstinline{cases_type}:
@@ -977,11 +974,11 @@ match cases with
           rest_of_cases cases'
     in rest_of_cases cases'
 \end{lstlisting}
-Seveda ne želimo praznega \lstinline{case} izraza, zato v takem primeru sprožimo napako. Nato izračunamo tipe spremenljivk, ki predstavljajo argumente za konstruktor v dani veji. To storimo z uporabo
+Seveda ne želimo praznega izraza \lstinline{case}, zato v takem primeru sprožimo napako. Nato izračunamo tipe spremenljivk, ki predstavljajo argumente za konstruktor v dani veji. To storimo z uporabo
 funkcije \lstinline{find_u}, ki poišče konstruktor v seznamu konstruktorjev in vrne tipe njegovih argumentov. Nato to dodamo v kontekst, da jih lahko uporabimo pri izračunu tipa posledice. Opazimo, 
 da, ko dodajamo spremenljivke in njihove tipe v kontekst, posredno preverimo, da je število spremenljivk enako številu potrebnih argumentov, torej pravilno. Ko tega izračunamo in ga 
 poimenujemo \lstinline{t1}, se lotimo preostalih vej. Te pregledamo rekurzivno, z enakim postopkom kot pri prvi veji, vendar zdaj namesto da shranimo tip posledice, ga primerjamo s \lstinline{t1} in če 
-se ne ujemata, sprožimo napako. To storimo, ker želimo, da \lstinline{case} izraz vrne rezultat enakega tipa, neodvisno od izbrane veje.
+se ne ujemata, sprožimo napako. To storimo, ker želimo, da izraz \lstinline{case} vrne rezultat enakega tipa, neodvisno od izbrane veje.
 
 \section{Tolmač}
 Čas je za izračunanje vrednosti izrazov v programu. Tega se lahko brez težav lotimo, ker nam preverjevalnik tipov zagotavlja, da so ti pravilni. V MiniHaskellu izraze računamo znotraj datoteke 
@@ -1022,7 +1019,7 @@ let rec print_result n v =
 
 Za \lstinline{case} je bilo potrebno dopolniti funkcijo \lstinline{interp}, da zna poiskati pravo vejo in vrniti njeno posledico. Kot je tudi navada v splošnem, sem omogočil tudi vzorec oblike \lstinline{_}, ki 
 pomeni `vsi preostali primeri'. Ker vemo, da preverjevalnik tipov zagotavlja pravilno število spremenljivk za konstruktorji v vejah, lahko le enostavno primerjamo ime podanega 
-konstruktorja z vsemi v \lstinline{case} izrazu. Če najdemo pravega, dodamo njegove argumente v okolje in izračunamo posledico. V nasprotnem primeru sprožimo napako. 
+konstruktorja z vsemi v izrazu \lstinline{case}. Če najdemo pravega, dodamo njegove argumente v okolje in izračunamo posledico. V nasprotnem primeru sprožimo napako. 
 \begin{lstlisting}
 let rec extend_env env xs vs =
     match xs, vs with
@@ -1120,13 +1117,13 @@ let plusEna = fun x : Int => x + 1
 Sedaj imamo vse potrebno. Poglejmo, kako deluje naš primer.
 \begin{lstlisting}
 MiniHaskell> head enke
-- : int = 1
+- : Int = 1
 
 MiniHaskell> tail enke
 - : Seznam = Cons ((1) (Cons (1) (Empty)))
 
 MiniHaskell> length enke
-- : int = 3
+- : Int = 3
 
 MiniHaskell> append (Cons 2 Empty) enke
 - : Seznam = Cons (2) (Cons (1) 
@@ -1223,7 +1220,7 @@ MiniHaskell> prvi par
 MiniHaskell> drugi par
 - : Stevilo = Naslednik (Nic)
 \end{lstlisting}
-Tako lahko nadomestimo tudi urejene pare. Funkcij pa ne moremo, ker jih potrebujemo za delo s tipi. Vanje vstavljamo \lstinline{case} izraze. 
+Tako lahko nadomestimo tudi urejene pare. Funkcij pa ne moremo, ker jih potrebujemo za delo s tipi. Vanje vstavljamo izraze \lstinline{case}. 
 
 Zelo pogosto upoabljen primer rekurzivnih tipov so drevesa. Definirajmo tip \lstinline{Drevo}, ki bo predstavljalo binarno drevo in funkcijo, ki bo preštela število elementov v drevesu:
 \begin{lstlisting}	
@@ -1316,7 +1313,7 @@ let naravna = rec naravna : (Int -> Int) -> Int -> Unit -> Par is
 
 MiniHaskell> prvi ((fold (drugi ((fold (drugi 
     ((naravna naslednik 0) T))) T))) T)
-- : int = 2
+- : Int = 2
 \end{lstlisting}
 
 Ker lahko na tokove gledamo tudi kot na neskončne sezname, jih lahko tudi definiramo podobno kot smo sezname zgoraj. Seveda tudi tukaj 
@@ -1402,9 +1399,40 @@ let proces = rec proces : (Int -> Int -> Int) -> Int
   
 MiniHaskell> prvi ((fold (drugi (proces sestej 1 2
     ))) 3)
-- : int = 6
+- : Int = 6
 \end{lstlisting}
 Dobili smo šest, kar je vsota enke, dvojice in trojke.
+
+
+
+Področje rekurzivnih tipov sega še veliko globje, kot prikazujejo zgornji primeri in nam tako daje veliko možnosti za nadgradnjo implementacije. 
+Opazna možnost je implementacija polimorfizmov. Tipi so sedaj lahko le monomorfni, torej ne moremo definirati seznama, ki bi lahko hkrati 
+vseboval elemente različnih tipov. Prav tako ne moremo uporabljati izomorfizmov tipov znotraj izrazov \lstinline{case}, recimo, ne moremo definirati izraza
+\begin{lstlisting}
+case e of
+    Empty -> ...
+  | Cons x l -> ...
+  | Cons x (Cons y l) -> ...
+end
+\end{lstlisting}
+Zgornji izraz lahko v resnici zapišemo kot gnezdeni \lstinline{case}
+\begin{lstlisting}
+case e of
+    Empty -> ...
+  | Cons x l ->
+      case l of
+          Empty -> ...
+        | Cons y l -> ...
+    end
+end
+\end{lstlisting}
+Zanimivo bi bilo uporabljati prvi izraz, vsekakor pa bi bila koda tako lepša in bolj pregledna.
+Še ena zanimiva razširitev bi bila omogočanje medsebojno rekurzivnih tipov, na primer 
+\begin{lstlisting}
+data A = B
+data B = A
+\end{lstlisting}
+Takšne definicije so zelo zanimive in lahko zelo uporabne, vendar implementacija, ki to omogoča, zahteva veliko dela. 
 
 \newpage
 
@@ -1421,7 +1449,3 @@ Dobili smo šest, kar je vsota enke, dvojice in trojke.
 
 
 \end{document}
-
-
-
-
