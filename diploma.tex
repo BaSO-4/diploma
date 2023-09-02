@@ -314,21 +314,6 @@ Ključne besede v angleškem jeziku.
 
 %********************************************
 
-todo: 
-- popravi širino kodnih blokov 
-
-- ali naj dodam poglavje sintaksa jezika, kako se definirajo funkcije in to? 
-
-- prevedi equi in iso recursive
-
-- prevedi sum types
-
-- prevod enumerations in single field variants
-
-- bloke kode sem zaključeval z ločili, je to kul?
-
-- prevedi interpreter
-
 
 
 
@@ -428,7 +413,7 @@ val zeloLacna : Lacna
 V resnici je \lstinline{zeloLacna} sestavljena iz več lačnih funkcij, ki se poračunajo sproti z vsakim argumentom. Lahko bi jo zapisali tudi kot:
 \begin{lstlisting}
 let zeloLacna = (((((((((f 1) 2) 3) 4) 5) 6) 7) 8) 9) 10
-zeloLacna : Lacna
+val zeloLacna : Lacna
 \end{lstlisting}
 Tako se \lstinline{1} uporabi kot argument na funkciji \lstinline{f}, \lstinline{2} na funkciji, ki jo vrne \lstinline{f}, ko sprejme \lstinline{1} in tako naprej.
 
@@ -495,8 +480,8 @@ Izorekurziven način pa ubere na prvi pogled nekoliko bolj zapleteno pot. Defini
 \end{align*}
 Preslikavi sta inverzni, torej sta izomorfizma.
 \begin{align*}
-  \mathtt{fold\(unfold\(x\)\) = x}\\
-  \mathtt{unfold\(fold\(y\)\) = y}
+  \mathtt{fold(unfold(x)) = x}\\
+  \mathtt{unfold(fold(y)) = y}
 \end{align*}
 Na primeru seznamov:
 \begin{align*}
@@ -540,26 +525,31 @@ Ker v izrazu \lstinline{case} preverjamo tip argumenta na način, da samo prever
 se lahko zgodi, da je izrazu možno dodeliti več kot en tip. To se zgodi, če ima več vsot enak seštevanec. Za primer vzemimo vsoti
 \begin{lstlisting}
 data A = Foo Int | Bar Bool
-data B = Foo Int | Baz Unit
+data B = Foo Int | Baz Int
 \end{lstlisting}
 Obe imata varianto, označeno s \lstinline{Foo}, torej kateremu tipu pripada izraz \lstinline{Foo 42}? V praksi se ta problem rešuje na različne načine, jaz pa sem v svoji implementaciji določil, da se vrednosti 
 dodeli tip, ki ga preverjevalnik tipov najprej najde, torej tistega, ki je bil definiran nazadnje. V tem primeru je to tip \lstinline{B}.
-\begin{lstinline}
-Foo 42
-- :  B = 42
-\end{lstinline}
-
-Morda zanimiva skupina vsot so tiste, ki lahko vsebujejo tudi trivialne vrednosti \lstinline{Unit}, ki je
 \begin{lstlisting}
-data Opcijsko = Nic | V Vrednost
+Foo 42
+- : B = 42
 \end{lstlisting}
-Ti tipi so izomorfni s tistimi, ki dajejo \lstinline{Vrednost} in razširjeni z možnostjo trivialne vrednosti. To so na primer tipi, ki jih poznamo iz priljubljenih programskih jezikov in dopuščajo 
+
+Morda zanimiva skupina vsot so tiste, ki lahko vsebujejo tudi trivialne vrednosti \lstinline{Unit}, ki je tip z enim elementom:
+\begin{lstlisting}
+data Unit = U
+\end{lstlisting}
+Ker ima tip \lstinline{Unit} lahko le en element \lstinline{T}, sta zapisa \lstinline{Nic Unit} in \lstinline{Nic} izomorfna. Oba imata le eno možno vrednost. Vsote, ksterih elementi lahko zavzamejo tudi trivialno vrednost, izgledajo kot:
+\begin{lstlisting}
+data Opcijsko = Nic | Vrednost T
+\end{lstlisting}
+Ti tipi so izomorfni s tistimi, katerih elementi imajo tip \lstinline{T} in razširjeni z možnostjo trivialne vrednosti. To so na primer tipi, ki jih poznamo iz priljubljenih programskih jezikov in dopuščajo 
 vrednosti kot so \lstinline{null}, \lstinline{None} ali \lstinline{nil}.
 
 Še dve posebni vrsti vsot sta dovolj zanimivi za posebno obravnavo.
 
 \section{Oštevilčenja}
-Oštevilčenja so vsote, ki vsebujejo zgolj trivialne vrendosti in so namenjene predstavljanju tipov, ki sestojijo iz končno mnogo konstant. Na primer, če želimo predstaviti del dneva, definiramo vsoto
+Poleg tipa \lstinline{Unit}, ki sestoji iz ene konstante, imamo tudi vsote, sestavljene iz več njih. To so vsote, ki vsebujejo zgolj trivialne vrendosti in so namenjene predstavljanju tipov, ki sestojijo iz končno mnogo konstant. 
+Na primer, če želimo predstaviti dele dneva, definiramo vsoto
 \begin{lstlisting}
 data DelDneva = Jutro | Dopoldan | Popoldan | Vecer | Noc
 \end{lstlisting}
@@ -567,68 +557,69 @@ Lahko sestavimo tudi funkcije, ki obravnavajo take vrednosti. Na primer
 \begin{lstlisting}
 let primerenZaZajtrkovanje = fun d:DelDneva =>
     case d of 
-         Jutro  	-> true
+         Jutro -> true
        | Dopoldan -> true
-       | _       -> false
+       | _ -> false
     end
 \end{lstlisting}
 je funkcija, ki sprejme eno izmed delov dneva in vrne odgovor na vprašanje, če takrat običajno zajtrkujemp. Tip te funkcije je \lstinline{DelDneva} $\rightarrow$ \lstinline{Bool}.
 
 \section{Vsote z eno varianto}
-Možno je ustvariti tudi vsote s samo eno varianto, torej bodo vsi njeni elementi istega tipa:
+Možno je ustvariti tudi vsote s samo eno varianto, ki vsebuje vrednosti danega tipa \lstinline{T}:
 \begin{lstlisting}
 data V = C T
 \end{lstlisting}
-torej tipa \lstinline{V}. To je lahko zelo uporabno, ker tako elementov tipa \lstinline{T} ni možno zamešati za elemente tipa \lstinline{V} in posledično na njih ne moremo izvajati operacij, ki jih lahko na tipu 
+To je lahko zelo uporabno, ker tako elementov tipa \lstinline{T} ni možno zamešati za elemente tipa \lstinline{V} in posledično na njih ne moremo izvajati operacij, ki jih lahko na tipu 
 \lstinline{V}. Tako se lahko izognemo nesmiselnim primerom. Recimo, da uporabljamo podatke o valutah. Količino denarja v posamezni valuti lahko predstavimo s tipom \lstinline{Float}, kot decimalno 
 število. Težava nastane, ko definiramo funkcijo, ki pretvarja med valutami:
 \begin{lstlisting}
-let dolarjiVEvre = fun d:Float =>
-  zmnozi x 0.92
-dolarjiVEvre : Float -> Float
+let dolarjiVEvre = fun d:Float => x * 0.92
+val dolarjiVEvre : Float -> Float
 \end{lstlisting}
-kjer \lstinline{zmnozi} predstavlja funkcijo, ki pomnoži dve decimialni števili. Če je \lstinline{d}, ki ga podamo funkciji \lstinline{dolarjiVEvre} količina denarja v dolarjih, je vse v redu. Vendar pa nam nič ne 
+Če je \lstinline{d}, ki ga podamo funkciji \lstinline{dolarjiVEvre} količina denarja v dolarjih, je vse v redu. Vendar pa nam nič ne 
 preprečuje, da bi kot argument v \lstinline{dolarjiVEvre} podali katerokoli drugo število, na primer količino denarja v frankih, ali še huje, število število komarjev v nekem prostoru. Taka uporaba te 
-funkcije je nesmiselna in se ji v večini primerov želimo izogniti. Tako lahko, definiramo vsote z eno varianto:
+funkcije je nesmiselna in se ji želimo izogniti, katr storimo tako, da definiramo vsote z eno varianto:
 \begin{lstlisting}
-data DenarVDolarjih = Dolarji Float
-data DenarVEvrih = Evri Float
+data Evri = Evri Float
+data Dolarji = Dolarji Float
 \end{lstlisting}
-in morda še vse ostale, ki jih potrebujemo, ter funkcijo \lstinline{dolarjiVEvre} spremenimo tako, da deluje s pravilnimi tipi, torej pretvorbo omogočimo 
+Pozorni moramo biti na različne pomene pojavitev besed z veliko začetnico. V zgornji definiciji prva pojavitev besede \lstinline{Evri} predstavlja ime tipa, druga pa konstruktor, ki sprejme en argument in 
+vrne vrednost tipa \lstinline{Evri}.
+Funkcijo \lstinline{dolarjiVEvre} spremenimo tako, da deluje s pravilnimi tipi, torej pretvorbo omogočimo 
 samo iz dolarjev v evre in nič drugega:
 \begin{lstlisting}
-let dolarjiVEvre = fun d:DenarVDolarjih =>
+let dolarjiVEvre = fun d:Dolarji =>
     case d of 
-        Dolarji x -> Evri (zmnozi x 0.92)
+        Dolarji x -> Evri (x * 0.92)
     end
-val dolarjiVEvre : DenarVDolarjih -> DenarVEvrih
+val dolarjiVEvre : Dolarji -> Evri
 \end{lstlisting}
 Tako se zavarujemo pred napakami.
 \newpage
 
 \chapter{Implementacija}
 Predstavljene konstrukte sem tudi sam implementiral. To sem storil v programskem jeziku MiniHaskell, ki ga je ustvaril prof. dr. Andrej Bauer in 
-je dostopen na njegovem Github profilu, v repozitoriju \emph{plzoo}. 
+je dostopen v repozitoriju~\cite{bauer:plzoo}.
 
 MiniHaskell je programski jezik, ki je namenjen predstavitvi osnovnih konceptov funkcijskega programiranja. Napisan je v programskem jeziku 
-OCaml in po strukturi in načinu uporabe sledi jeziku Haskell. Omogoča uporabo celih števil (\textit{integers}), booleanov z logičnimi operacijami in primerjavami 
-celih števil $(`=$'$, `<$'$)$, urejenih parov, seznamov, funkcij in rekurzije. Temu sem dodal možnost definiranja novih tipov, rekurzivnih ali ne, in 
-uporabe \lstinline{case} izrazov za delo z njimi. Programski jezik sestavljajo leksična analiza, razčlenjevanje, interpreter in preverjevalnik tipov. V nadaljevanju bom predstavil kako 
+OCaml in po strukturi in načinu uporabe sledi jeziku Haskell. Omogoča uporabo celih števil, boolovih vrednosti z logičnimi operacijami in primerjavami 
+celih števil, urejenih parov, seznamov, funkcij in rekurzije. Temu sem dodal možnost definiranja novih tipov, rekurzivnih ali ne, in 
+uporabe \lstinline{case} izrazov za delo z njimi. Programski jezik sestavljajo leksična analiza, razčlenjevalnik, tolmač in preverjevalnik tipov. V nadaljevanju bom predstavil kako 
 delujejo v MiniHaskellu, ter kako sem jih dopolnil.
 
 \section{Leksična analiza}
-Prvi korak, ki ga je potrebno narediti, ko dobimo program ali ukaz in ga želimo izvesti, je leksična analiza. To je postopek, kjer vhodni niz znakov očistimo znakov, ki ne nosijo pomembnih informacij, kot 
-na primer presledki, in jih razdelimo na gradnike. To so vse ključne besede, ki jih jezik pozna, števila, znaki, \emph{eof} in podobno. To stori leksični analizator ali lekser. 
-Ta je v našem primeru napisan v datoteki \emph{lexer.mll}. Je datoteka, kjer so shranjeni regularni izrazi, ki opisujejo gradnike, ki jih lahko uporabljamo v programskem jeziku. 
-Kot je to storjeno v Haskellu, sem določil, da bom imena spremenljvk dovolil le z majhno začetnico, imena konstruktorjev tipov pa le z veliko. Tako sem si olajšal delo v parserju. 
+Prvi korak, ki ga je potrebno narediti, ko dobimo izvorno kodo in jo želimo izvesti, je leksična analiza. To je postopek, kjer vhodni niz znakov očistimo znakov, ki ne nosijo pomembnih informacij, kot 
+na primer presledki, in jih razdelimo na gradnike. To so vse ključne besede, ki jih jezik pozna, števila, znaki in podobno. To stori leksični analizator ali lekser. 
+Ta je v našem primeru napisan v datoteki \lstinline{lexer.mll}. Je datoteka, kjer so shranjeni regularni izrazi, ki opisujejo gradnike, ki jih lahko uporabljamo v programskem jeziku. 
+Kot je to storjeno v Haskellu, sem določil, da bom imena spremenljvk dovolil le z majhno začetnico, imena konstruktorjev tipov pa le z veliko. Tako sem si olajšal delo v razčlenjevalniku. 
 Gradnik, ki bo predstavljal imena konstruktorjev in imena tipov sem poimenoval \lstinline{cname}, kot okrajšavo za \textit{capital name} ali ime z veliko začetnico. Poleg načina poimenovanja 
-konstruktov je v lekserju definiranih še veliko drugih gradnikov, kot so olkepaji, znaki za operacije, ključne besede, ukaz \lstinline{:quit} za izhod iz \emph{minihaskell.exe} 
+konstruktov je v lekserju definiranih še veliko drugih gradnikov, kot so olkepaji, znaki za operacije, ključne besede, ukaz \lstinline{:quit} za izhod iz programa 
 in podobno. Za definicijo podatkovnih tipov sem dodal ključno besedo \lstinline{data}, z idejo, da bo imela enako vlogo kot tista v Haskellu. Tako imamo vse potrebno za 
 definicijo novih podatkovnih tipov, ker smo definirali besedo \lstinline{data}, imamo \lstinline{cname} za definicijo konstruktorjev in že od prej možnost definiranja spremenljivk.
 Za delo s podatkovnimi tipi, torej izraz \lstinline{case}, je bilo potrebno dodati še gradnike za ključne besede \lstinline{case}, \lstinline{of} in \lstinline{end}.\footnote{Gradnik \lstinline{ALTERNATIVE} 
 za znak $\mid$ je že bil definiran, ker je MiniHaskell že imel sezname in funkcijo \lstinline{match} za delo z njimi.}\footnote{Gradnik \emph{TARROW} za znak \emph{$\rightarrow$}, ki bo v veji \emph{case} 
 izraza ločil med izrazom, ki ga primerjamo in posledico, ki se sproži v primeru ujemanja, je prav tako že bil definiran.} V Haskellu sicer gradnika za \lstinline{end} ne poznamo, vendar ker za 
-razliko od Haskella MiniHaskell ni občutljiv na zamik vrstic v kodi, in ker nisem želel z implementacijo še tega zaiti s smeri moje diplomske naloge, sem za lažje delo v parserju 
+razliko od Haskella MiniHaskell ni občutljiv na zamik vrstic v kodi, in ker nisem želel z implementacijo še tega zaiti s smeri moje diplomske naloge, sem za lažje delo v razčlenjevalnikju 
 dodal tudi ta gradnik. Da bi razumeli zakaj je potreben, si poglejmo naslednji primer: recimo, da imamo \lstinline{case} izraz, ki v eni od svojih vej vsebuje še en, gnezden \lstinline{case} 
 izraz:
 \begin{lstlisting}
@@ -639,30 +630,26 @@ case x of
             d -> _
     e -> _
 \end{lstlisting}
-Če bi bil MiniHaskell občutljiv na zamik vrstic, bi bil zgornji izraz samoumeven. Ker pa v MiniHaskellu v resnici izgleda takole:
-\begin{lstlisting}
-case x of a -> _ | b -> case y of c -> _ | d -> _ | e -> _,
-\end{lstlisting}
-ga lahko razumemo na dva načina:
+Če bi bil MiniHaskell občutljiv na zamik vrstic, bi lahko zgornji izraz razčlenili enolično. Če pa zamikov ne upoštevamo, ga je možno razčleniti na dva načina:
 \begin{lstlisting}
 case x of 
     a -> _
-    b -> case y of
+    b -> (case y of
             c -> _
-            d -> _
+            d -> _)
     e -> _,
 \end{lstlisting}
 ali pa:
 \begin{lstlisting}
 case x of 
     a -> _
-    b -> case y of
-            c -> _
+    b -> (case y of
+            c -> _)
     d -> _
     e -> _.
 \end{lstlisting}
 Ker imajo različni programerji različna mnenja o tem, kateri od obeh je bolj smiselen in sem se želel izogniti kakeršnikoli dvoumnosti, sem dodal 
-\lstinline{end} gradnik, ki nam omogoča, da enostavno določimo, kdaj se \lstinline{case} izraz konča:
+gradnik \lstinline{end}, ki nam omogoča, da enostavno določimo, kdaj se izraz \lstinline{case} konča:
 \begin{lstlisting}
 case x of 
     a -> _
@@ -681,17 +668,17 @@ Tako bi zgornji primer izgledal takole:
 case x of 
   a -> _
   | b -> case y of
-      c -> _
-      | d -> _
-      end
+            c -> _
+          | d -> _
+         end
   | e -> _
 end
 \end{lstlisting}
 
 \section{Razčlenjevanje}
-Razčlenjevalnik ali parser je naslednji korak v procesu prevajanja progamov. Kot je to početo v praksi, tudi v MiniHaskellu ni parser napisan na roke, temveč 
-je uporabljen program parser generator, kateremu moramo podati le slovnična pravila. Ker se tukaj uporabi Menhirjev OCaml parser generator, končnica 
-datoteke ni .ml, ampak .mly. Lekser posreduje tok gradnikov, ki jih je prepoznal, naloga parserja pa je prepoznati slovnično pravilne stavke in zgraditi 
+Razčlenjevalnik ali parser je naslednji korak v procesu prevajanja progamov. Kot je to početo v praksi, tudi v MiniHaskellu ni razčlenjevalnik napisan na roke, temveč 
+je uporabljen generator razčlenjevalnikov. To je program, ki iz podanih slovničnih pravil sestavi kodo za pripadajoči razčlenjevalnik. Ker se tukaj uporabi Menhirjev OCaml parser generator, končnica 
+datoteke ni .ml, ampak .mly. Lekser posreduje tok gradnikov, ki jih je prepoznal, naloga razčlenjevalnikja pa je prepoznati slovnično pravilne stavke in zgraditi 
 abstraktna sintaktična drevesa. To stori s pomočjo slovničnih pravil, ki povejo, v kakšnem zaporedju pričakujemo gradnike in kje se ti smejo pojaviti. 
 V svoji implementaciji sem dodal dve gramatični pravili: eno za definicijo novih tipov in eno za \lstinline{case} izraz. Pravilo za definicijo novih tipov je 
 sledeče:
@@ -834,27 +821,27 @@ ki jih seveda lahko prav tako zapišemo kot abstraktno sintaktično drevo:
       \end{tikzpicture}
 \end{center}
 
-\section{Definicija in manipulacija abstraktne sintakse}
+\section{Abstraktna sintaksa}
 Ko imamo zgrajena drevesa iz gradnikov, je potrebno ugotoviti, kaj pomenijo in čemu so namenjeni, preden lahko program začnemo izvajati. Tu pride na vrsto abstraktna sintaksa. 
-V datoteki \emph{syntax.ml} so najprej definirani podatkovni tipi, ki jih parser pripiše drevesom in njihovim vozliščem, ko prepozna slovnična pravila. Eden izmed njih je na primer 
+V datoteki \lstinline{syntax.ml} so najprej definirani podatkovni tipi, v katere razčlenjevalnik predela izvorno kodo. Eden izmed njih je na primer 
 \lstinline{htype}, krajše za \textit{haskell type}, ki hrani vrednosti tipov, ki jih MiniHaskell pozna na začetku, torej \lstinline{TInt}, \lstinline{TBool}, \lstinline{TTimes}, \lstinline{Tarrow}, \lstinline{TList} in 
 \lstinline{TData}. Črke \lstinline{T} na začetku poimenovanj služijo kot oznaka, da gre za tip. Morda nesamoumeven tip je \lstinline{TArrow}, ki predstavlja funkcije. Hrani dva tipa, tip argumenta
 in tip vrnjene vrednosti. Spomnimo se, da v Haskellu ne obstajajo funkcije večih argumentov, temveč funkcije lahko vrnejo tudi nove funkcije, ki sprejmejo nove argumente in tako 
 simulirajo sprejem večih argumetnov. Na primer: funkcija, ki sešteje dve celi števili, tipa \lstinline{Int} $\rightarrow$ \lstinline{Int} $\rightarrow$ \lstinline{Int}, je v resnici funkcija, ki sprejme prvi argument tipa \lstinline{Int}
 in vrne novo funkcijo, ki sprejme drugi argument in vrne rezultat:
 \begin{lstlisting}
-seštej :: Int -> Int -> Int
-seštej x y = x + y
+sestej :: Int -> Int -> Int
+sestej x y = x + y
 \end{lstlisting}
 v resnici izgleda kot:
 \begin{lstlisting}
-seštej :: Int -> (Int -> Int)
-seštej x = (\y -> x + y).
+sestej :: Int -> (Int -> Int)
+sestej = \x -> \y -> x + y
 \end{lstlisting}
 Med tipe, ki jih pozna MiniHaskell sem moral dodati tip \lstinline{TData}, ki je namenjen shranjevanju imen konstruktorjev in imen tipov. Sam ima tip \lstinline{string}, ampak kot omenjeno, 
 se vanj shranjejo le besede z veliko začetnico. 
 
-Morda bolj zanimiv je tip \lstinline{toplevel\_cmd} ali \textit{toplevel command}, ki kot omenjeno zgoraj, lahko zavzame eno izmed štirih vrendnosti: \lstinline{Expr}, ki shranjuje izraze, 
+Morda bolj zanimiv je tip \lstinline{toplevel_cmd} ali \textit{toplevel command}, ki kot omenjeno zgoraj, lahko zavzame eno izmed štirih vrendnosti: \lstinline{Expr}, ki shranjuje izraze, 
 \lstinline{Def}, ki shrnajuje definicije spremenljivk, \lstinline{DataDef}, ki shranjuje definicije novih tipov in \lstinline{Quit}, ki označuje ukaz za izhod iz \lstinline{toplevel}, torej 
 \emph{minihaskell.exe}. Odločil sem se, da bo \lstinline{DataDef} shranjeval definicije novih tipov kot urejen par imena tipa in seznama konstruktorjev in njihovih argumentov:
 \begin{lstlisting}
@@ -868,7 +855,7 @@ type datadef = (cname * htype list) list
 \end{lstlisting}
 Kot vidimo, so argumenti konstruktorjev tipa \lstinline{htype}. To pomeni, da lahko konstruktorjem podamo tudi argumente, ki so novih tipov. To nam omogoča definicijo rekurzivnih tipov:
 \begin{lstlisting}
-data Seznam = Empty | Cons Int Seznam.
+data Seznam = Empty | Cons Int Seznam
 \end{lstlisting}
 
 Izraz \lstinline{case} ima bolj zapleteno strukturo. Odločil sem se, da ga bom najprej razbil na dva dela: vhodni izraz in seznam vej. V abstraktnem sintaktičnem drevesu prikazanem zgoraj, 
@@ -891,7 +878,7 @@ data Oseba = Odrasel Int Bool Int | Otrok Int
 let starost = fun o : Oseba => 
 case o of 
     Odrasel x z y -> x 
-  | Otrok x       -> x
+  | Otrok x -> x
 end
 \end{lstlisting}
 
@@ -899,8 +886,8 @@ Definiral sem tudi funkcijo za izpis izraza \lstinline{case}, vendar je zaradi n
 
 \section{Pravilnost tipov}
  Da se program lahko izvede, se morajo vsi tipi spremenljivk, funkcij in izrazov ujemati. Preveriti, da je temu tako, je naloga preverjevalnika tipov. V MiniHaskellu je zapisan v datoteki 
- \emph{type\_check.ml}. Peverjevalnik tipov programskega jezika MiniHaskell je zelo preprost. Poleg pomožnih funkcij vsebuje kontekst, kjer hrani tipe spremenljivk, funkcijo \lstinline{check}, 
- ki preveri, če je tip danega izraza pravilen in funkcijo \lstinline{type\_of}, ki kakšnega tipa je dani izraz.
+ \lstinline{type_check.ml}. Peverjevalnik tipov programskega jezika MiniHaskell je zelo preprost. Poleg pomožnih funkcij vsebuje kontekst, kjer hrani tipe spremenljivk, funkcijo \lstinline{check}, 
+ ki preveri, če je tip danega izraza pravilen in funkcijo \lstinline{type_of}, ki kakšnega tipa je dani izraz.
  
  Da lahko preverjevalnik tipov deluje, mora poznati tipe obstoječih spremenljivk. To hrani kot seznam urejenih parov imen spremenljivk in njihovih tipov. Da pa lahko poznamo tipe spremenljivk, 
  ki so rezultat novih konstruktorjev, moramo poznati tudi njihove tipe.
@@ -910,11 +897,11 @@ data Oseba = Odrasel Int Bool Int | Otrok Int
 let student = Odrasel 20 false 0
 val student : Oseba
 \end{lstlisting}
-Da lahko razberemo tip spremenljivke \lstinline{student}, moramo vedeti, da je tip, ki ga prinese konstruktor \lstinline{Odrasel}, tip \lstinline{Oseba}. Te informacije shranimo kot seznam urejenih parov imen 
+Da lahko razberemo tip spremenljivke \lstinline{student}, moramo vedeti, da konstruktor \lstinline{Odrasel} pripada tipu \lstinline{Oseba} in da sprejme tri argumente tipov \lstinline{Int}, \lstinline{Bool} in \lstinline{Int}. Te informacije shranimo kot seznam urejenih parov imen 
 tipov in njihovih konstruktorjev. Tako dobimo kontekst:
 \begin{lstlisting}
 type context = {vars: (string * Syntax.htype) list; 
-    datadefs: (Syntax.cname * Syntax.datadef) list}
+     datadefs: (Syntax.cname * Syntax.datadef) list}
 \end{lstlisting}
 definiramo tudi začeten, prazen kontekst, ki ga potrebujemo na začetku izvajanja, ko še ne poznamo nobenih spremenljivk in pomožni funkciji za dodajanje novih spremenljivk in tipov:
 \begin{lstlisting}
@@ -927,11 +914,11 @@ let extend_datadef x constrs ctx =
     {ctx with datadefs = (x, constrs)::ctx.datadefs}.
 \end{lstlisting}
 
-Funkcija \lstinline{check} deluje zelo preprosto, primerja izračunan tip danega izraza s tistim, ki ga pričakuje in sproži napako, če se ne ujemata. Funkcija \lstinline{type\_of} pa s pomočjo informacij 
+Funkcija \lstinline{check} deluje zelo preprosto, primerja izračunan tip danega izraza s tistim, ki ga pričakuje in sproži napako, če se ne ujemata. Funkcija \lstinline{type_of} pa s pomočjo informacij 
 v kontekstu preoblikuje podan izraz v izrazno drevo in rekurzivno izračuna tipe podizrazov. Hkrati preverja pravilnost tipov s pomočjo funkcije \lstinline{check}. Na primer, v operaciji seštevanja 
 dovolimo le dve celi števili, torej izračunamo tipa obeh podizrazov in če nista celi števili, sprožimo napako.
 
-Poglejmo, kako sem dopolnil \lstinline{type\_of}, da pravilno preverja tipe novih konstruktorjev in \lstinline{case} izrazov:
+Poglejmo, kako sem dopolnil \lstinline{type_of}, da pravilno preverja tipe novih konstruktorjev in \lstinline{case} izrazov:
 \begin{lstlisting}
 and type_of (ctx:context) = function
   ...
@@ -946,8 +933,8 @@ and type_of (ctx:context) = function
       | _ -> type_error "%s cannot occur 
         in a case expression" (Syntax.string_of_type t))
 \end{lstlisting}
-Osredotočimo se najprej na definicije novih tipov, torej \lstinline{Syntax.Constr} vejo. Tu enostavno kličemo funkcijo \lstinline{type\_of\_constr}, s konstruktorjem, katerega tip nas zanima in delom 
-konteksta, kjer je ta shranjen. Funkcija \lstinline{type\_of\_constr} izgleda takole:
+Osredotočimo se najprej na definicije novih tipov, torej \lstinline{Syntax.Constr} vejo. Tu enostavno kličemo funkcijo \lstinline{type_of_constr}, s konstruktorjem, katerega tip nas zanima in delom 
+konteksta, kjer je ta shranjen. Funkcija \lstinline{type_of_constr} izgleda takole:
 \begin{lstlisting}
 let rec type_of_constr c = function
   | [] -> type_error "unknown constructor %s" c
@@ -966,8 +953,8 @@ njegov tip.
 
 Malo več dela je bilo s preverjanjem tipa v \lstinline{case} izrazu. Najprej izračunamo tip izraza, ki ga primerjamo z vejami. Ker je \lstinline{case} smiselen le za novo definirane tipe, ker ne bi ničesar 
 pridobili, če bi vstavili na primer celo število, v nasprotnem primeru sprožimo napako. Sedaj poznamo vhodni tip. Nato poiščemo konstruktorje tega tipa, da jih bomo lahko primerjali z vzorci v vejah.
-To storimo rekurzivno, na zelo podoben način, kot smo to storili v funkciji \lstinline{type\_of\_constr}. Preostane nam le še izračunati tip, ki ga bomo vrnili. Pri tem nam pomaga pomožna funkcija 
-\lstinline{cases\_type}:
+To storimo rekurzivno, na zelo podoben način, kot smo to storili v funkciji \lstinline{type_of_constr}. Preostane nam le še izračunati tip, ki ga bomo vrnili. Pri tem nam pomaga pomožna funkcija 
+\lstinline{cases_type}:
 \begin{lstlisting}
 and cases_type u_def cases ctx =
 match cases with
@@ -991,14 +978,14 @@ match cases with
     in rest_of_cases cases'
 \end{lstlisting}
 Seveda ne želimo praznega \lstinline{case} izraza, zato v takem primeru sprožimo napako. Nato izračunamo tipe spremenljivk, ki predstavljajo argumente za konstruktor v dani veji. To storimo z uporabo
-funkcije \lstinline{find\_u}, ki poišče konstruktor v seznamu konstruktorjev in vrne tipe njegovih argumentov. Nato to dodamo v kontekst, da jih lahko uporabimo pri izračunu tipa posledice. Opazimo, 
+funkcije \lstinline{find_u}, ki poišče konstruktor v seznamu konstruktorjev in vrne tipe njegovih argumentov. Nato to dodamo v kontekst, da jih lahko uporabimo pri izračunu tipa posledice. Opazimo, 
 da, ko dodajamo spremenljivke in njihove tipe v kontekst, posredno preverimo, da je število spremenljivk enako številu potrebnih argumentov, torej pravilno. Ko tega izračunamo in ga 
 poimenujemo \lstinline{t1}, se lotimo preostalih vej. Te pregledamo rekurzivno, z enakim postopkom kot pri prvi veji, vendar zdaj namesto da shranimo tip posledice, ga primerjamo s \lstinline{t1} in če 
 se ne ujemata, sprožimo napako. To storimo, ker želimo, da \lstinline{case} izraz vrne rezultat enakega tipa, neodvisno od izbrane veje.
 
-\section{interpreter}
+\section{Tolmač}
 Čas je za izračunanje vrednosti izrazov v programu. Tega se lahko brez težav lotimo, ker nam preverjevalnik tipov zagotavlja, da so ti pravilni. V MiniHaskellu izraze računamo znotraj datoteke 
-\emph{interpret.ml}. Ta deluje precej preprosto, ker smo vso pripravo naredili že prej. Najprej definira okolje za spremenljivke, nato kako shranjujemo izračunane vrednosti, funkcijo 
+\lstinline{interpret.ml}. Ta deluje precej preprosto, ker smo vso pripravo naredili že prej. Najprej definira okolje za spremenljivke, nato kako shranjujemo izračunane vrednosti, funkcijo 
 \lstinline{interp}, ki računa vrednosti izrazov, in izpiše rezultat. 
 
 Okolje ali \lstinline{environment} je seznam urejenih parov imen spremenljivk in njihovih vrednosti. Uporablja ga funkcija \lstinline{interp}, ki vrednosti spremenljivk uporablja za izračun 
@@ -1033,8 +1020,8 @@ let rec print_result n v =
 ) ;
 \end{lstlisting}
 
-Za \lstinline{case} je bilo potrebno dopolniti funkcijo \lstinline{interp}, da zna poiskati pravo vejo in vrniti njeno posledico. Kot je tudi navada v splošnem, sem omogočil tudi vzorec oblike '\_', ki 
-pomeni "vsi preostali primeri". Ker vemo, da preverjevalnik tipov zagotavlja pravilno število spremenljivk za konstruktorji v vejah, lahko le enostavno primerjamo ime podanega 
+Za \lstinline{case} je bilo potrebno dopolniti funkcijo \lstinline{interp}, da zna poiskati pravo vejo in vrniti njeno posledico. Kot je tudi navada v splošnem, sem omogočil tudi vzorec oblike \lstinline{_}, ki 
+pomeni `vsi preostali primeri'. Ker vemo, da preverjevalnik tipov zagotavlja pravilno število spremenljivk za konstruktorji v vejah, lahko le enostavno primerjamo ime podanega 
 konstruktorja z vsemi v \lstinline{case} izrazu. Če najdemo pravega, dodamo njegove argumente v okolje in izračunamo posledico. V nasprotnem primeru sprožimo napako. 
 \begin{lstlisting}
 let rec extend_env env xs vs =
@@ -1059,9 +1046,9 @@ let rec extend_env env xs vs =
     )
 \end{lstlisting}
 
-\section{minihaskell.ml}
-Preostane le še glavna datoteka, ki poganja programe s uporabo vseh zgoraj opisanih datotek. Definira lekser in parser, okolje in funkcijo \lstinline{exec}, ki izvaja ukaze. Okolje je sestavljeno 
-iz konteksta preverjevalnika tipov in okolja intepretatorja. Tako pozna vrednosti in tipe vseh spremenljivk. Moral sem le dodati, kaj se zgodi, ko uporabnik definira nov tip:
+\section{Glavni program}
+Preostane le še glavna datoteka, ki poganja programe z uporabo vseh zgoraj opisanih datotek. Sklicuje se na leksični analizator in razčlenjevalnik, ter definira okolje in funkcijo \lstinline{exec}, ki izvaja ukaze. Okolje je sestavljeno 
+iz konteksta preverjevalnika tipov in okolja tolmača. Tako pozna vrednosti in tipe vseh spremenljivk. Moral sem le dodati, kaj se zgodi, ko uporabnik definira nov tip:
 \begin{lstlisting}
 let exec (ctx, env) = function
   ...
@@ -1081,12 +1068,10 @@ ponuja veliko več možnosti načina pristopa k problemu. Vendar najprej poglejm
 Spomnimo se, da ima jezik od prej že osnovne tipe celih števil, booleanov, urejenih parov, seznamov in funkcij. Najbolj očitno je, da lahko z definiranjem nekega novega tipa nadomestimo posebej 
 definiran tip seznama:
 \begin{lstlisting}
-data Element = Nil | Num Int | Boolean Bool | Pair A B
-data Seznam = Empty | Cons Element Seznam
+data Seznam = Empty | Cons Int Seznam
 \end{lstlisting}
-Definirali smo seznam kot nov podatkovni tip, ki lahko vsebuje elemente tipa \lstinline{Int}, \lstinline{Bool} ali \lstinline{Pair}\footnote{\lstinline{Pair} ni zares notacija, ki se uporablja v MiniHaskellu, 
-temveč sem jo poenostavil za uporabo v tem primeru.}. Konstruktorja Num in Boolean uporabimo, ker sta besedi \lstinline{Int} in \lstinline{Bool} že rezervirani in ju ne moremo ponovno uporabiti. Dodajmo 
-še nekaj funkcij za uporabo novih seznamov. Najbolj uporabne funkcije so \lstinline{head}, ki vrne prvi element seznama, \lstinline{tail},ki vrne vse elemente razen prvega, \lstinline{length} za računanje 
+Definirali smo seznam kot nov podatkovni tip, ki lahko vsebuje cela števila. V moji implementaciji je možno definirati le monomorfne sezname, torej take, ki vsebujejo le en tip, ki ga določimo v naprej, torej ob definiciji. 
+Pogoste funkcije ze delo s seznami so \lstinline{head}, ki vrne prvi element seznama, \lstinline{tail},ki vrne vse elemente razen prvega, \lstinline{length} za računanje 
 dolžine seznama, \lstinline{append}, ki doda element na konec seznama in \lstinline{map}, ki uporabi funkcijo na vsakem elementu seznama. 
 \begin{lstlisting}
 let head = fun s : Seznam => 
@@ -1115,46 +1100,43 @@ let append = rec append : Seznam -> Seznam -> Seznam is
 		| Cons x xs -> Cons x (append xs s2)
 	end
 
-let map = rec map : (Element -> Element) -> Seznam -> Seznam 
+let map = rec map : (Int -> Int) -> Seznam -> Seznam 
     is
-	fun f : (Element -> Element) => fun s : Seznam =>
-	 case s of
-	   Empty -> Empty
-	   | Cons x xs -> Cons (f x) (map f xs)
-	 end
+	fun f : (Int -> Int) =>
+    fun s : Seznam =>
+	    case s of
+	        Empty -> Empty
+	      | Cons x xs -> Cons (f x) (map f xs)
+	    end
 \end{lstlisting}
 Imamo funkcije za delo s seznami. Potrebujemo še seznam, na katerem jih bomo uporabili
 \begin{lstlisting}
-let enke = Cons (Num 1) (Cons (Num 1) 
-    (Cons (Num 1) Empty))
+let enke = Cons 1 (Cons 1 (Cons 1 Empty))
 \end{lstlisting}
 \lstinline{Enke} so torej seznam sestavljen iz treh enic. Dodajmo še funkcijo, ki jo bomo kot argument podali funkciji \lstinline{map}:
 \begin{lstlisting}
-let plus_ena = fun x : Element =>
-    case x of
-        Num n -> Num (n + 1) | _ -> x
-    end
+let plusEna = fun x : Int => x + 1
 \end{lstlisting}
 Sedaj imamo vse potrebno. Poglejmo, kako deluje naš primer.
 \begin{lstlisting}
 MiniHaskell> head enke
-- : Element = Num (1)
+- : int = 1
 
 MiniHaskell> tail enke
-- : Seznam = Cons (Num (1) (Cons (Num (1) (Empty))))
+- : Seznam = Cons ((1) (Cons (1) (Empty)))
 
 MiniHaskell> length enke
 - : int = 3
 
-MiniHaskell> append (Cons (Num 2) Empty) enke
-- : Seznam = Cons (Num (2) (Cons (Num (1) 
-        (Cons (Num (1) (Cons (Num (1) (Empty))))))))
+MiniHaskell> append (Cons 2 Empty) enke
+- : Seznam = Cons (2) (Cons (1) 
+        (Cons (1) (Cons (1) (Empty))))
 
 MiniHaskell> map plus_ena enke
-- : Seznam = Cons (Num (2) (Cons (Num (2) 
-        (Cons (Num (2) (Empty))))))
+- : Seznam = Cons (2) (Cons (2) 
+        (Cons (2) (Empty)))
 \end{lstlisting}
-Torej, z implementacijo novih tipov smodobili tudi možnost delanja s seznami. Torej seznamov, kot so bili definirani v MiniHaskellu, ne potrebujemo več. Vprašanje je, kaj še vse lahko nadomestimo.
+Z implementacijo novih tipov smo dobili tudi možnost delanja s seznami. Torej seznamov kot so bili definirani v MiniHaskellu, ne potrebujemo več. Vprašanje je, kaj vse še lahko nadomestimo.
 Poskusimo še ustvariti nov tip \lstinline{Boolean}, ki bo zamenjal osnovni tip \lstinline{Bool} in nekaj pripadajočih funkcij:
 \begin{lstlisting}
 data Boolean = True | False
@@ -1168,12 +1150,12 @@ let not = fun b : Boolean =>
 let xor = fun b1 : Boolean => fun b2 : Boolean =>
 case of b1 of
   True -> case b2 of
-	  True -> False
-	  | False -> True
+	   True -> False
+	 | False -> True
 	end
   | False -> case b2 of
-		True -> True
-	  | False -> False
+		 True -> True
+	 | False -> False
 	end
 end
 \end{lstlisting}
@@ -1198,32 +1180,31 @@ MiniHaskell> xor a a
 - : Boolean = False
 \end{lstlisting}
 Preostanejo nam še cela števila ali \lstinline{Int}, urejeni pari in funkcije. Slednje se samo s tipi ne dajo reproducirati, lahko pa se lotimo števil. Najbolj enostaven primer in tak, ki se izogne pisanju neštetega števila 
-konstruktorjev, so Churchova števila. Delujejo tako, da definirajo število nič in naslednika števila. Tako lahko zapišemo vsa naravna števila, kot bi to naredili v eniškem sistemu. Z negativnimi števili je več težav, 
-zato se jim ne bomo posebej posvečali. Definiramo tudi funkcijo \lstinline{plus}, ki sešteje dve Churchevi števili na način, da vemo, da je vsota nič in nekemu številu to drugo število in to uporabimo tako, da rekurzivno 
+konstruktorjev, so Peanova naravna števila. Delujejo tako, da definirajo število nič in naslednika števila. Tako lahko zapišemo vsa naravna števila, kot bi to naredili v eniškem sistemu. Z negativnimi števili je več težav, 
+zato se jim ne bomo posebej posvečali. Definiramo tudi funkcijo \lstinline{plus}, ki sešteje dve Peanovi števili na način, da vemo, da je vsota nič in nekemu številu to drugo število in to uporabimo tako, da rekurzivno 
 zmanjšujemo prvi seštevanec do nič in sproti povečujemo vsoto. Na koncu samo prištejemo drugi seštevanec.
 \begin{lstlisting}
-data Stevilo = Nic | Naslednjik Stevilo
+data Stevilo = Nic | Naslednik Stevilo
 
 let plus = rec plus : Stevilo -> Stevilo -> Stevilo is
 fun x : Stevilo => fun y : Stevilo =>
 case x of
 Nic -> y
-| Naslednjik a -> Naslednjik (plus a y)
+| Naslednik a -> Naslednik (plus a y)
 end
 
-let ena = Naslednjik Nic
+let ena = Naslednik Nic
 
-let dva = Naslednjik (Naslednjik Nic)
+let dva = Naslednik (Naslednik Nic)
 
 MiniHaskell> plus ena dva
-- : Stevilo = Naslednjik (Naslednjik (Naslednjik (Nic)))
+- : Stevilo = Naslednik (Naslednik (Naslednik (Nic)))
 \end{lstlisting}
 Opazimo, da seštevanje deluje pravilno. 
 
 Urejeni pari so tudi dokaj preprosta struktura. Potrebujemo tip in funkciji za pridobivanje prvega in drugega elementa.
 \begin{lstlisting}
-data Element = Nil | S Stevilo | B Boolean | S Seznam
-data Par = Par Element Element
+data Par = Par Stevilo Stevilo
 
 let prvi = fun p : Par =>
   case p of 
@@ -1235,13 +1216,12 @@ let drugi = fun p : Par =>
     Par x y -> y
   end
 
-let par = Par (S (Naslednjik (Naslednjik Nic))) 
-    (S (Naslednjik Nic))
+let par = Par (Naslednik (Naslednik Nic)) (Naslednik Nic)
 
 MiniHaskell> prvi par
-- : Element = S (Naslednjik (Naslednjik (Nic)))
+- : Stevilo = Naslednik (Naslednik (Nic))
 MiniHaskell> drugi par
-- : Element = S (Naslednjik (Nic))
+- : Stevilo = Naslednik (Nic)
 \end{lstlisting}
 Tako lahko nadomestimo tudi urejene pare. Funkcij pa ne moremo, ker jih potrebujemo za delo s tipi. Vanje vstavljamo \lstinline{case} izraze. 
 
@@ -1254,28 +1234,27 @@ let stVozlisc = rec st_vozlisc : Drevo -> Stevilo is
   fun d : Drevo =>
     case d of
       Empty -> Nic
-      | List s -> Naslednjik Nic
+      | List s -> Naslednik Nic
       | Vozlisce s l r ->
-        plus (Naslednjik Nic) (plus (stVozlisc l) 
+        plus (Naslednik Nic) (plus (stVozlisc l) 
             (stVozlisc r))
     end
 
-let lipa = Vozlisce Nic (List (Naslednjik Nic)) 
-    (List (Naslednjik (Naslednjik Nic)))
+let lipa = Vozlisce Nic (List (Naslednik Nic)) 
+    (List (Naslednik (Naslednik Nic)))
 
 MiniHaskell> st_vozlisc lipa
-- : Stevilo = Naslednjik (Naslednjik (Naslednjik (Nic)))
+- : Stevilo = Naslednik (Naslednik (Naslednik (Nic)))
 \end{lstlisting}
 Definirali smo drevo \lstinline{lipa}, ki ima korensko vozlišče in dva lista. Funkcija \lstinline{st_vozlisc} vrne število tri.
 
-V teoretičnem delu smo spoznali lačne funkcije. Spomnimo se, da so to funkcije, ki sprejmejo argument in vrnejo funkcijo, ki sprejme spet nov argument in vrne funkcijo, ... Definicija 
-takih funkcij je zaradi iso rekurzivnega pristopa bolj zapletena, ker potrebujemo izomorfizem med tipom in njegovim odvojem. V tem primeru bomo potrebovali funkcicjo \lstinline{fold}. 
+V prvem poglavju smo spoznali lačne funkcije. Spomnimo se, da so to funkcije, ki sprejmejo argument in vrnejo funkcijo, ki sprejme spet nov argument in vrne funkcijo, ... Definicija 
+takih funkcij je zaradi iso rekurzivnega pristopa bolj zapletena, ker potrebujemo izomorfizem med tipom in njegovim odvojem. V tem primeru bomo potrebovali funkcijo \lstinline{fold}. 
 Definirajmo tip \lstinline{Lacna}, ki bo predstavljal lačne funkcije. Potrebujemo konstruktor, poimenujmo ga \lstinline{Fun}:
 \begin{lstlisting}
-data Element = Nil | Num Int | B Bool
-data Lacna = Fun (Element -> Lacna)
+data Lacna = Fun (Int -> Lacna)
 \end{lstlisting}
-Definirajmo še izomorfizem \lstinline{fold}, ki nam bo omogočal, da bomo lahko slikali tipe \lstinline{Element }$\rightarrow ($\lstinline{Element} $\rightarrow$ \lstinline{Lacna}$)$ v \lstinline{Element} $\rightarrow$ \lstinline{Lacna} 
+Definirajmo še izomorfizem \lstinline{fold}, ki nam bo omogočal, da bomo lahko slikali tipe \lstinline{Int }$\rightarrow ($\lstinline{Int} $\rightarrow$ \lstinline{Lacna}$)$ v \lstinline{Int} $\rightarrow$ \lstinline{Lacna} 
 ker tipa izomorfna, torej bomo lahko izhode lačnih funkcij obravnavali kot lačne funkcije.
 \begin{lstlisting}
 let fold = fun l : Lacna =>
@@ -1283,33 +1262,30 @@ let fold = fun l : Lacna =>
     Fun f -> f
   end
 \end{lstlisting}
-Definirajmo še primer lačne funkcije. Za preprostejšo notacijo, definirajmo še spremenljivko \lstinline{e : Element}:
+Definirajmo še primer lačne funkcije.
 \begin{lstlisting}
-let lacna = rec lacna : Element -> Lacna is
-  (fun e : Element => Fun lacna)
+let lacna = rec lacna : Int -> Lacna is
+  (fun x : Int => Fun lacna)
 
-MiniHaskell> let e = Nil
-val e : Element
-
-MiniHaskell> lacna e
+MiniHaskell> lacna 42
 - : Lacna = Fun (<fun>)
 
-MiniHaskell> fold (lacna e)
-- : Element -> Lacna = <fun>
+MiniHaskell> fold (lacna 42)
+- : Int -> Lacna = <fun>
 \end{lstlisting}
 Ko lačni funkciji podamo argument in rezultat preslikamo v njegov izomorfizem, dobimo spet lačno funkcijo. Poskusimo ustvariti daljše zaporedje:
 \begin{lstlisting}
-MiniHaskell> fold (fold (fold (fold ((fold (lacna e
-    )) e) e) e) e)
-- : Element -> Lacna = <fun>
+MiniHaskell> fold (fold (fold (fold ((fold (lacna 1
+    )) 2) 3) 4) 5)
+- : Int -> Lacna = <fun>
 \end{lstlisting}
 
-Še malo bolj zapletene lačne funkcije so tokovi, ki za vsak prejeto \lstinline{unit} vrednost, vrnejo naslednji element toka. Ker vračajo urejeni 
+Še malo bolj zapletene lačne funkcije so tokovi, ki za vsak prejeto \lstinline{Unit} vrednost, vrnejo naslednji element toka. Ker vračajo urejeni 
 par elementa in toka, potrebujemo še dodatni funkciji, ki vračata posamezne elemente para.
 \begin{lstlisting}
-data Unit = Nil
+data Unit = T
 
-data Par = Out Int Tok
+data Par = Par Int Tok
 
 data Tok = Fun (Unit -> Par)
 
@@ -1320,28 +1296,26 @@ let fold = fun t : Tok =>
 
 let prvi = fun p : Par =>
   case p of
-    Out e l -> e
+    Par e l -> e
   end
 
 let drugi = fun p : Par =>
   case p of
-    Out e l -> l
+    Par e l -> l
   end
 \end{lstlisting}
-Ker v toku ne želimo le enoličnih elementov, mu podamo še funkcijo ki tega spreminja in začetni element. Poglejmo 
+Konstantni tokovi, ki vedno vračajo isto vrednost, niso zanimivi. Poglejmo 
 primer toka naravnih števil:
 \begin{lstlisting}
-let funkcija = fun n : Int => n + 1
+let naslednik = fun n : Int => n + 1
 
-let tok = rec tok : (Int -> Int) -> Int -> Unit -> Par is
+let naravna = rec naravna : (Int -> Int) -> Int -> Unit -> Par is
   fun f : (Int -> Int) =>
     fun n : Int => fun u : Unit =>
-      Out n (Fun (tok f (f n)))
-
-let u = Nil
+      Par n (Fun (naravna f (f n)))
 
 MiniHaskell> prvi ((fold (drugi ((fold (drugi 
-    ((tok funkcija 0) u))) u))) u)
+    ((naravna naslednik 0) T))) T))) T)
 - : int = 2
 \end{lstlisting}
 
@@ -1350,14 +1324,14 @@ potrebujemo funkcijo na začetnem elementu.
 \begin{lstlisting}
 data Tok = Cons Int Tok
 
-let funkcija = rec funkcija : Tok -> Tok is
+let naslednik = rec funkcija : Tok -> Tok is
   fun t : Tok =>
     case t of
-      Cons e tok -> Cons (e+1) (funkcija tok)
+      Cons e tok -> Cons (e+1) (naslednik tok)
     end
 
 MiniHaskell> let naravna = rec naravna : Tok is
-    Cons 0 (funkcija naravna)
+    Cons 0 (naslednik naravna)
 val naravna : Tok
 
 MiniHaskell> naravna
@@ -1402,11 +1376,11 @@ let rep = fun t : Tok =>
 V lenih programskih jezikih delujeta obe definiciji, medtem ko 
 bi neučakani jeziki po drugi definiciji hoteli najprej izračunati vse vrednosti do konca, kar seveda ni mogoče.  
 
-Če definicijo tokov malenkost spremenimo, lahko definiramo tudi procese. Ti namesto \lstinline{unit} vrednosti sprejemejo poljubne elemente, ki 
-vplivajo na izhos funkcije. Ohranimo lahko funkciji \lstinline{prvi} in \lstinline{drugi} iz definicije tokov. Poglejmo si primer, ki vrne vsoto 
+Če definicijo tokov malenkost spremenimo, lahko definiramo tudi procese. Ti namesto \lstinline{Unit} vrednosti sprejemejo poljubne elemente, ki 
+vplivajo na izhod funkcije. Ohranimo lahko funkciji \lstinline{prvi} in \lstinline{drugi} iz definicije tokov. Poglejmo si primer, ki vrne vsoto 
 vseh dosedanjih vhodov:
 \begin{lstlisting}
-data Par = Out Int Proces
+data Par = Par Int Proces
 
 data Proces = Fun (Int -> Par)
 
@@ -1415,7 +1389,7 @@ let fold = fun t : Proces =>
     Fun f -> f
   end
 
-let funkcija = fun e : Int =>
+let sestej = fun e : Int =>
   fun n : Int =>
     e + n
 
@@ -1424,9 +1398,9 @@ let proces = rec proces : (Int -> Int -> Int) -> Int
   fun f : (Int -> Int -> Int) =>
     fun n : Int =>
       fun e : Int =>
-        Out (f e n) (Fun (proces f (f e n)))
+        Par (f e n) (Fun (proces f (f e n)))
   
-MiniHaskell> prvi ((fold (drugi (proces funkcija 1 2
+MiniHaskell> prvi ((fold (drugi (proces sestej 1 2
     ))) 3)
 - : int = 6
 \end{lstlisting}
