@@ -53,13 +53,23 @@
 \newcommand{\gnuplot}{\textbf{gnuplot}}
 \newcommand{\pgfname}{\textsc{pgf}}
 \newcommand{\tikzname}{Ti\emph{k}Z}
+\newcommand{\tkeywords}{rekurzivni tip, induktivni tip, koinduktivni tip, funkcijsko programiranje, vsota tipov}
+\newcommand{\tkeywordsEn}{recursive type, inductive type, coinductive type, functional programming, sum type}
+\newcommand{\ttitle}{Implementacija rekurzivnih podatkovnih tipov}
+\newcommand{\ttitleEn}{Implementation of recursive data types}
+\newcommand{\tsubject}{\ttitle}
+\newcommand{\tsubjectEn}{\ttitleEn}
+\newcommand{\tauthor}{Luka Sabotič}
 
 \input{cc}
 
 %********************************************
 
 \begin{document}
-
+\selectlanguage{slovene}
+\frontmatter
+\setcounter{page}{1} %
+\renewcommand{\thepage}{}  
 % stran 1 med uvodnimi listi
 \thispagestyle{empty} 
 
@@ -89,10 +99,6 @@ RAČUNALNIŠTVO IN MATEMATIKA\\
 \vfill
 {\Large Ljubljana, 2023}
 \end{center}
-
-\newpage
-
-\ \thispagestyle{empty}
 
 \newpage
 
@@ -131,18 +137,37 @@ Besedilo je oblikovano z urejevalnikom besedil \LaTeX. \\ Slike so izdelane s po
 
 \newpage
 
-\ \thispagestyle{empty}
-
-\newpage
-
 %********************************************
 
 % stran 3 med uvodnimi listi
 \thispagestyle{empty}
+\
+\vfill
 
-Namesto te strani {\bf vstavite} original izdane teme diplomskega dela s podpisom mentorja in dekana ter \v zigom fakultete, ki ga diplomant
-dvigne v študent\-skem referatu,  preden odda izdelek v vezavo!
+\bigskip
+\noindent\textbf{Kandidat:} Luka Sabotič\\
+\noindent\textbf{Naslov:} Implementacija rekurzivnih podatkovnih tipov\\
+% vstavite ustrezen naziv študijskega programa!
+\noindent\textbf{Vrsta naloge:} Diplomska naloga na univerzitetnem programu prve stopnje Računalništvo in matematika \\
+% izberite pravi habilitacijski naziv mentorja!
+\noindent\textbf{Mentor:} prof.\ dr.\ Andrej Bauer\\
 
+\bigskip
+\noindent\textbf{Opis:}\\
+Delo predstavi rekurzivne podatkovne tipe, opiše induktivne in koinduktivne podatkovne tipe in implementira rekurzivne podatkovne tipe v preprostem lenem funkcijskem programskem jeziku.
+
+\bigskip
+\noindent\textbf{Title:} Implementation of recursive data types
+
+\bigskip
+\noindent\textbf{Description:}\\
+Thesis introduces recursive data types, describes inductive and coinductive data types and implements recursive data types in a simple lazy functional programming language.
+
+\vfill
+
+
+
+\vspace{2cm}
 \newpage
 
 %********************************************
@@ -154,63 +179,11 @@ dvigne v študent\-skem referatu,  preden odda izdelek v vezavo!
 
 %********************************************
 
-% stran 5 med uvodnimi listi
-
-\thispagestyle{empty}
-
-\vspace{1cm}
-\begin{center} 
-{\Large \textbf{IZJAVA O AVTORSTVU}}
-\end{center}
-
-\begin{center} 
-{\Large diplomskega dela}
-\end{center}
-
-\vspace{1cm}
-Spodaj podpisani \hspace{0.5cm} Luka Sabotič,
-
-\vspace{0.5cm}
-z vpisno številko \hspace{0.5cm} 63200031,
-
-\vspace{1cm}
-sem avtor diplomskega dela z naslovom:
-   
-\vspace{0.5cm}
-Implementacija rekurzivnih podatkovnih tipov
-
-\vspace{1.5cm}
-S svojim podpisom zagotavljam, da:
-\begin{itemize}
-	\item sem diplomsko delo izdelal samostojno pod mentorstvom 
-	
-	prof.\ dr.\ Andrej Bauer
-	
-	\item	so elektronska oblika diplomskega dela, naslov (slov., angl.), povzetek (slov., angl.) ter ključne besede (slov., 			angl.) identični s tiskano obliko diplomskega dela
-	\item soglašam z javno objavo elektronske oblike diplomskega dela v zbirki ''Dela FRI''.
-\end{itemize}
-
-\vspace{1cm}
-V Ljubljani, dne 05.09.2023 \hspace{1cm} Podpis avtorja:
-
-\newpage 
-
-%********************************************
-
-% stran 6 med uvodnimi listi je prazna pri dvostranskem tiskanju
-\ \thispagestyle{empty}
-
-\newpage
-
-%********************************************
-
 % stran 7 med uvodnimi listi
-
-\chapter*{Zahvala}
-
-\thispagestyle{empty}
-
+\thispagestyle{empty}\mbox{}\vfill\null\it%
+\noindent
 Zahvaljujem se mentorju prof.\ dr.\ Andreju Bauerju za veliko zagretost in izjemno odzivnost pri izdelavi tega diplomskega dela.
+\rm\normalfont
 
 
 \newpage
@@ -250,68 +223,66 @@ $\;$
 
 
 %********************************************
-
-\chapter*{Seznam uporabljenih kratic in simbolov}
-
-\thispagestyle{empty}
-
-Seznam uporabljenih kratic in simbolov, ki morajo biti enotni v celotnem delu, ne glede na označevanje v uporabljenih virih.
-
 %\cleardoublepage
 
 \clearpage{\pagestyle{empty}\cleardoublepage}
 
 %********************************************
-%zacno se glavni listi, ki so numerirani z arabskimi stevilkami
-
-\setcounter{page}{1}
-\pagenumbering{arabic}
-
+% povzetek
+\phantomsection
+\addcontentsline{toc}{chapter}{Povzetek}
 \chapter*{Povzetek}
 
-\addcontentsline{toc}{chapter}{Povzetek}
-Diplomsko delo obravnava rekurzivne podatkovne tipe, tako induktivne, kot tudi koinduktivne. Podaja njihovo definicijo in predstavi nekaj 
+\noindent\textbf{Naslov:} \ttitle
+\bigskip
+
+\noindent\textbf{Avtor:} \tauthor
+\bigskip
+
+%\noindent\textbf{Povzetek:} 
+\noindent Diplomsko delo obravnava rekurzivne podatkovne tipe, tako induktivne, kot tudi koinduktivne. Podaja njihovo definicijo in predstavi nekaj 
 primerov, ter opiše različne pristope k njihovi implementaciji. V nadaljevanju se posveti vsotam tipov in izrazu \lstinline{case}, ki lahko razčleni 
 vsote na posamezne variante in je potreben za delo z rekurzivnimi tipi. Predstavi korake implementacije teh struktur v programskem jeziku 
 MiniHaskell in pokaže potrebne spremembe v leksičnem analizatorju, razčlenjevalniku, preverjevalniku tipov in tolmaču. Osnovni poudarek je 
-na praktični integraciji teh struktur v progrmaski jezik MiniHaskell, v katerem je prikazanih več primerov uporabe, ki ilustrirajo uporabnost 
-teh struktur in odpirajo možnosti za morebitne nadaljnje razširitve.
+na praktični integraciji teh struktur v programski jezik MiniHaskell, v katerem je prikazanih več primerov uporabe, ki ilustrirajo uporabnost 
+teh struktur in odpirajo možnosti za morebitne nadaljne razširitve.
 
-\vspace{1.3cm}
-\noindent
-{\large \bf Ključne besede:}
+\bigskip
 
-\vspace{0.5cm}
-\noindent
-rekurzivni tip, induktivni tip, koinduktivni tip, funkcijsko programiranje, vsota tipov
+\noindent\textbf{Ključne besede:} \tkeywords.
 
-
+% abstract
+\phantomsection
+\selectlanguage{english}
+\addcontentsline{toc}{chapter}{Abstract}
 \chapter*{Abstract}
 
-\addcontentsline{toc}{chapter}{Abstract}
+\noindent\textbf{Title:} \ttitleEn
+\bigskip
 
-The thesis addresses recursive data types, both inductive and coinductive. It provides their definition and presents some examples, as well as 
+\noindent\textbf{Author:} \tauthor
+\bigskip
+
+%\noindent\textbf{Abstract:} 
+\noindent The thesis addresses recursive data types, both inductive and coinductive. It provides their definition and presents some examples, as well as 
 describing various approaches to their implementation. Subsequently, it focuses on sum types and the expression case, which can 
 decompose sums into individual variants and is essential for working with recursive types. It outlines the steps for implementing these 
 structures in the MiniHaskell programming language and illustrates the necessary changes in the lexer, parser, type checker and interpreter. 
 The primary emphasis lies on the practical integration of these structures into the MiniHaskell programming language, where several usage 
 examples are demonstrated, showcasing the utility of these structures and paving the way for potential further extensions.
+\bigskip
 
-\vspace{1.3cm}
-\noindent
-{\large \bf Key words:}
-
-\vspace{0.5cm}
-\noindent
-recursive type, inductive type, coinductive type, functional programming, sum type
-
+\noindent\textbf{Keywords:} \tkeywordsEn.
+\selectlanguage{slovene}
 
 %********************************************
 
 
-
-
 \newpage
+
+\mainmatter
+\setcounter{page}{1}
+\pagenumbering{arabic}
 \chapter{Rekurzivni tipi}
 V programiranju se vsakodnevno srečujemo z velikim številom konceptov in idej, ki nam na različne načine omogočajo iskati rešitve. Eden najbolj osnovnih in popularnih je tudi rekurzija.
 V osnovi rekurzija predstavlja eleganten način reševanja zapletenih problemov z razčlenitvijo na manjše probleme iste vrste, ki se nato lahko razčlenjujejo naprej. Ta sposobnost reševanja zapletenih izzivov 
