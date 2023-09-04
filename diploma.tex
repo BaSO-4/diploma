@@ -104,7 +104,6 @@ FAKULTETA ZA MATEMATIKO IN FIZIKO\\
 \vspace*{5cm}
 {\small \noindent
 To diplomsko delo je ponujeno pod licenco \textit{Creative Commons Priznanje avtorstva-Deljenje pod enakimi pogoji 2.5 Slovenija}
-ali (po želji) novejšo različico.
 To pomeni, da se tako besedilo, slike, grafi in druge sestavine dela kot tudi rezultati diplomskega dela lahko prosto distribuirajo,
 reproducirajo, uporabljajo, dajejo v najem, priobčujejo javnosti in predelujejo, pod pogojem, da se jasno in vidno navede avtorja in naslov tega
 dela in da se v primeru spremembe, preoblikovanja ali uporabe tega dela v svojem delu, lahko distribuira predelava le pod
@@ -120,7 +119,7 @@ intelektualno lastnino, Streliška 1, 1000 Ljubljana.
 \vspace*{1.5cm}
 {\small \noindent
 Izvorna koda diplomskega dela, njenih rezultatov in v ta namen razvite programske opreme je ponujena pod GNU General Public License,
-različica 3 ali (po želji) novejšo različico. To pomeni, da se lahko prosto uporablja, distribuira in/ali predeluje pod njenimi pogoji.
+različica 3. To pomeni, da se lahko prosto uporablja, distribuira in/ali predeluje pod njenimi pogoji.
 Podrobnosti licence so dostopne na spletni strani \url{http://www.gnu.org/licenses/}.
 }
 
@@ -211,7 +210,7 @@ V Ljubljani, dne xx.xx.2023 \hspace{1cm} Podpis avtorja:
 
 \thispagestyle{empty}
 
-Na tem mestu se diplomant zahvali vsem, ki so kakorkoli pripomogli k uspešni izvedbi diplomskega dela.
+Zahvaljujem se mentorju prof. dr. Andreju Bauerju za veliko zagretost in izjemno odzivnost pri izdelavi tega diplomskega dela.
 
 
 \newpage
@@ -230,9 +229,6 @@ Na tem mestu se diplomant zahvali vsem, ki so kakorkoli pripomogli k uspešni iz
 
 $\;$ 
 
-\vspace{5cm}
-\hfill {\Large \em Morebitno posvetilo}
-\thispagestyle{empty}
 
 \newpage
 
@@ -287,7 +283,7 @@ teh struktur in odpirajo možnosti za morebitne nadaljnje razširitve.
 
 \vspace{0.5cm}
 \noindent
-podatkovne strukture, rekurzivni tipi, case, vsote tipov, MiniHaskell
+rekurzivni tip, induktivni tip, koinduktivni tip, funkcijsko programiranje, vsota tipov
 
 
 \chapter*{Abstract}
@@ -307,7 +303,7 @@ examples are demonstrated, showcasing the utility of these structures and paving
 
 \vspace{0.5cm}
 \noindent
-data structures, recursive types, case, sum types, MiniHaskell
+recursive type, inductive type, coinductive type, functional programming, sum type
 
 
 %********************************************
@@ -319,15 +315,14 @@ data structures, recursive types, case, sum types, MiniHaskell
 \chapter{Rekurzivni tipi}
 V programiranju se vsakodnevno srečujemo z velikim številom konceptov in idej, ki nam na različne načine omogočajo iskati rešitve. Eden najbolj osnovnih in popularnih je tudi rekurzija.
 V osnovi rekurzija predstavlja eleganten način reševanja zapletenih problemov z razčlenitvijo na manjše probleme iste vrste, ki se nato lahko razčlenjujejo naprej. Ta sposobnost reševanja zapletenih izzivov 
-postopoma, ni le preoblikovala načina, kako se programerji lotevajo kodiranja, temveč je tudi postavila temelje za ustvarjanje razreda podatkovnih struktur, imenovanih rekurzivne podatkovne strukture.
+postopoma ni le preoblikovala načina, kako se programerji lotevajo kodiranja, temveč je tudi postavila temelje za ustvarjanje razreda podatkovnih struktur, imenovanih rekurzivne podatkovne strukture.
 
 Tako kot rekurzivna funkcija pokliče samo sebe, da reši problem v manjših korakih, rekurzivni tipi opredeljujejo strukture, ki vsebujejo podatke istega tipa in ustvarjajo strukturirane 
 samo-referenčne vzorce. S tem, ko dovoljujejo da so elementi strukture sestavljeni iz primerkov iste strukture, oponašajo način, kako zaznavamo in opisujemo svet okoli nas. 
 Na primer datotečni sistem, kjer lahko mape vsebujejo podmape, ki pa spet vsebujejo več map in datotek. Podobno v družinskem drevesu: posamezniki imajo otroke, ki sčasoma sami 
-postanejo starši. Rekurzivne strukture omogočajo, da te kompleksne odnose opišemo na preprost in intuitiven način.
+postanejo starši. Rekurzivne strukture omogočajo, da te kompleksne odnose opišemo na preprost in intuitiven način. Vsebina tega pogavja je povzeta po viru~\cite{Pie02}.
 
-V programskih jezikih podatkovne strukture predstavimo s podatkovnimi tipi. Če so strukture rekurzivne, so taki tudi tipi. Rekurzivne tipe lahko ločimo na induktivne in koinduktivne. Elementi prvih lahko nosijo le končne podatke, elementi drugih pa so lahko tudi neskončni~\cite{Sla15}. 
-Vsebina tega pogavja je povzeta po viru ~\cite{Pie02}.Morda najbolj osnoven primer rekurzivnega tipa je seznam. Ta je lahko prazen, ali pa vsebuje urejen par nekega elementa in drugega seznama. Elementu ponavadi rečemo glava, seznamu, 
+V programskih jezikih podatkovne strukture predstavimo s podatkovnimi tipi. Če so strukture rekurzivne, so taki tudi tipi. Rekurzivne tipe lahko ločimo na induktivne in koinduktivne, elementi prvih lahko nosijo le končne podatke, elementi drugih pa so lahko tudi neskončni~\cite{Sla15}. Morda najbolj osnoven primer rekurzivnega tipa je seznam. Ta je lahko prazen, ali pa vsebuje urejen par nekega elementa in drugega seznama. Elementu ponavadi rečemo glava, seznamu, 
 ki glavi sledi, pa rep. Tako ima poljubno dolžino, lahko pa je tudi prazen. V prikazovanju primerov bom za prazen seznam uporabljal konstruktor \lstinline{Empty}, ki ne sprejme nobenega argumenta in predstavlja odsotnost vrednosti, pogosto označena kot \lstinline{nil}. 
 Oglejmo si seznam celih števil:
 \begin{lstlisting}
@@ -341,7 +336,8 @@ val enaDoTri : Seznam
 
 Seznamom podoben primer so drevesa. Ta so sestavljena iz vozlišč, vsako je lahko končno, ali pa ima potomce, ki so spet drevesa.
 \begin{lstlisting}
-data Drevo = Empty | List Int | Vozlisce Int Drevo Drevo
+data Drevo = Empty | List Int 
+                   | Vozlisce Int Drevo Drevo
 \end{lstlisting}
 Primer drevesa, ki vsebuje cela števila:
 \begin{lstlisting}
@@ -390,7 +386,7 @@ Primer koinduktivnih tipov je tip lačnih funkcij. To so funkcije, ki sprejmejo 
 \end{equation}
 Na primer, lahko imamo funkcijo, ki sprejme število in vrne funkcijo, ki sprejme novo število:
 \begin{lstlisting}
-let f = λ n : Int -> f
+let f = λ n : Int. f
 val f : Lacna  
 \end{lstlisting}
 Ko pokličemo f, bo ta vrnila novo funkcijo, ki bo lačna novega argumenta:
@@ -405,12 +401,12 @@ val lacna2 : Lacna
 \end{lstlisting}
 Tako funkcijo lahko gledamo tudi kot funkcijo, ki sprejme neomejeno količino argumentov in bo še vedno lačna novih:
 \begin{lstlisting}
-let zeloLacna = f 1 2 3 4 5 6 7 8 9 10
+let zeloLacna = f 1 2 3 4 5 6 7 8 9
 val zeloLacna : Lacna
 \end{lstlisting}
 V resnici je \lstinline{zeloLacna} sestavljena iz več lačnih funkcij, ki se poračunajo sproti z vsakim argumentom. Lahko bi jo zapisali tudi kot:
 \begin{lstlisting}
-let zeloLacna = (((((((((f 1) 2) 3) 4) 5) 6) 7) 8) 9) 10
+let zeloLacna = (((((((((f 1) 2) 3) 4) 5) 6) 7) 8) 9
 val zeloLacna : Lacna
 \end{lstlisting}
 Tako se \lstinline{1} uporabi kot argument na funkciji \lstinline{f}, \lstinline{2} na funkciji, ki jo vrne \lstinline{f}, ko sprejme \lstinline{1} in tako naprej.
@@ -447,13 +443,14 @@ Oglejmo si še nadgradnjo tokov, enostavne procese. To so funkcije, ki sprejmejo
 \end{equation}
 Primer procesa je recimo enocelični pomnilnik, ki shranjuje po eno vrednost in ob prejemu argumenta vrne do sedaj shranjen element in shrani novega:
 \begin{lstlisting}
-let pomnilnik = λe : Int . λn : Int . (e , pomnilnik (n ))
+let pomnilnik = λe : Int. 
+                λn : Int. (e , pomnilnik (n ))
 val pomnilnik : Proces  
 \end{lstlisting}
 Podobno kot pri tokovih, za delo s procesi potrebujemo pomožne funkcije, kot je na primer funkcija, ki vrne vrnjeno vrednost procesa:
 \begin{lstlisting}
-let vrednost = λp : Proces . p .1
-val vrednost : Proces → Int  
+let vrednost = λp : Proces. p .1
+val vrednost : Proces -> Int  
 \end{lstlisting}
 Koinduktivni tipi so torej zelo uporabni, ker nam omogočajo delo z neskončnimi podatki. Vendar je potrebno biti previden, ker lahko hitro pride do neskončnih zank. 
 Lažje jih je obvladovati v lenih programskih jezikih, ker se njihova vsebina nikoli ne izračuna do konca, vedno samo po potrebi.
@@ -462,8 +459,8 @@ Lažje jih je obvladovati v lenih programskih jezikih, ker se njihova vsebina ni
 Ko implementiramo rekurzivne tipe, se moramo slej ko prej vprašati, kaj je razlika med tipom in čemer dobimo, ko ta tip enkrat ">odvijemo"<. Na primer, kaj je razlika med tipom \lstinline{Seznam}
 in njegovim enkratnim odvojem \\ \lstinline{Empty | Cons Int Seznam}? V literaturi pojavita dva pristopa k temu vprašanju: ekvirekurziven in izorekurziven.
 
-Definirajmo operator $\mu$, ki računa negibne točke. Za dano funkcijo $F$, ki slika tipe v tipe, naj bo $\mu(F)$ tip, za katerega velja $\mu(F) = F(\mu(F))$. Običajno namesto $\mu (\lambda X . T)$ 
-pišem $\mu X . T$. Na primer, tip seznamov celih števil lahko zapišemo kot $\mu (\lambda X . \ \mathtt{Empty} \mid \ \mathtt{Cons} \ \mathtt{Int} \ X)$ ali raje $\mu X . \mathtt{Empty} \mid \mathtt{Cons} \ \mathtt{Int} \ X$.
+Definirajmo operator $\mu$, ki računa negibne točke. Za dano funkcijo $F$, ki slika tipe v tipe, naj bo $\mu(F)$ tip, za katerega velja $\mu(F) = F(\mu(F))$. Običajno namesto $\mu (\lambda X. T)$ 
+pišem $\mu X. T$. Na primer, tip seznamov celih števil lahko zapišemo kot $\mu (\lambda X. \ \mathtt{Empty} \mid \ \mathtt{Cons} \ \mathtt{Int} \ X)$ ali raje $\mu X. \mathtt{Empty} \mid \mathtt{Cons} \ \mathtt{Int} \ X$.
 
 \subsection{Ekvirekurziven pristop}
 Ekvirekurziven pristop pravi, da je tip \emph{\(\mu\)X.F(X)} po definiciji enak njegovemu odvoju \emph{F(\(\mu\)X.F(X))}, ker oba predstavljata enaka neskončna drevesa. Ta pristop nato od 
@@ -494,15 +491,15 @@ vendar v veliko primerih to ni potrebno, ker zadoščuje uporaba konstruktorjev 
 
 \chapter{Vsote tipov}
 Programerji se pogosto srečujemo z različnimi strukturami ali spremenljivkami, ki lahko zavzamejo vrednosti iz množice možnosti. Na primer, vozlišče v drevesu je lahko prazno, list, ali 
-notranje vozlišče. Element v povezanem seznamu je lahko trivialna vrednost \lstinline{nil}, ali pa vozlišče \lstinline{Cons} z glavo in repom seznama. Takih primerov je veliko, zato poznamo vsote tipov. 
-Snov tega poglavja se zgleduje po viru ~\cite{Pie02}.
+notranje vozlišče. Element v povezanem seznamu je lahko trivialna vrednost \lstinline{Empty}, ali pa vozlišče \lstinline{Cons} z glavo in repom seznama. Takih primerov je veliko, zato poznamo vsote tipov. 
+Snov tega poglavja se zgleduje po viru~\cite{Pie02}.
 
 Vsote tipov so podatkovni tipi, ki izvirajo iz množice vrednosti, dobljene iz kombinacije več tipov. Na primer, če imamo tipa
 \begin{lstlisting}
 data Odrasel = Odr Int Bool Int
 data Otrok = Otr Int
 \end{lstlisting}
-s katerima povemo koliko je odrasel star, če je poročen in koliko otrok ima, ter koliko je star otrok in ju želimo združiti v en tip, da bi lahko na primer naredili seznam, ki vključuje odrasle in otroke, lahko definiramo vsoto \lstinline{Oseba}.
+s katerima povemo koliko je odrasel človek star, če je poročen in koliko otrok ima, ter koliko je star otrok in ju želimo združiti v en tip, da bi lahko na primer naredili seznam, ki vključuje odrasle in otroke, lahko definiramo vsoto \lstinline{Oseba}.
 \begin{lstlisting}
 data Oseba = Odr Int Bool Int | Otr Int
 \end{lstlisting}
@@ -535,13 +532,13 @@ Foo 42
 
 Morda zanimiva skupina vsot so tiste, ki lahko vsebujejo tudi trivialne vrednosti \lstinline{Unit}, ki je tip z enim elementom:
 \begin{lstlisting}
-data Unit = U
+data Unit = T
 \end{lstlisting}
 Ker ima tip \lstinline{Unit} lahko le en element \lstinline{T}, sta zapisa \lstinline{Nic Unit} in \lstinline{Nic} izomorfna. Oba imata le eno možno vrednost. Vsote, ksterih elementi lahko zavzamejo tudi trivialno vrednost, izgledajo kot:
 \begin{lstlisting}
-data Opcijsko = Nic | Vrednost T
+data Opcijsko = Nic | Vrednost Tip
 \end{lstlisting}
-Ti tipi so izomorfni s tistimi, katerih elementi imajo tip \lstinline{T} in razširjeni z možnostjo trivialne vrednosti. To so na primer tipi, ki jih poznamo iz priljubljenih programskih jezikov in dopuščajo 
+Ti tipi so izomorfni s tistimi, katerih elementi imajo tip \lstinline{Tip} in razširjeni z možnostjo trivialne vrednosti. To so na primer tipi, ki jih poznamo iz priljubljenih programskih jezikov in dopuščajo 
 vrednosti kot so \lstinline{null}, \lstinline{None} ali \lstinline{nil}.
 
 Še dve posebni vrsti vsot sta dovolj zanimivi za posebno obravnavo.
@@ -636,7 +633,7 @@ case x of
     b -> (case y of
             c -> _
             d -> _)
-    e -> _,
+    e -> _
 \end{lstlisting}
 ali pa:
 \begin{lstlisting}
@@ -645,7 +642,7 @@ case x of
     b -> (case y of
             c -> _)
     d -> _
-    e -> _.
+    e -> _
 \end{lstlisting}
 Ker imajo različni programerji različna mnenja o tem, kateri od obeh je bolj smiselen in sem se želel izogniti kakeršnikoli dvoumnosti, sem dodal 
 gradnik \lstinline{end}, ki nam omogoča, da enostavno določimo, kdaj se izraz \lstinline{case} konča:
@@ -774,7 +771,7 @@ case x of
     Constr 2 -> _
     ...
     Constr n -> _
-end,
+end
 \end{lstlisting}
 ki jih seveda lahko prav tako zapišemo kot abstraktno sintaktično drevo:
 \begin{center}
@@ -929,8 +926,8 @@ and type_of (ctx:context) = function
       let u_def = find_u u ctx.datadefs in
       let ret_type = cases_type u_def cases ctx in
       ret_type
-      | _ -> type_error "%s cannot occur 
-        in a case expression" (Syntax.string_of_type t))
+      | _ -> type_error "%s cannot occur in a case 
+            expression" (Syntax.string_of_type t))
 \end{lstlisting}
 Osredotočimo se najprej na definicije novih tipov, torej \lstinline{Syntax.Constr} vejo. Tu enostavno kličemo funkcijo \lstinline{type_of_constr}, s konstruktorjem, katerega tip nas zanima in delom 
 konteksta, kjer je ta shranjen. Funkcija \lstinline{type_of_constr} izgleda takole:
@@ -1081,32 +1078,32 @@ let head = fun s : Seznam =>
 
 let tail = fun s : Seznam =>
 	case s of
-	  Empty -> Empty
-	  | Cons x xs -> xs
+            Empty -> Empty
+          | Cons x xs -> xs
 	end
 
 let length = rec length : Seznam -> Int is
 	fun s : Seznam =>
-	  case s of
-		Empty -> 0
-		| Cons x xs -> 1 + length xs
-	  end
+          case s of
+              Empty -> 0
+            | Cons x xs -> 1 + length xs
+          end
 
 let append = rec append : Seznam -> Seznam -> Seznam is
 	fun s1 : Seznam => fun s2 : Seznam => 
-	case s1 of
-		Empty -> s2
-		| Cons x xs -> Cons x (append xs s2)
-	end
+          case s1 of
+              Empty -> s2
+            | Cons x xs -> Cons x (append xs s2)
+          end
 
 let map = rec map : (Int -> Int) -> Seznam -> Seznam 
-    is
-	fun f : (Int -> Int) =>
-    fun s : Seznam =>
-	    case s of
-	        Empty -> Empty
-	      | Cons x xs -> Cons (f x) (map f xs)
-	    end
+  is
+    fun f : (Int -> Int) =>
+      fun s : Seznam =>
+        case s of
+            Empty -> Empty
+          | Cons x xs -> Cons (f x) (map f xs)
+        end
 \end{lstlisting}
 Imamo funkcije za delo s seznami. Potrebujemo še seznam, na katerem jih bomo uporabili
 \begin{lstlisting}
@@ -1177,6 +1174,22 @@ MiniHaskell> xor a b
 
 MiniHaskell> xor a a
 - : Boolean = False
+\end{lstlisting}
+Zelo pogosta uporaba boolovih vrednosti je pogojni stavek. Tudi tega lahko zamenjamo z novimi tipi in izrazom \lstinline{case}.
+\begin{lstlisting}
+if e1 then r1
+else if e2 then r2
+else r3
+\end{lstlisting}
+Zgornjo kodo lahko zamenjamo z
+\begin{lstlisting}
+case e1 of
+    True -> r1
+  | False ->  case e2 of
+                  True -> r2
+                | False -> r3
+              end
+end
 \end{lstlisting}
 Preostanejo nam še cela števila ali \lstinline{Int}, urejeni pari in funkcije. Slednje se samo s tipi ne dajo reproducirati, lahko pa se lotimo števil. Najbolj enostaven primer in tak, ki se izogne pisanju neštetega števila 
 konstruktorjev, so Peanova naravna števila. Delujejo tako, da definirajo število nič in naslednika števila. Tako lahko zapišemo vsa naravna števila, kot bi to naredili v eniškem sistemu. Z negativnimi števili je več težav, 
@@ -1408,9 +1421,9 @@ MiniHaskell> prvi ((fold (drugi (proces sestej 1 2
 Dobili smo šest, kar je vsota enke, dvojice in trojke.
 
 
-
+\chapter{Zaključek}
 Področje rekurzivnih tipov sega še veliko globje, kot prikazujejo zgornji primeri in nam tako daje veliko možnosti za nadgradnjo implementacije. 
-Opazna možnost je implementacija polimorfizmov. Tipi so sedaj lahko le monomorfni, torej ne moremo definirati seznama, ki bi lahko hkrati 
+Opazna možnost je implementacija polimorfizma. Tipi so sedaj lahko le monomorfni, torej ne moremo definirati seznama, ki bi lahko hkrati 
 vseboval elemente različnih tipov. Prav tako ne moremo uporabljati izomorfizmov tipov znotraj izrazov \lstinline{case}, recimo, ne moremo definirati izraza
 \begin{lstlisting}
 case e of
@@ -1449,6 +1462,7 @@ Takšne definicije so zelo zanimive in lahko zelo uporabne, vendar implementacij
 \addcontentsline{toc}{chapter}{Literatura}
 \label{stran_literatura}
 \bibliography{diploma} 
+\bibliographystyle{plain}
 
 
 \end{document}
