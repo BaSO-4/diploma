@@ -326,8 +326,8 @@ samo-referenčne vzorce. S tem, ko dovoljujejo da so elementi strukture sestavlj
 Na primer datotečni sistem, kjer lahko mape vsebujejo podmape, ki pa spet vsebujejo več map in datotek. Podobno v družinskem drevesu: posamezniki imajo otroke, ki sčasoma sami 
 postanejo starši. Rekurzivne strukture omogočajo, da te kompleksne odnose opišemo na preprost in intuitiven način.
 
-V programskih jezikih podatkovne strukture predstavimo s podatkovnimi tipi. Če so strukture rekurzivne, so taki tudi tipi. Rekurzivne tipe lahko ločimo na induktivne in koinduktivne. Elementi prvih lahko nosijo le končne podatke, elementi drugih pa so lahko tudi neskončni. 
-Morda najbolj osnoven primer rekurzivnega tipa je seznam. Ta je lahko prazen, ali pa vsebuje urejen par nekega elementa in drugega seznama. Elementu ponavadi rečemo glava, seznamu, 
+V programskih jezikih podatkovne strukture predstavimo s podatkovnimi tipi. Če so strukture rekurzivne, so taki tudi tipi. Rekurzivne tipe lahko ločimo na induktivne in koinduktivne. Elementi prvih lahko nosijo le končne podatke, elementi drugih pa so lahko tudi neskončni~\cite{Sla15}. 
+Vsebina tega pogavja je povzeta po viru ~\cite{Pie02}.Morda najbolj osnoven primer rekurzivnega tipa je seznam. Ta je lahko prazen, ali pa vsebuje urejen par nekega elementa in drugega seznama. Elementu ponavadi rečemo glava, seznamu, 
 ki glavi sledi, pa rep. Tako ima poljubno dolžino, lahko pa je tudi prazen. V prikazovanju primerov bom za prazen seznam uporabljal konstruktor \lstinline{Empty}, ki ne sprejme nobenega argumenta in predstavlja odsotnost vrednosti, pogosto označena kot \lstinline{nil}. 
 Oglejmo si seznam celih števil:
 \begin{lstlisting}
@@ -447,20 +447,20 @@ Oglejmo si še nadgradnjo tokov, enostavne procese. To so funkcije, ki sprejmejo
 \end{equation}
 Primer procesa je recimo enocelični pomnilnik, ki shranjuje po eno vrednost in ob prejemu argumenta vrne do sedaj shranjen element in shrani novega:
 \begin{lstlisting}
-let buffer(e) = λx:Int. (e, buffer(x)) --zelo cudno, poskusi drugace
-val buffer(e) : Proces
+let pomnilnik = λe : Int . λn : Int . (e , pomnilnik (n ))
+val pomnilnik : Proces  
 \end{lstlisting}
 Podobno kot pri tokovih, za delo s procesi potrebujemo pomožne funkcije, kot je na primer funkcija, ki vrne vrnjeno vrednost procesa:
 \begin{lstlisting}
-let vrednost = λp : Proces. p.1;
-val vrednost : Proces -> Int
+let vrednost = λp : Proces . p .1
+val vrednost : Proces → Int  
 \end{lstlisting}
 Koinduktivni tipi so torej zelo uporabni, ker nam omogočajo delo z neskončnimi podatki. Vendar je potrebno biti previden, ker lahko hitro pride do neskončnih zank. 
 Lažje jih je obvladovati v lenih programskih jezikih, ker se njihova vsebina nikoli ne izračuna do konca, vedno samo po potrebi.
 
 \section{Ekvirekurziven ali izorekurziven pristop?}
 Ko implementiramo rekurzivne tipe, se moramo slej ko prej vprašati, kaj je razlika med tipom in čemer dobimo, ko ta tip enkrat ">odvijemo"<. Na primer, kaj je razlika med tipom \lstinline{Seznam}
-in njegovim enkratnim odvojem \lstinline{Empty | Cons Int Seznam}? V literaturi pojavita dva pristopa k temu vprašanju: ekvirekurziven in izorekurziven.
+in njegovim enkratnim odvojem \\ \lstinline{Empty | Cons Int Seznam}? V literaturi pojavita dva pristopa k temu vprašanju: ekvirekurziven in izorekurziven.
 
 Definirajmo operator $\mu$, ki računa negibne točke. Za dano funkcijo $F$, ki slika tipe v tipe, naj bo $\mu(F)$ tip, za katerega velja $\mu(F) = F(\mu(F))$. Običajno namesto $\mu (\lambda X . T)$ 
 pišem $\mu X . T$. Na primer, tip seznamov celih števil lahko zapišemo kot $\mu (\lambda X . \ \mathtt{Empty} \mid \ \mathtt{Cons} \ \mathtt{Int} \ X)$ ali raje $\mu X . \mathtt{Empty} \mid \mathtt{Cons} \ \mathtt{Int} \ X$.
@@ -494,7 +494,8 @@ vendar v veliko primerih to ni potrebno, ker zadoščuje uporaba konstruktorjev 
 
 \chapter{Vsote tipov}
 Programerji se pogosto srečujemo z različnimi strukturami ali spremenljivkami, ki lahko zavzamejo vrednosti iz množice možnosti. Na primer, vozlišče v drevesu je lahko prazno, list, ali 
-notranje vozlišče. Element v povezanem seznamu je lahko trivialna vrednost \lstinline{nil}, ali pa vozlišče \lstinline{Cons} z glavo in repom seznama. Takih primerov je veliko, zato poznamo vsote tipov.
+notranje vozlišče. Element v povezanem seznamu je lahko trivialna vrednost \lstinline{nil}, ali pa vozlišče \lstinline{Cons} z glavo in repom seznama. Takih primerov je veliko, zato poznamo vsote tipov. 
+Snov tega poglavja se zgleduje po viru ~\cite{Pie02}.
 
 Vsote tipov so podatkovni tipi, ki izvirajo iz množice vrednosti, dobljene iz kombinacije več tipov. Na primer, če imamo tipa
 \begin{lstlisting}
@@ -549,7 +550,8 @@ vrednosti kot so \lstinline{null}, \lstinline{None} ali \lstinline{nil}.
 Poleg tipa \lstinline{Unit}, ki sestoji iz ene konstante, imamo tudi vsote, sestavljene iz več njih. To so vsote, ki vsebujejo zgolj trivialne vrendosti in so namenjene predstavljanju tipov, ki sestojijo iz končno mnogo konstant. 
 Na primer, če želimo predstaviti dele dneva, definiramo vsoto
 \begin{lstlisting}
-data DelDneva = Jutro | Dopoldan | Popoldan | Vecer | Noc
+data DelDneva = Jutro | Dopoldan | Popoldan | Vecer 
+                | Noc
 \end{lstlisting}
 Lahko sestavimo tudi funkcije, ki obravnavajo take vrednosti. Na primer
 \begin{lstlisting}
@@ -1213,7 +1215,8 @@ let drugi = fun p : Par =>
     Par x y -> y
   end
 
-let par = Par (Naslednik (Naslednik Nic)) (Naslednik Nic)
+let par = Par (Naslednik (Naslednik Nic)) 
+              (Naslednik Nic)
 
 MiniHaskell> prvi par
 - : Stevilo = Naslednik (Naslednik (Nic))
@@ -1306,7 +1309,8 @@ primer toka naravnih števil:
 \begin{lstlisting}
 let naslednik = fun n : Int => n + 1
 
-let naravna = rec naravna : (Int -> Int) -> Int -> Unit -> Par is
+let naravna = rec naravna : (Int -> Int) -> 
+    Int -> Unit -> Par is
   fun f : (Int -> Int) =>
     fun n : Int => fun u : Unit =>
       Par n (Fun (naravna f (f n)))
@@ -1442,7 +1446,6 @@ Takšne definicije so zelo zanimive in lahko zelo uporabne, vendar implementacij
 
 \newpage
 
-\bibliographystyle{slplainurl}
 \addcontentsline{toc}{chapter}{Literatura}
 \label{stran_literatura}
 \bibliography{diploma} 
