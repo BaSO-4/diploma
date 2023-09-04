@@ -11,8 +11,7 @@
 \usepackage{cite}
 \usepackage{listings}
 \usepackage{amsmath}
-
-\usepackage[pdftex,colorlinks,citecolor=black,filecolor=black,linkcolor=black,urlcolor=black,pagebackref]{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage{tikz}
 
 \lstset{
@@ -80,11 +79,12 @@ FAKULTETA ZA MATEMATIKO IN FIZIKO\\
 
 \vspace{2cm}
 { DIPLOMSKO DELO}\\
-{ NA UNIVERZITETNEM ŠTUDIJSKEM PROGRAMU PRVE STOPNJE RAčUNALNIŠTVO IN MATEMATIKA\\
+{ UNIVERZITETNI ŠTUDIJSKI PROGRAM PRVE STOPNJE
+RAČUNALNIŠTVO IN MATEMATIKA\\
 }
 
 \vspace{2cm} 
-{\Large Mentor: prof. dr. Andrej Bauer}
+{\Large Mentor: prof.\ dr.\ Andrej Bauer}
 
 \vfill
 {\Large Ljubljana, 2023}
@@ -184,14 +184,14 @@ S svojim podpisom zagotavljam, da:
 \begin{itemize}
 	\item sem diplomsko delo izdelal samostojno pod mentorstvom 
 	
-	prof. dr. Andrej Bauer
+	prof.\ dr.\ Andrej Bauer
 	
 	\item	so elektronska oblika diplomskega dela, naslov (slov., angl.), povzetek (slov., angl.) ter ključne besede (slov., 			angl.) identični s tiskano obliko diplomskega dela
 	\item soglašam z javno objavo elektronske oblike diplomskega dela v zbirki ''Dela FRI''.
 \end{itemize}
 
 \vspace{1cm}
-V Ljubljani, dne xx.xx.2023 \hspace{1cm} Podpis avtorja:
+V Ljubljani, dne 05.09.2023 \hspace{1cm} Podpis avtorja:
 
 \newpage 
 
@@ -210,7 +210,7 @@ V Ljubljani, dne xx.xx.2023 \hspace{1cm} Podpis avtorja:
 
 \thispagestyle{empty}
 
-Zahvaljujem se mentorju prof. dr. Andreju Bauerju za veliko zagretost in izjemno odzivnost pri izdelavi tega diplomskega dela.
+Zahvaljujem se mentorju prof.\ dr.\ Andreju Bauerju za veliko zagretost in izjemno odzivnost pri izdelavi tega diplomskega dela.
 
 
 \newpage
@@ -342,7 +342,7 @@ data Drevo = Empty | List Int
 Primer drevesa, ki vsebuje cela števila:
 \begin{lstlisting}
 let smreka = Vozlisce 0 (Vozlisce 1 (List 2) Empty)
-    (Vozlisce 3 Empty (List 4))
+             (Vozlisce 3 Empty (List 4))
 val smreka : Drevo
 \end{lstlisting}
 Drevesa si pogosto predstavljamo kot grafe. Vrednost spremenljivke \lstinline{smreka} torej izgleda kot
@@ -449,7 +449,7 @@ val pomnilnik : Proces
 \end{lstlisting}
 Podobno kot pri tokovih, za delo s procesi potrebujemo pomožne funkcije, kot je na primer funkcija, ki vrne vrnjeno vrednost procesa:
 \begin{lstlisting}
-let vrednost = λp : Proces. p .1
+let vrednost = λp : Proces. p.1
 val vrednost : Proces -> Int  
 \end{lstlisting}
 Koinduktivni tipi so torej zelo uporabni, ker nam omogočajo delo z neskončnimi podatki. Vendar je potrebno biti previden, ker lahko hitro pride do neskončnih zank. 
@@ -554,9 +554,9 @@ Lahko sestavimo tudi funkcije, ki obravnavajo take vrednosti. Na primer
 \begin{lstlisting}
 let primerenZaZajtrkovanje = fun d:DelDneva =>
     case d of 
-         Jutro -> true
-       | Dopoldan -> true
-       | _ -> false
+        Jutro -> true
+      | Dopoldan -> true
+      | _ -> false
     end
 \end{lstlisting}
 je funkcija, ki sprejme eno izmed delov dneva in vrne odgovor na vprašanje, če takrat običajno zajtrkujemp. Tip te funkcije je \lstinline{DelDneva} $\rightarrow$ \lstinline{Bool}.
@@ -595,7 +595,7 @@ Tako se zavarujemo pred napakami.
 \newpage
 
 \chapter{Implementacija}
-Predstavljene konstrukte sem tudi sam implementiral. To sem storil v programskem jeziku MiniHaskell, ki ga je ustvaril prof. dr. Andrej Bauer in 
+Predstavljene konstrukte sem tudi sam implementiral. To sem storil v programskem jeziku MiniHaskell, ki ga je ustvaril prof.\ dr.\ Andrej Bauer in 
 je dostopen v repozitoriju~\cite{bauer:plzoo}.
 
 MiniHaskell je programski jezik, ki je namenjen predstavitvi osnovnih konceptov funkcijskega programiranja. Napisan je v programskem jeziku 
@@ -620,40 +620,40 @@ razliko od Haskella MiniHaskell ni občutljiv na zamik vrstic v kodi, in ker nis
 dodal tudi ta gradnik. Da bi razumeli zakaj je potreben, si poglejmo naslednji primer: recimo, da imamo izraz \lstinline{case}, ki v eni od svojih vej vsebuje še en, gnezden izraz \lstinline{case}:
 \begin{lstlisting}
 case x of 
-    a -> _
-    b -> case y of
-            c -> _
-            d -> _
-    e -> _
+  a -> _
+  b -> case y of
+         c -> _
+         d -> _
+  e -> _
 \end{lstlisting}
 Če bi bil MiniHaskell občutljiv na zamik vrstic, bi lahko zgornji izraz razčlenili enolično. Če pa zamikov ne upoštevamo, ga je možno razčleniti na dva načina:
 \begin{lstlisting}
 case x of 
-    a -> _
-    b -> (case y of
-            c -> _
-            d -> _)
-    e -> _
+  a -> _
+  b -> (case y of
+          c -> _
+          d -> _)
+  e -> _
 \end{lstlisting}
 ali pa:
 \begin{lstlisting}
 case x of 
-    a -> _
-    b -> (case y of
-            c -> _)
-    d -> _
-    e -> _
+  a -> _
+  b -> (case y of
+          c -> _)
+  d -> _
+  e -> _
 \end{lstlisting}
 Ker imajo različni programerji različna mnenja o tem, kateri od obeh je bolj smiselen in sem se želel izogniti kakeršnikoli dvoumnosti, sem dodal 
 gradnik \lstinline{end}, ki nam omogoča, da enostavno določimo, kdaj se izraz \lstinline{case} konča:
 \begin{lstlisting}
 case x of 
-    a -> _
-    b -> case y of
-            c -> _
-            d -> _
-            end
-    e -> _
+  a -> _
+  b -> case y of
+         c -> _
+         d -> _
+       end
+  e -> _
 end
 \end{lstlisting}
 Prav tako imamo v MiniHaskellu težavo z vpisovanjem izrazov na zgornji način, saj je prilagojen le vpisovanju ukazov v ukazno vsrtico, ki pa 
@@ -662,10 +662,10 @@ sprejema le nize znakov brez znaka za novo vrstico (\emph{newline} ali \lstinlin
 Tako bi zgornji primer izgledal takole:
 \begin{lstlisting}
 case x of 
-  a -> _
+    a -> _
   | b -> case y of
-            c -> _
-          | d -> _
+             c -> _
+           | d -> _
          end
   | e -> _
 end
@@ -692,13 +692,13 @@ data_variant:
 ki omogoča definicijo tipov na način:
 \begin{lstlisting}
 data Type = Constr_1 args_1 | Constr_2 args_2 | 
-    ... | Constr_n args_n.
+            ... | Constr_n args_n.
 \end{lstlisting}
 Seveda morajo biti TYPE in CONSTR imena z veliko začetnico. Slovnična pravila lahko zapišemo tudi z abstraktnimi sintaktičnimi drevesi. Na primer, 
 definicijo tipa:
 \begin{lstlisting}
 data Type = Constr_1 args_1 | Constr_2 args_2 | 
-    Constr_3 args_3,
+            Constr_3 args_3,
 \end{lstlisting}
 lahko predstavimo z drevesom:
 \begin{center}
@@ -767,10 +767,10 @@ case_variants:
 in omogoča uporabo izrazov \lstinline{case}, kot so:
 \begin{lstlisting}
 case x of 
-    Constr 1 -> _
-    Constr 2 -> _
-    ...
-    Constr n -> _
+  Constr 1 -> _
+  Constr 2 -> _
+  ...
+  Constr n -> _
 end
 \end{lstlisting}
 ki jih seveda lahko prav tako zapišemo kot abstraktno sintaktično drevo:
@@ -1071,30 +1071,30 @@ Pogoste funkcije ze delo s seznami so \lstinline{head}, ki vrne prvi element sez
 dolžine seznama, \lstinline{append}, ki doda element na konec seznama in \lstinline{map}, ki uporabi funkcijo na vsakem elementu seznama. 
 \begin{lstlisting}
 let head = fun s : Seznam => 
-    case s of
-     Empty -> Nil
+  case s of
+      Empty -> Nil
     | Cons x xs -> x
-    end
+  end
 
 let tail = fun s : Seznam =>
-	case s of
-            Empty -> Empty
-          | Cons x xs -> xs
-	end
+  case s of
+      Empty -> Empty
+    | Cons x xs -> xs
+  end
 
 let length = rec length : Seznam -> Int is
-	fun s : Seznam =>
-          case s of
-              Empty -> 0
-            | Cons x xs -> 1 + length xs
-          end
+  fun s : Seznam =>
+    case s of
+        Empty -> 0
+      | Cons x xs -> 1 + length xs
+    end
 
 let append = rec append : Seznam -> Seznam -> Seznam is
-	fun s1 : Seznam => fun s2 : Seznam => 
-          case s1 of
-              Empty -> s2
-            | Cons x xs -> Cons x (append xs s2)
-          end
+  fun s1 : Seznam => fun s2 : Seznam => 
+    case s1 of
+        Empty -> s2
+      | Cons x xs -> Cons x (append xs s2)
+    end
 
 let map = rec map : (Int -> Int) -> Seznam -> Seznam 
   is
@@ -1126,11 +1126,11 @@ MiniHaskell> length enke
 
 MiniHaskell> append (Cons 2 Empty) enke
 - : Seznam = Cons (2) (Cons (1) 
-        (Cons (1) (Cons (1) (Empty))))
+             (Cons (1) (Cons (1) (Empty))))
 
 MiniHaskell> map plus_ena enke
 - : Seznam = Cons (2) (Cons (2) 
-        (Cons (2) (Empty)))
+             (Cons (2) (Empty)))
 \end{lstlisting}
 Z implementacijo novih tipov smo dobili tudi možnost delanja s seznami. Torej seznamov kot so bili definirani v MiniHaskellu, ne potrebujemo več. Vprašanje je, kaj vse še lahko nadomestimo.
 Poskusimo še ustvariti nov tip \lstinline{Boolean}, ki bo zamenjal osnovni tip \lstinline{Bool} in nekaj pripadajočih funkcij:
@@ -1139,21 +1139,21 @@ data Boolean = True | False
 	
 let not = fun b : Boolean => 
   case b of 
-     True -> False 
+      True -> False 
     | False -> True 
   end
 
 let xor = fun b1 : Boolean => fun b2 : Boolean =>
-case of b1 of
-  True -> case b2 of
-	   True -> False
-	 | False -> True
-	end
-  | False -> case b2 of
-		 True -> True
-	 | False -> False
-	end
-end
+  case of b1 of
+      True -> case b2 of
+                  True -> False
+	              | False -> True
+	            end
+    | False -> case b2 of
+		               True -> True
+	               | False -> False
+	             end
+  end
 \end{lstlisting}
 Podobno bi lahko definirali tudi funkciji \lstinline{and} in \lstinline{or}, vendar tu nista ključnega pomena. Oglejmo si rezultate:
 \begin{lstlisting}
@@ -1199,11 +1199,11 @@ zmanjšujemo prvi seštevanec do nič in sproti povečujemo vsoto. Na koncu samo
 data Stevilo = Nic | Naslednik Stevilo
 
 let plus = rec plus : Stevilo -> Stevilo -> Stevilo is
-fun x : Stevilo => fun y : Stevilo =>
-case x of
-Nic -> y
-| Naslednik a -> Naslednik (plus a y)
-end
+  fun x : Stevilo => fun y : Stevilo =>
+    case x of
+        Nic -> y
+      | Naslednik a -> Naslednik (plus a y)
+    end
 
 let ena = Naslednik Nic
 
@@ -1246,15 +1246,15 @@ data Drevo = Empty | List Stevilo |
 let stVozlisc = rec st_vozlisc : Drevo -> Stevilo is
   fun d : Drevo =>
     case d of
-      Empty -> Nic
+        Empty -> Nic
       | List s -> Naslednik Nic
       | Vozlisce s l r ->
         plus (Naslednik Nic) (plus (stVozlisc l) 
-            (stVozlisc r))
+             (stVozlisc r))
     end
 
 let lipa = Vozlisce Nic (List (Naslednik Nic)) 
-    (List (Naslednik (Naslednik Nic)))
+           (List (Naslednik (Naslednik Nic)))
 
 MiniHaskell> st_vozlisc lipa
 - : Stevilo = Naslednik (Naslednik (Naslednik (Nic)))
@@ -1289,7 +1289,7 @@ MiniHaskell> fold (lacna 42)
 Ko lačni funkciji podamo argument in rezultat preslikamo v njegov izomorfizem, dobimo spet lačno funkcijo. Poskusimo ustvariti daljše zaporedje:
 \begin{lstlisting}
 MiniHaskell> fold (fold (fold (fold ((fold (lacna 1
-    )) 2) 3) 4) 5)
+             )) 2) 3) 4) 5)
 - : Int -> Lacna = <fun>
 \end{lstlisting}
 
@@ -1323,13 +1323,13 @@ primer toka naravnih števil:
 let naslednik = fun n : Int => n + 1
 
 let naravna = rec naravna : (Int -> Int) -> 
-    Int -> Unit -> Par is
+Int -> Unit -> Par is
   fun f : (Int -> Int) =>
     fun n : Int => fun u : Unit =>
       Par n (Fun (naravna f (f n)))
 
 MiniHaskell> prvi ((fold (drugi ((fold (drugi 
-    ((naravna naslednik 0) T))) T))) T)
+             ((naravna naslednik 0) T))) T))) T)
 - : Int = 2
 \end{lstlisting}
 
@@ -1345,7 +1345,7 @@ let naslednik = rec funkcija : Tok -> Tok is
     end
 
 MiniHaskell> let naravna = rec naravna : Tok is
-    Cons 0 (naslednik naravna)
+             Cons 0 (naslednik naravna)
 val naravna : Tok
 
 MiniHaskell> naravna
@@ -1423,8 +1423,15 @@ Dobili smo šest, kar je vsota enke, dvojice in trojke.
 
 \chapter{Zaključek}
 Področje rekurzivnih tipov sega še veliko globje, kot prikazujejo zgornji primeri in nam tako daje veliko možnosti za nadgradnjo implementacije. 
-Opazna možnost je implementacija polimorfizma. Tipi so sedaj lahko le monomorfni, torej ne moremo definirati seznama, ki bi lahko hkrati 
-vseboval elemente različnih tipov. Prav tako ne moremo uporabljati izomorfizmov tipov znotraj izrazov \lstinline{case}, recimo, ne moremo definirati izraza
+Opazna možnost je implementacija polimorfizma. Tipi so sedaj lahko le monomorfni, torej ne moremo definirati seznama, ki bi lahko dopuščal elemente različnih tipov, 
+vendar je tip seznama potrebno določiti ob definiciji tipa. Polimorfizem na seznamih bi izgledal takole:
+\begin{lstlisting}
+data Seznam a = Empty | Cons a (Seznam a)
+let seznamStevil = Cons 1 (Cons 2 (Cons 3 Empty))
+\end{lstlisting}
+spremenljivka \lstinline{a} je tukaj lahko poljubnega tipa.
+
+Prav tako znotraj izrazov \lstinline{case} ne moremo uporabljati kompleksnih vzorcev. Recimo, ne moremo definirati izraza
 \begin{lstlisting}
 case e of
     Empty -> ...
@@ -1432,7 +1439,7 @@ case e of
   | Cons x (Cons y l) -> ...
 end
 \end{lstlisting}
-Zgornji izraz lahko v resnici zapišemo kot gnezdeni \lstinline{case}
+Sicer bi zgornji izraz lahko zapisali kot gnezdeni \lstinline{case}
 \begin{lstlisting}
 case e of
     Empty -> ...
@@ -1443,13 +1450,14 @@ case e of
     end
 end
 \end{lstlisting}
-Zanimivo bi bilo uporabljati prvi izraz, vsekakor pa bi bila koda tako lepša in bolj pregledna.
-Še ena zanimiva razširitev bi bila omogočanje medsebojno rekurzivnih tipov, na primer 
+vednar bi bilo zanimivo uporabljati prvi primer, vsekakor pa bi bila koda tako lepša in bolj pregledna.
+
+Še ena razširitev bi bila omogočanje medsebojno rekurzivnih tipov, na primer 
 \begin{lstlisting}
 data A = B
 data B = A
 \end{lstlisting}
-Takšne definicije so zelo zanimive in lahko zelo uporabne, vendar implementacija, ki to omogoča, zahteva veliko dela. 
+s katero bi lahko našli veliko zanimivih primerov malo bolj zapletenih rekurzivnih tipov.
 
 \newpage
 
