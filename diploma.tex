@@ -1,18 +1,45 @@
-\documentclass[12pt,a4paper,openany]{book}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% datoteka diploma-FRI-vzorec.tex
+%
+% vzorčna datoteka za pisanje diplomskega dela v formatu LaTeX
+% na UL Fakulteti za računalništvo in informatiko
+%
+% na osnovi starejših verzij vkup spravil Franc Solina, maj 2021
+% prvo verzijo je leta 2010 pripravil Gašper Fijavž
+%
+% za upravljanje z literaturo ta vezija uporablja BibLaTeX
+%
+% svetujemo uporabo Overleaf.com - na tej spletni implementaciji LaTeXa ta vzorec zagotovo pravilno deluje
+%
 
-%Uporabljeni paketi
-\usepackage[utf8]{inputenc}
+\documentclass[a4paper,12pt,openright]{book}
+%\documentclass[a4paper, 12pt, openright, draft]{book}  Nalogo preverite tudi z opcijo draft, ki pokaže, katere vrstice so predolge! Pozor, v draft opciji, se slike ne pokažejo!
+ 
+\usepackage[utf8]{inputenc}   % omogoča uporabo slovenskih črk kodiranih v formatu UTF-8
+\usepackage[slovene,english]{babel}    % naloži, med drugim, slovenske delilne vzorce
+\usepackage[pdftex]{graphicx}  % omogoča vlaganje slik različnih formatov
+\usepackage{fancyhdr}          % poskrbi, na primer, za glave strani
+\usepackage{amssymb}           % dodatni matematični simboli
+\usepackage{amsmath}           % eqref, npr.
+\usepackage{hyperxmp}
+\usepackage[hyphens]{url}
+\usepackage{csquotes}
+\usepackage[pdftex, colorlinks=true,
+						citecolor=black, filecolor=black, 
+						linkcolor=black, urlcolor=black,
+						pdfproducer={LaTeX}, pdfcreator={LaTeX}]{hyperref}
+
+\usepackage{color}
+\usepackage{soul}
 \usepackage{cmap}
 \usepackage{type1ec}
-\usepackage[T1]{fontenc}
-\usepackage{fancyhdr}
-\usepackage{graphicx,epsfig}
-\usepackage[slovene]{babel}
-\usepackage{cite}
 \usepackage{listings}
-\usepackage{amsmath}
-\usepackage[hidelinks]{hyperref}
 \usepackage{tikz}
+\usepackage[
+backend=biber,
+style=numeric,
+sorting=nty,
+]{biblatex}
 
 \lstset{
     xleftmargin=2em,
@@ -29,116 +56,214 @@
         {|}{{$\mid$}}1
 }
 
-%Velikost strani - dvostransko
-\oddsidemargin 1.4cm
-\evensidemargin 0.35cm
-\textwidth 14cm
-\topmargin 0.26cm
-\headheight 0.6cm
-\headsep 1.5cm
-\textheight 20cm
+\addbibresource{diploma.bib} %Imports bibliography file
 
-%Nastavitev glave in repa strani
-\pagestyle{fancy}
-\fancyhead{}
-\renewcommand{\chaptermark}[1]{\markboth{\textsf{Poglavje \thechapter:\ #1}}{}}
-\renewcommand{\sectionmark}[1]{\markright{\textsf{\thesection\  #1}}{}}
-\fancyhead[RE]{\leftmark}
-\fancyhead[LO]{\rightmark}
-\fancyhead[LE,RO]{\thepage}
-\fancyfoot{}
-\renewcommand{\headrulewidth}{0.0pt}
-\renewcommand{\footrulewidth}{0.0pt}
 
-\newcommand{\gnuplot}{\textbf{gnuplot}}
-\newcommand{\pgfname}{\textsc{pgf}}
-\newcommand{\tikzname}{Ti\emph{k}Z}
-\newcommand{\tkeywords}{rekurzivni tip, induktivni tip, koinduktivni tip, funkcijsko programiranje, vsota tipov}
-\newcommand{\tkeywordsEn}{recursive type, inductive type, coinductive type, functional programming, sum type}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	DIPLOMA INFO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand{\ttitle}{Implementacija rekurzivnih podatkovnih tipov}
 \newcommand{\ttitleEn}{Implementation of recursive data types}
 \newcommand{\tsubject}{\ttitle}
 \newcommand{\tsubjectEn}{\ttitleEn}
 \newcommand{\tauthor}{Luka Sabotič}
+\newcommand{\tkeywords}{rekurzivni tip, induktivni tip, koinduktivni tip, funkcijsko programiranje, vsota tipov}
+\newcommand{\tkeywordsEn}{recursive type, inductive type, coinductive type, functional programming, sum type}
 
-\input{cc}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	HYPERREF SETUP
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hypersetup{pdftitle={\ttitle}}
+\hypersetup{pdfsubject=\ttitleEn}
+\hypersetup{pdfauthor={\tauthor}}
+\hypersetup{pdfkeywords=\tkeywordsEn}
 
-%********************************************
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% postavitev strani
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+
+\addtolength{\marginparwidth}{-20pt} % robovi za tisk
+\addtolength{\oddsidemargin}{40pt}
+\addtolength{\evensidemargin}{-40pt}
+
+\renewcommand{\baselinestretch}{1.3} % ustrezen razmik med vrsticami
+\setlength{\headheight}{15pt}        % potreben prostor na vrhu
+\renewcommand{\chaptermark}[1]%
+{\markboth{\MakeUppercase{\thechapter.\ #1}}{}} \renewcommand{\sectionmark}[1]%
+{\markright{\MakeUppercase{\thesection.\ #1}}} \renewcommand{\headrulewidth}{0.5pt} \renewcommand{\footrulewidth}{0pt}
+\fancyhf{}
+\fancyhead[LE,RO]{\sl \thepage} 
+\fancyhead[LO]{\sl \rightmark} \fancyhead[RE]{\sl \leftmark}
+%\fancyhead[RE]{\sc \tauthor}              % dodal Solina
+%\fancyhead[LO]{\sc Diplomska naloga}     % dodal Solina
+
+
+\newcommand{\BibLaTeX}{{\sc Bib}\LaTeX}
+\newcommand{\BibTeX}{{\sc Bib}\TeX}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% naslovi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+
+\newcommand{\autfont}{\Large}
+\newcommand{\titfont}{\LARGE\bf}
+\newcommand{\clearemptydoublepage}{\newpage{\pagestyle{empty}\cleardoublepage}}
+\setcounter{tocdepth}{1}	      % globina kazala
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PDF-A
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% define medatata
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\def\Title{\ttitle}
+\def\Author{\tauthor}
+\def\Subject{\ttitleEn}
+\def\Keywords{\tkeywordsEn}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% \convertDate converts D:20080419103507+02'00' to 2008-04-19T10:35:07+02:00
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\def\convertDate{%
+    \getYear
+}
+
+{\catcode`\D=12
+ \gdef\getYear D:#1#2#3#4{\edef\xYear{#1#2#3#4}\getMonth}
+}
+\def\getMonth#1#2{\edef\xMonth{#1#2}\getDay}
+\def\getDay#1#2{\edef\xDay{#1#2}\getHour}
+\def\getHour#1#2{\edef\xHour{#1#2}\getMin}
+\def\getMin#1#2{\edef\xMin{#1#2}\getSec}
+\def\getSec#1#2{\edef\xSec{#1#2}\getTZh}
+\def\getTZh +#1#2{\edef\xTZh{#1#2}\getTZm}
+\def\getTZm '#1#2'{%
+    \edef\xTZm{#1#2}%
+    \edef\convDate{\xYear-\xMonth-\xDay T\xHour:\xMin:\xSec+\xTZh:\xTZm}%
+}
+
+%\expandafter\convertDate\pdfcreationdate 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% get pdftex version string
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\newcount\countA
+\countA=\pdftexversion
+\advance \countA by -100
+\def\pdftexVersionStr{pdfTeX-1.\the\countA.\pdftexrevision}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% XMP data
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+\usepackage{xmpincl}
+%\includexmp{pdfa-1b}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% pdfInfo
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+\pdfinfo{%
+    /Title    (\ttitle)
+    /Author   (\tauthor)
+    /Subject  (\ttitleEn)
+    /Keywords (\tkeywordsEn)
+    /ModDate  (\pdfcreationdate)
+    /Trapped  /False
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% znaki za copyright stran
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+
+\newcommand{\CcImageCc}[1]{%
+	\includegraphics[scale=#1]{cc_cc_30.pdf}%
+}
+\newcommand{\CcImageBy}[1]{%
+	\includegraphics[scale=#1]{cc_by_30.pdf}%
+}
+\newcommand{\CcImageSa}[1]{%
+	\includegraphics[scale=#1]{cc_sa_30.pdf}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 \selectlanguage{slovene}
 \frontmatter
 \setcounter{page}{1} %
-\renewcommand{\thepage}{}  
-% stran 1 med uvodnimi listi
-\thispagestyle{empty} 
+\renewcommand{\thepage}{}       % preprečimo težave s številkami strani v kazalu
 
-\begin{center}
-{\large 
-UNIVERZA V LJUBLJANI\\
-FAKULTETA ZA RAČUNALNIŠTVO IN INFORMATIKO\\
-FAKULTETA ZA MATEMATIKO IN FIZIKO\\
-}
-
-\vspace{3cm}
-{\LARGE Luka Sabotič}\\
-
-\vspace{2cm}
-{\LARGE
-\textsc{\textbf{Implementacija rekurzivnih podatkovnih tipov}}\par}
-
-\vspace{2cm}
-{ DIPLOMSKO DELO}\\
-{ UNIVERZITETNI ŠTUDIJSKI PROGRAM PRVE STOPNJE
-RAČUNALNIŠTVO IN MATEMATIKA\\
-}
-
-\vspace{2cm} 
-{\Large Mentor: prof.\ dr.\ Andrej Bauer}
-
-\vfill
-{\Large Ljubljana, 2023}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%naslovnica
+ \thispagestyle{empty}%
+   \begin{center}
+    {\large\sc Univerza v Ljubljani\\%
+%      Fakulteta za elektrotehniko\\% za študijski program Multimedija
+%      Fakulteta za upravo\\% za študijski program Upravna informatika
+      Fakulteta za računalništvo in informatiko\\%
+      Fakulteta za matematiko in fiziko\\% za študijski program Računalništvo in matematika
+     }
+    \vskip 10em%
+    {\autfont \tauthor\par}%
+    {\titfont \ttitle \par}%
+    {\vskip 3em \textsc{DIPLOMSKO DELO\\[5mm]         % dodal Solina za ostale študijske programe
+%    VISOKOŠOLSKI STROKOVNI ŠTUDIJSKI PROGRAM\\ PRVE STOPNJE\\ RAČUNALNIŠTVO IN INFORMATIKA}\par}%
+%     UNIVERZITETNI  ŠTUDIJSKI PROGRAM\\ PRVE STOPNJE\\ RAČUNALNIŠTVO IN INFORMATIKA}\par}%
+%    INTERDISCIPLINARNI UNIVERZITETNI\\ ŠTUDIJSKI PROGRAM PRVE STOPNJE\\ MULTIMEDIJA}\par}%
+%    INTERDISCIPLINARNI UNIVERZITETNI\\ ŠTUDIJSKI PROGRAM PRVE STOPNJE\\ UPRAVNA INFORMATIKA}\par}%
+    INTERDISCIPLINARNI UNIVERZITETNI\\ ŠTUDIJSKI PROGRAM PRVE STOPNJE\\ RAČUNALNIŠTVO IN MATEMATIKA}\par}%
+    \vfill\null%
+% izberite pravi habilitacijski naziv mentorja!
+    {\large \textsc{Mentor}: prof.\ dr.\ Andrej Bauer\par}%
+    {\vskip 2em \large Ljubljana, \the\year \par}%
 \end{center}
+% prazna stran
+%\clearemptydoublepage      
+% izjava o licencah itd. se izpiše na hrbtni strani naslovnice
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%copyright stran
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-
-%********************************************
-
-% stran 2 med uvodnimi listi
 \thispagestyle{empty}
 
 \vspace*{5cm}
 {\small \noindent
-To diplomsko delo je ponujeno pod licenco \textit{Creative Commons Priznanje avtorstva-Deljenje pod enakimi pogoji 2.5 Slovenija}
+To delo je ponujeno pod licenco \textit{Creative Commons Priznanje avtorstva-Deljenje pod enakimi pogoji 2.5 Slovenija}.
 To pomeni, da se tako besedilo, slike, grafi in druge sestavine dela kot tudi rezultati diplomskega dela lahko prosto distribuirajo,
-reproducirajo, uporabljajo, dajejo v najem, priobčujejo javnosti in predelujejo, pod pogojem, da se jasno in vidno navede avtorja in naslov tega
+reproducirajo, uporabljajo, priobčujejo javnosti in predelujejo, pod pogojem, da se jasno in vidno navede avtorja in naslov tega
 dela in da se v primeru spremembe, preoblikovanja ali uporabe tega dela v svojem delu, lahko distribuira predelava le pod
 licenco, ki je enaka tej.
-Podrobnosti licence so dostopne na spletni strani \url{http://creativecommons.si/} ali na Inštitutu za
+Podrobnosti licence so dostopne na spletni strani \href{http://creativecommons.si}{creativecommons.si} ali na Inštitutu za
 intelektualno lastnino, Streliška 1, 1000 Ljubljana.
 
+\vspace*{1cm}
 \begin{center}% 0.66 / 0.89 = 0.741573033707865
-  \CcImageCc{0.741573033707865}\hspace*{1ex}\CcGroupBySa{1}{1ex}
+\CcImageCc{0.741573033707865}\hspace*{1ex}\CcImageBy{1}\hspace*{1ex}\CcImageSa{1}%
 \end{center}
 }
 
-\vspace*{1.5cm}
+\vspace*{1cm}
 {\small \noindent
-Izvorna koda diplomskega dela, njenih rezultatov in v ta namen razvite programske opreme je ponujena pod GNU General Public License,
-različica 3. To pomeni, da se lahko prosto uporablja, distribuira in/ali predeluje pod njenimi pogoji.
+Izvorna koda diplomskega dela, njeni rezultati in v ta namen razvita programska oprema je ponujena pod licenco GNU General Public License,
+različica 3. To pomeni, da se lahko prosto distribuira in/ali predeluje pod njenimi pogoji.
 Podrobnosti licence so dostopne na spletni strani \url{http://www.gnu.org/licenses/}.
 }
 
+\vfill
 \begin{center} 
 \ \\ \vfill
 {\em
-Besedilo je oblikovano z urejevalnikom besedil \LaTeX. \\ Slike so izdelane s pomočjo jezika \pgfname/\tikzname.}
+Besedilo je oblikovano z urejevalnikom besedil \LaTeX.}
 \end{center}
 
-\newpage
+% prazna stran
+\clearemptydoublepage
 
-%********************************************
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % stran 3 med uvodnimi listi
 \thispagestyle{empty}
 \
@@ -168,66 +293,40 @@ Thesis introduces recursive data types, describes inductive and coinductive data
 
 
 \vspace{2cm}
-\newpage
 
-%********************************************
+% prazna stran
+\clearemptydoublepage
 
-% stran 4 med uvodnimi listi je prazna 
-\ \thispagestyle{empty}
-
-\newpage
-
-%********************************************
-
-% stran 7 med uvodnimi listi
+% zahvala
 \thispagestyle{empty}\mbox{}\vfill\null\it%
 \noindent
 Zahvaljujem se mentorju prof.\ dr.\ Andreju Bauerju za veliko zagretost in izjemno odzivnost pri izdelavi tega diplomskega dela.
 \rm\normalfont
 
+% prazna stran
+\clearemptydoublepage
 
-\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% posvetilo, če sama zahvala ne zadošča :-)
+\thispagestyle{empty}\mbox{}{\vskip0.20\textheight}\mbox{}\hfill\begin{minipage}{0.55\textwidth}%
+\normalfont\end{minipage}
 
-%********************************************
-
-% stran 8 med uvodnimi listi je prazna pri dvostranskem tiskanju
-\ \thispagestyle{empty}
-
-\newpage
-
-%********************************************
-
-% stran 9 med uvodnimi listi
-\thispagestyle{empty}
-
-$\;$ 
+% prazna stran
+\clearemptydoublepage
 
 
-\newpage
-
-%********************************************
-
-% stran 10 med uvodnimi listi je prazna pri dvostranskem tiskanju
-
-\ \thispagestyle{empty}
-
-\newpage
-
-%********************************************
-
-\renewcommand\thepage{} 
-\tableofcontents 
-\renewcommand\thepage{\arabic{page}}
-
-\thispagestyle{empty}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% kazalo
+\pagestyle{empty}
+\def\thepage{}% preprečimo težave s številkami strani v kazalu
+\tableofcontents{}
 
 
-%********************************************
-%\cleardoublepage
+% prazna stran
+\clearemptydoublepage
 
-\clearpage{\pagestyle{empty}\cleardoublepage}
 
-%********************************************
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % povzetek
 \phantomsection
 \addcontentsline{toc}{chapter}{Povzetek}
@@ -250,7 +349,10 @@ teh struktur in odpirajo možnosti za morebitne nadaljne razširitve.
 \bigskip
 
 \noindent\textbf{Ključne besede:} \tkeywords.
+% prazna stran
+\clearemptydoublepage
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % abstract
 \phantomsection
 \selectlanguage{english}
@@ -274,15 +376,14 @@ examples are demonstrated, showcasing the utility of these structures and paving
 
 \noindent\textbf{Keywords:} \tkeywordsEn.
 \selectlanguage{slovene}
+% prazna stran
+\clearemptydoublepage
 
-%********************************************
-
-
-\newpage
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \mainmatter
 \setcounter{page}{1}
-\pagenumbering{arabic}
+\pagestyle{fancy}
+
 \chapter{Rekurzivni tipi}
 V programiranju se vsakodnevno srečujemo z velikim številom konceptov in idej, ki nam na različne načine omogočajo iskati rešitve. Eden najbolj osnovnih in popularnih je tudi rekurzija.
 V osnovi rekurzija predstavlja eleganten način reševanja zapletenih problemov z razčlenitvijo na manjše probleme iste vrste, ki se nato lahko razčlenjujejo naprej. Ta sposobnost reševanja zapletenih izzivov 
@@ -900,7 +1001,7 @@ and type_of (ctx:context) = function
       | _ -> type_error "%s cannot occur in a case 
             expression" (Syntax.string_of_type t))
 \end{lstlisting}
-Osredotočimo se najprej na definicije novih tipov, torej \lstinline{Syntax.Constr} vejo. Tu enostavno kličemo funkcijo \lstinline{type_of_constr}, s konstruktorjem, katerega tip nas zanima in delom 
+Osredotočimo se najprej na definicije novih tipov, torej \lstinline{Syntax.Constr} vejo. Tu enostavno kličemo funkcijo\\ \lstinline{type_of_constr}, s konstruktorjem, katerega tip nas zanima in delom 
 konteksta, kjer je ta shranjen. Funkcija \lstinline{type_of_constr} izgleda takole:
 \begin{lstlisting}
 let rec type_of_constr c = function
@@ -918,7 +1019,7 @@ let rec type_of_constr c = function
 Funkcija se rekurzivno sprehodi skozi del konteksta, kjer so shranjeni novi tipi in njihovi konstruktorji. Za vsak tip preveri, če se med njegovimi konstruktorji nahaja želeni in če se, izračuna 
 njegov tip. 
 
-Malo več dela je bilo s preverjanjem tipa v izrazu \lstinline{case}. Najprej izračunamo tip izraza, ki ga primerjamo z vejami. Ker je \lstinline{case} smiselen le za novo definirane tipe, ker ne bi ničesar 
+Malo več dela je bilo s preverjanjem tipa v izrazu\\ \lstinline{case}. Najprej izračunamo tip izraza, ki ga primerjamo z vejami. Ker je \lstinline{case} smiselen le za novo definirane tipe, ker ne bi ničesar 
 pridobili, če bi vstavili na primer celo število, v nasprotnem primeru sprožimo napako. Sedaj poznamo vhodni tip. Nato poiščemo konstruktorje tega tipa, da jih bomo lahko primerjali z vzorci v vejah.
 To storimo rekurzivno, na zelo podoben način, kot smo to storili v funkciji \lstinline{type_of_constr}. Preostane nam le še izračunati tip, ki ga bomo vrnili. Pri tem nam pomaga pomožna funkcija 
 \lstinline{cases_type}:
@@ -963,7 +1064,8 @@ and value =
 | VBool of bool
 | VNil of Syntax.htype
 | VClosure of environment * Syntax.expr
-| VConstr of Syntax.cname * (environment * Syntax.expr) 
+| VConstr of Syntax.cname * 
+             (environment * Syntax.expr) 
     list
 \end{lstlisting}
 Potrebujemo način za shranjevanje osnovnih tipov MiniHaskella, torej \lstinline{Int} in \lstinline{Bool}, prazen seznam \lstinline{Nil} in funkcije. Za hranjenje vrednosti novih tipov sem dodal še 
@@ -1009,7 +1111,8 @@ let rec extend_env env xs vs =
             interp env' action
           else find_case l
         in find_case cases
-    | _ -> runtime_error "Constructor expected in case"
+    | _ -> runtime_error "Constructor expected in 
+                         case"
     )
 \end{lstlisting}
 
@@ -1021,8 +1124,8 @@ let exec (ctx, env) = function
   ...
     | Syntax.DataDef (name, constructors) ->
       Zoo.print_info "type %s is defined@." name ;
-      (Type_check.extend_datadef name constructors ctx,
-        env)
+      (Type_check.extend_datadef name constructors 
+      ctx, env)
   ...
 \end{lstlisting}
 
@@ -1320,28 +1423,31 @@ MiniHaskell> let naravna = rec naravna : Tok is
 val naravna : Tok
 
 MiniHaskell> naravna
-- : Tok = Cons (0 (Cons (1 (Cons (2 (Cons (3 (Cons (4 
-(Cons (5 (Cons (6 (Cons (7 (Cons (8 (Cons (9 (Cons (10 
-(Cons (11 (Cons (12 (Cons (13 (Cons (14 (Cons (15 (Cons 
-(16 (Cons (17 (Cons (18 (Cons (19 (Cons (20 (Cons (21 
-(Cons (22 (Cons (23 (Cons (24 (Cons (25 (Cons (26 (Cons 
-(27 (Cons (28 (Cons (29 (Cons (30 (Cons (31 (Cons (32 
-(Cons (33 (Cons (34 (Cons (35 (Cons (36 (Cons (37 (Cons 
-(38 (Cons (39 (Cons (40 (Cons (41 (Cons (42 (Cons (43 
-(Cons (44 (Cons (45 (Cons (46 (Cons (47 (Cons (48 (Cons 
-(49 (Cons (50 (Cons (51 (Cons (52 (Cons (53 (Cons (54 
-(Cons (55 (Cons (56 (Cons (57 (Cons (58 (Cons (59 (Cons 
-(60 (Cons (61 (Cons (62 (Cons (63 (Cons (64 (Cons (65 
-(Cons (66 (Cons (67 (Cons (68 (Cons (69 (Cons (70 (Cons 
-(71 (Cons (72 (Cons (73 (Cons (74 (Cons (75 (Cons (76 
-(Cons (77 (Cons (78 (Cons (79 (Cons (80 (Cons (81 (Cons 
-(82 (Cons (83 (Cons (84 (Cons (85 (Cons (86 (Cons (87 
-(Cons (88 (Cons (89 (Cons (90 (Cons (91 (Cons (92 (Cons 
-(93 (Cons (94 (Cons (95 (Cons (96 (Cons (97 (Cons (98 
-(Cons (... (...))))))))))))))))))))))))))))))))))))))))
-)))))))))))))))))))))))))))))))))))))))))))))))))))))))
-)))))))))))))))))))))))))))))))))))))))))))))))))))))))
-))))))))))))))))))))))))))))))))))))))))))))))))))
+- : Tok = Cons (0 (Cons (1 (Cons (2 (Cons (3 (Cons 
+(4 (Cons (5 (Cons (6 (Cons (7 (Cons (8 (Cons (9 (Cons 
+(10 (Cons (11 (Cons (12 (Cons (13 (Cons (14 (Cons (15 
+(Cons (16 (Cons (17 (Cons (18 (Cons (19 (Cons (20 
+(Cons (21 (Cons (22 (Cons (23 (Cons (24 (Cons (25 
+(Cons (26 (Cons (27 (Cons (28 (Cons (29 (Cons (30 
+(Cons (31 (Cons (32 (Cons (33 (Cons (34 (Cons (35 
+(Cons (36 (Cons (37 (Cons (38 (Cons (39 (Cons (40 
+(Cons (41 (Cons (42 (Cons (43 (Cons (44 (Cons (45 
+(Cons (46 (Cons (47 (Cons (48 (Cons (49 (Cons (50 
+(Cons (51 (Cons (52 (Cons (53 (Cons (54 (Cons (55 
+(Cons (56 (Cons (57 (Cons (58 (Cons (59 (Cons (60 
+(Cons (61 (Cons (62 (Cons (63 (Cons (64 (Cons (65 
+(Cons (66 (Cons (67 (Cons (68 (Cons (69 (Cons (70 
+(Cons (71 (Cons (72 (Cons (73 (Cons (74 (Cons (75 
+(Cons (76 (Cons (77 (Cons (78 (Cons (79 (Cons (80 
+(Cons (81 (Cons (82 (Cons (83 (Cons (84 (Cons (85 
+(Cons (86 (Cons (87 (Cons (88 (Cons (89 (Cons (90 
+(Cons (91 (Cons (92 (Cons (93 (Cons (94 (Cons (95 
+(Cons (96 (Cons (97 (Cons (98 (Cons (... 
+(...)))))))))))))))))))))))))))))))))))))))))))))
+)))))))))))))))))))))))))))))))))))))))))))))))))
+)))))))))))))))))))))))))))))))))))))))))))))))))
+)))))))))))))))))))))))))))))))))))))))))))))))))
+))))))))
 \end{lstlisting}
 Dobimo neskončen seznam naravnih števil. Program seveda ne izpiše vseh, da lahko nadaljujemo z vpisovanjem ukazev. 
 Taka definicija nam poda neskončen seznam, medtem ko definicija z uporabo lačne funkcije vsakič vrne le en par. 
@@ -1430,18 +1536,17 @@ data B = A
 \end{lstlisting}
 s katero bi lahko našli veliko zanimivih primerov malo bolj zapletenih rekurzivnih tipov.
 
-\newpage
 
-%********************************************
 
-\appendix
+%\cleardoublepage
+%\addcontentsline{toc}{chapter}{Literatura}
 
-\newpage
+% če imaš težave poravnati desni rob bibliografije, potem odkomentiraj spodnjo vrstico
+\raggedright
 
-\addcontentsline{toc}{chapter}{Literatura}
-\label{stran_literatura}
-\bibliography{diploma} 
-\bibliographystyle{plain}
-
+% v zadnji verziji diplomskega dela običajno združiš vse tri vrste referenc v en sam seznam in
+% izpustiš delne sezname
+\printbibliography[heading=bibintoc,title={Literatura}]
 
 \end{document}
+
