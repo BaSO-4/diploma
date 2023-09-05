@@ -300,7 +300,7 @@ Thesis introduces recursive data types, describes inductive and coinductive data
 % zahvala
 \thispagestyle{empty}\mbox{}\vfill\null\it%
 \noindent
-Zahvaljujem se mentorju prof.\ dr.\ Andreju Bauerju za veliko zagretost in izjemno odzivnost pri izdelavi tega diplomskega dela.
+Zahvaljujem se mentorju prof.\ dr.\ Andreju Bauerju za veliko zavzetost in izjemno odzivnost pri izdelavi tega diplomskega dela.
 \rm\normalfont
 
 % prazna stran
@@ -529,7 +529,7 @@ Lažje jih je obvladovati v lenih programskih jezikih, ker se njihova vsebina ni
 
 \section{Ekvirekurziven ali izorekurziven pristop?}
 Ko implementiramo rekurzivne tipe, se moramo slej ko prej vprašati, kaj je razlika med tipom in čemer dobimo, ko ta tip enkrat ">odvijemo"<. Na primer, kaj je razlika med tipom \lstinline{Seznam}
-in njegovim enkratnim odvojem \\ \lstinline{Empty | Cons Int Seznam}? V literaturi pojavita dva pristopa k temu vprašanju: ekvirekurziven in izorekurziven.
+in njegovim enkratnim odvojem \\ \lstinline{Empty | Cons Int Seznam}? V literaturi  se pojavita dva pristopa k temu vprašanju: ekvirekurziven in izorekurziven.
 
 Definirajmo operator $\mu$, ki računa negibne točke. Za dano funkcijo $F$, ki slika tipe v tipe, naj bo $\mu(F)$ tip, za katerega velja $\mu(F) = F(\mu(F))$. Običajno namesto $\mu (\lambda X. T)$ 
 pišem $\mu X. T$. Na primer, tip seznamov celih števil lahko zapišemo kot $\mu (\lambda X. \ \mathtt{Empty} \mid \ \mathtt{Cons} \ \mathtt{Int} \ X)$ ali raje $\mu X. \mathtt{Empty} \mid \mathtt{Cons} \ \mathtt{Int} \ X$.
@@ -590,7 +590,7 @@ Ko je argument \lstinline{o} tipa \lstinline{Odrasel}, se izvede prva veja in vr
 \lstinline{Oseba} $\rightarrow$ \lstinline{Int}. Seveda zahtevamo, da vse veje vrnejo izraz istega tipa.
 
 Ker v izrazu \lstinline{case} preverjamo tip argumenta na način, da samo preverimo ali ustreza kakšni izmed variant in se ne oziramo na preostale tipe v tisti vsoti, 
-se lahko zgodi, da je izrazu možno dodeliti več kot en tip. To se zgodi, če ima več vsot enak seštevanec. Za primer vzemimo vsoti
+se lahko zgodi, da je izrazu možno dodeliti več kot en tip. To se zgodi, če ima več vsot enak seštevanec. Za primer vzemimo vsoti:
 \begin{lstlisting}
 data A = Foo Int | Bar Bool
 data B = Foo Int | Baz Int
@@ -631,7 +631,7 @@ let primerenZaZajtrkovanje = fun d:DelDneva =>
       | _ -> false
     end
 \end{lstlisting}
-je funkcija, ki sprejme eno izmed delov dneva in vrne odgovor na vprašanje, če takrat običajno zajtrkujemp. Tip te funkcije je \lstinline{DelDneva} $\rightarrow$ \lstinline{Bool}.
+je funkcija, ki sprejme eno izmed delov dneva in vrne odgovor na vprašanje, če takrat običajno zajtrkujemo. Tip te funkcije je \lstinline{DelDneva} $\rightarrow$ \lstinline{Bool}.
 
 \section{Vsote z eno varianto}
 Možno je ustvariti tudi vsote s samo eno varianto, ki vsebuje vrednosti danega tipa \lstinline{T}:
@@ -646,7 +646,7 @@ let dolarjiVEvre = fun d:Float => x * 0.92
 val dolarjiVEvre : Float -> Float
 \end{lstlisting}
 Če je \lstinline{d}, ki ga podamo funkciji \lstinline{dolarjiVEvre} količina denarja v dolarjih, je vse v redu. Vendar pa nam nič ne 
-preprečuje, da bi kot argument v \lstinline{dolarjiVEvre} podali katerokoli drugo število, na primer količino denarja v frankih, ali še huje, število število komarjev v nekem prostoru. Taka uporaba te 
+preprečuje, da bi kot argument v \lstinline{dolarjiVEvre} podali katerokoli drugo število, na primer količino denarja v frankih, ali še huje, število komarjev v nekem prostoru. Taka uporaba te 
 funkcije je nesmiselna in se ji želimo izogniti, katr storimo tako, da definiramo vsote z eno varianto:
 \begin{lstlisting}
 data Evri = Evri Float
@@ -673,7 +673,7 @@ je dostopen v repozitoriju~\cite{bauer:plzoo}.
 MiniHaskell je programski jezik, ki je namenjen predstavitvi osnovnih konceptov funkcijskega programiranja. Napisan je v programskem jeziku 
 OCaml in po strukturi in načinu uporabe sledi jeziku Haskell. Omogoča uporabo celih števil, boolovih vrednosti z logičnimi operacijami in primerjavami 
 celih števil, urejenih parov, seznamov, funkcij in rekurzije. Temu sem dodal možnost definiranja novih tipov, rekurzivnih ali ne, in 
-uporabe izrazov \lstinline{case} za delo z njimi. Programski jezik sestavljajo leksična analiza, razčlenjevalnik, tolmač in preverjevalnik tipov. V nadaljevanju bom predstavil kako 
+uporabe izrazov \lstinline{case} za delo z njimi. Programski jezik sestavljajo leksična analiza, razčlenjevalnik, tolmač in preverjevalnik tipov. V nadaljevanju bom predstavil, kako 
 delujejo v MiniHaskellu, ter kako sem jih dopolnil.
 
 \section{Leksična analiza}
@@ -682,7 +682,7 @@ na primer presledki, in jih razdelimo na gradnike. To so vse ključne besede, ki
 Ta je v našem primeru napisan v datoteki \lstinline{lexer.mll}. Je datoteka, kjer so shranjeni regularni izrazi, ki opisujejo gradnike, ki jih lahko uporabljamo v programskem jeziku. 
 Kot je to storjeno v Haskellu, sem določil, da bom imena spremenljvk dovolil le z majhno začetnico, imena konstruktorjev tipov pa le z veliko. Tako sem si olajšal delo v razčlenjevalniku. 
 Gradnik, ki bo predstavljal imena konstruktorjev in imena tipov sem poimenoval \lstinline{cname}, kot okrajšavo za \textit{capital name} ali ime z veliko začetnico. Poleg načina poimenovanja 
-konstruktov je v lekserju definiranih še veliko drugih gradnikov, kot so olkepaji, znaki za operacije, ključne besede, ukaz \lstinline{:quit} za izhod iz programa 
+konstruktov je v lekserju definiranih še veliko drugih gradnikov, kot so oklepaji, znaki za operacije, ključne besede, ukaz \lstinline{:quit} za izhod iz programa 
 in podobno. Za definicijo podatkovnih tipov sem dodal ključno besedo \lstinline{data}, z idejo, da bo imela enako vlogo kot tista v Haskellu. Tako imamo vse potrebno za 
 definicijo novih podatkovnih tipov, ker smo definirali besedo \lstinline{data}, imamo \lstinline{cname} za definicijo konstruktorjev in že od prej možnost definiranja spremenljivk.
 Za delo s podatkovnimi tipi, torej izraz \lstinline{case}, je bilo potrebno dodati še gradnike za ključne besede \lstinline{case}, \lstinline{of} in \lstinline{end}.\footnote{Gradnik \lstinline{ALTERNATIVE} 
@@ -909,7 +909,7 @@ sestej = \x -> \y -> x + y
 Med tipe, ki jih pozna MiniHaskell sem moral dodati tip \lstinline{TData}, ki je namenjen shranjevanju imen konstruktorjev in imen tipov. Sam ima tip \lstinline{string}, ampak kot omenjeno, 
 se vanj shranjejo le besede z veliko začetnico. 
 
-Morda bolj zanimiv je tip \lstinline{toplevel_cmd} ali \textit{toplevel command}, ki kot omenjeno zgoraj, lahko zavzame eno izmed štirih vrendnosti: \lstinline{Expr}, ki shranjuje izraze, 
+Morda bolj zanimiv je tip \lstinline{toplevel_cmd} ali \textit{toplevel command}, ki kot omenjeno zgoraj, lahko zavzame eno izmed štirih vrednosti: \lstinline{Expr}, ki shranjuje izraze, 
 \lstinline{Def}, ki shrnajuje definicije spremenljivk, \lstinline{DataDef}, ki shranjuje definicije novih tipov in \lstinline{Quit}, ki označuje ukaz za izhod iz \lstinline{toplevel}, torej 
 \emph{minihaskell.exe}. Odločil sem se, da bo \lstinline{DataDef} shranjeval definicije novih tipov kot urejen par imena tipa in seznama konstruktorjev in njihovih argumentov:
 \begin{lstlisting}
@@ -950,7 +950,7 @@ case o of
 end
 \end{lstlisting}
 
-Definiral sem tudi funkcijo za izpis izraza \lstinline{case}, vendar je zaradi njene preprostosti ne bom ipostavljal. Na voljo je v repozitoriju.
+Definiral sem tudi funkcijo za izpis izraza \lstinline{case}, vendar je zaradi njene preprostosti ne bom izpostavljal. Na voljo je v repozitoriju.
 
 \section{Pravilnost tipov}
  Da se program lahko izvede, se morajo vsi tipi spremenljivk, funkcij in izrazov ujemati. Preveriti, da je temu tako, je naloga preverjevalnika tipov. V MiniHaskellu je zapisan v datoteki 
@@ -1255,7 +1255,7 @@ if e1 then r1
 else if e2 then r2
 else r3
 \end{lstlisting}
-Zgornjo kodo lahko zamenjamo z
+Zgornjo kodo lahko zamenjamo z:
 \begin{lstlisting}
 case e1 of
     True -> r1
@@ -1336,7 +1336,7 @@ MiniHaskell> st_vozlisc lipa
 Definirali smo drevo \lstinline{lipa}, ki ima korensko vozlišče in dva lista. Funkcija \lstinline{st_vozlisc} vrne število tri.
 
 V prvem poglavju smo spoznali lačne funkcije. Spomnimo se, da so to funkcije, ki sprejmejo argument in vrnejo funkcijo, ki sprejme spet nov argument in vrne funkcijo, ... Definicija 
-takih funkcij je zaradi iso rekurzivnega pristopa bolj zapletena, ker potrebujemo izomorfizem med tipom in njegovim odvojem. V tem primeru bomo potrebovali funkcijo \lstinline{fold}. 
+takih funkcij je zaradi izorekurzivnega pristopa bolj zapletena, ker potrebujemo izomorfizem med tipom in njegovim odvojem. V tem primeru bomo potrebovali funkcijo \lstinline{fold}. 
 Definirajmo tip \lstinline{Lacna}, ki bo predstavljal lačne funkcije. Potrebujemo konstruktor, poimenujmo ga \lstinline{Fun}:
 \begin{lstlisting}
 data Lacna = Fun (Int -> Lacna)
@@ -1508,7 +1508,7 @@ let seznamStevil = Cons 1 (Cons 2 (Cons 3 Empty))
 \end{lstlisting}
 spremenljivka \lstinline{a} je tukaj lahko poljubnega tipa.
 
-Prav tako znotraj izrazov \lstinline{case} ne moremo uporabljati kompleksnih vzorcev. Recimo, ne moremo definirati izraza
+Prav tako znotraj izrazov \lstinline{case} ne moremo uporabljati kompleksnih vzorcev. Recimo, ne moremo definirati izraza:
 \begin{lstlisting}
 case e of
     Empty -> ...
@@ -1516,7 +1516,7 @@ case e of
   | Cons x (Cons y l) -> ...
 end
 \end{lstlisting}
-Sicer bi zgornji izraz lahko zapisali kot gnezdeni \lstinline{case}
+Sicer bi zgornji izraz lahko zapisali kot gnezdeni \lstinline{case}:
 \begin{lstlisting}
 case e of
     Empty -> ...
@@ -1529,7 +1529,7 @@ end
 \end{lstlisting}
 vednar bi bilo zanimivo uporabljati prvi primer, vsekakor pa bi bila koda tako lepša in bolj pregledna.
 
-Še ena razširitev bi bila omogočanje medsebojno rekurzivnih tipov, na primer 
+Še ena razširitev bi bila omogočanje medsebojno rekurzivnih tipov, na primer:
 \begin{lstlisting}
 data A = B
 data B = A
